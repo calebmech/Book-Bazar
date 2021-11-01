@@ -1,0 +1,132 @@
+\documentclass[fullpage]{article}
+
+%\setlength {\topmargin} {-1in}
+
+%\setlength {\textheight} {8.6in}
+
+%\setlength{\parindent}{1cm}
+
+\usepackage{amsmath, amsfonts}
+\usepackage[margin=1in]{geometry}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{cancel}
+\usepackage{graphicx}    %  in the preamble
+
+
+\usepackage[table]{xcolor}
+\setlength{\tabcolsep}{18pt}
+\renewcommand{\arraystretch}{1.5}
+\renewcommand{\labelenumi}{\theenumi.}
+\renewcommand{\labelenumii}{\theenumii.}
+\renewcommand{\labelenumiii}{\theenumiii.}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand{\bv}{\begin{verbatim}}
+\newcommand{\ev}{\end{verbatim}}
+\newcommand{\ba}{\begin{align*}}
+\newcommand{\ea}{\end{align*}}
+\newcommand{\beq}{\begin{equation*}}
+\newcommand{\eeq}{\end{equation*}}
+\newcommand{\bs}{\begin{split}}
+\newcommand{\es}{\end{split}}
+\newcommand{\mname}[1]{\mbox{\sf #1}}
+\newcommand{\pnote}[1]{{\langle \text{#1} \rangle}}
+\renewcommand{\labelenumii}{\theenumii.}
+
+\begin{document}
+
+\vspace*{\fill}
+\begin{center}
+
+  {\Huge \textbf{Project Goals}}\\
+\hrulefill\\[2mm]
+  {\huge \textbf{Book Bazar}}\\[2mm]
+{\large \today}\\[15mm]
+{\large
+\underline{\textbf{Group 6}}\\
+\begin{tabular}{ c c }
+
+ Caleb Mech & mechc2\\ 
+ David Thompson & thompd10\\
+ Matthew Williams & willim36\\
+ Ahmed Al Koasmh & alkoasma\\
+ Harsh Mahajan	& mahajanh    
+\end{tabular}
+}
+
+\end{center}
+
+\vspace*{\fill}
+
+%-----------END OF TITLE PAGE-------------------------------------------------------------
+\newpage
+
+\section{Overview}
+University and college students scramble to get their textbooks each school year. There are two marketplaces that exist for buying and selling used textbooks: the Campus Store and social media platforms like Facebook. The Campus Store acts as an intermediary for buyers and sellers by buying back current textbook editions and selling them the next year. This has a few drawbacks. The sellers are constrained to the Campus Store’s 50\%+ drop in price as opposed to setting their own price. Additionally, the campus store doesn't buy back older editions of textbooks that can sufficiently meet the needs of a course.\\
+
+As for social media platforms like Facebook, buyers and sellers face other conflicts. Those wishing to sell books need to create a public advertisement that can be viewed by anyone, including possible scammers. Those wishing to buy books scroll through an endless list of unorganized posts to find the books they need. Both sellers and buyers struggle with agreeing on a price and finding the right place to meet on campus to complete their exchange.\\
+
+Hence, we propose “\textbf{Book Bazar}”, an application that makes the experience of buying and selling used textbooks effortless. Book Bazar will be a secure marketplace tailored to McMaster University students and their needs. It will provide an easy mechanism to create and search for categorized book postings and enhance the book selling and buying experience every step of the way.
+
+
+\section{Project Goals}
+\bc
+
+\begin{tabular}{| p{4cm}| p{4cm}| p{4cm}|}
+
+\hline
+ \rowcolor{lightgray} 
+\textbf{Goals} & \textbf{Explanations} &\textbf{Reasoning}\\
+\hline
+Help buyers and sellers interact with each other easily. & Our platform should provide multiple ways for buyers and sellers to connect, agree on a price, and find a time and place to buy/sell books. & It should be straightforward for buyers and sellers to buy/sell books using the communication methods that they choose to maintain their level of privacy and comfort.\\
+\hline
+ Allow buyers to find textbooks directly for their courses. & In addition to being able to search for textbooks by the textbook name, users will be able to search for textbooks based on a specific course. & Provides a more straightforward user interface experience and helps buyers with their book search.\\
+\hline
+Allow sellers to easily fill in textbook details. & Reduce the amount of manual input required to create a textbook listing compared to existing platforms. & Saves users time and effort when they are listing their textbooks.\\
+\hline
+ Scalable to any number of post-secondary institutions. & The application needs to be scalable to different educational institutions and their students’ needs. & Future expansion of the service should take minimal effort.\\
+\hline
+Authenticate and verify users of the platform. & Verify that users utilizing the app attend the post-secondary institution they are registered within. & This builds a stronger buyer/seller trust relationship by limiting the pool of users and ensuring that they are registered students.\\
+\hline
+Accessible from any device. & The user should be able to use all the features of the application from any modern phone, tablet, laptop or desktop. & Users should not have to worry about their device being compatible.\\
+\hline
+
+\end{tabular}
+\ec
+
+
+\section{Stretch Goals}
+\bc
+
+\begin{tabular}{| p{4cm}| p{4cm}| p{4cm}|}
+
+\hline
+ \rowcolor{lightgray} 
+\textbf{Goals} & \textbf{Explanations} &\textbf{Reasoning}\\
+\hline
+Provide tools to moderate misconduct on the platform. & Provide tools to report users and content that does not adhere to the code of conduct. & This can create a safer environment for users of the app.\\
+\hline
+Warn users about old textbook editions. &Inform buyers if the book being sold is an older edition than the one prescribed by the course. & Give users confidence that the textbook they are buying meets their needs.\\
+\hline
+Allow a user to create a post using information gathered from an image of the textbook. & Automatically fills out the name, author, edition, and other information about a textbook given its image. & This will simplify the process of creating a post. In turn, this may result in more sellers using the platform.\\
+\hline
+Facilitate bidding on textbooks. & Allow sellers to auction their books to the buyers with the most competitive price. &This will simplify the price negotiation process between buyers and sellers and ensure that the best price is found given the supply and demand.\\
+\hline
+Have a ``Favourites List''. & Allow users to shortlist books/post they find desirable. & This will allow users to accumulate all their books in one place as opposed to having to search for each book separately.\\
+\hline
+\end{tabular}
+\ec
+
+\end{document}
+
+
