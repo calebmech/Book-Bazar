@@ -1,0 +1,17 @@
+#scanner-container {
+  position: relative;
+}
+
+.drawingBuffer {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 640px;
+  margin: auto;
+  justify-content: center;
+}
