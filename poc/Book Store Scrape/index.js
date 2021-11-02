@@ -10,6 +10,7 @@ let storeDomain = 'https://campusstore.mcmaster.ca';
 let storeBookPath = '/cgi-mcm/ws';
 let storeCourseMaterialPath = '/txhome.pl?wsgm=coursematerial';
 let storeFindBookPath = '/txsub.pl?';
+let storeImagePath = "/getTradeImage.pl?isbn=";
 let storeTermG1Search = 'wsTERMG1=';
 let storeTermDescSearch = '&wsTERMDESC1=';
 let storeDeptG1Search = '&wsDEPTG1=';
@@ -18,6 +19,9 @@ let storeCourseG1Search = '&wsCOURSEG1=';
 let storeSectionG1Search = '&wsSECTIONG1=';
 let storeProgramG1Search = '&programG1=';
 let storeFindBookPrefix = '&crit_cnt=1';
+
+// Here is the path to generate the link to the book image
+let bookImagePath = `${storeDomain}${storeBookPath}${storeImagePath}`
 
 // Parse variables from page to use eval
 let startStoreVariablesScrape = "/// Program/Terms";
@@ -122,7 +126,8 @@ async function getTextbookInformation(link, program, term, dept, course, section
         }
         let bookName = bookSplit[book].substring(bookSplit[book].indexOf(parseBookName) + 5, bookSplit[book].length);
         bookName = bookName.substring(0, bookName.indexOf(endParseSlash));
-        let newBook = { "ISBN": ISBN, "Name": bookName, "Program": program, "Term": term, "Course": course, "Dept": dept, "Section": section };
+        let bookImageURL = `${bookImagePath}${ISBN}`;
+        let newBook = { "ISBN": ISBN, "Name": bookName, "Program": program, "Term": term, "Course": course, "Dept": dept, "Section": section, 'Image': bookImageURL };
         textbookInformation.push(newBook);
     }
     return textbookInformation;
