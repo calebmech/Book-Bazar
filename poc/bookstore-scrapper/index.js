@@ -127,7 +127,7 @@ async function getTextbookInformation(link, program, term, dept, course, section
         let bookName = bookSplit[book].substring(bookSplit[book].indexOf(parseBookName) + 5, bookSplit[book].length);
         bookName = bookName.substring(0, bookName.indexOf(endParseSlash));
         let bookImageURL = `${bookImagePath}${ISBN}`;
-        let newBook = { "ISBN": ISBN, "Name": bookName, "Program": program, "Term": term, "Course": course, "Dept": dept, "Section": section, 'Image': bookImageURL };
+        let newBook = { isbn: ISBN, name: bookName, program: program, term: term, course: course, dept: dept, section: section, image: bookImageURL };
         textbookInformation.push(newBook);
     }
     return textbookInformation;
