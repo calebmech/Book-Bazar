@@ -239,6 +239,7 @@ const VideoScanner = props => {
 
   const updateBarcode = (result) => {
     if(result.codeResult) {
+        Quagga.stop();
         setISBN(result.codeResult.code)
         nextStep();
     } 
