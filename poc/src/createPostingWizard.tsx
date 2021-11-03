@@ -237,16 +237,11 @@ const VideoScanner = props => {
   const { nextStep } = props;
   const { lastStep } = props;
 
-  const [barcode, setBarcode] = useState<string>(null);
-
   const updateBarcode = (result) => {
     if(result.codeResult) {
         setISBN(result.codeResult.code)
-        setBarcode(result.codeResult.code)
+        nextStep();
     } 
-    else {
-        setBarcode("Not detected")
-    }
   }
   
   useEffect(() => {
@@ -326,8 +321,6 @@ const VideoScanner = props => {
       <div>
         <div id="scanner-container" />
         <button onClick={lastStep}> Back </button>
-        <h1> Detected Barcode: {barcode} </h1>
-        {barcode != null && barcode != "Not detected" && <button onClick={nextStep}> Next </button>}
       </div>
   );
 };
