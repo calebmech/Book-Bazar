@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import CreatePostingWizard from '../src/createPostingWizard.tsx';
+import CreatePostingWizard from '../src/CreatePostingWizard.tsx';
 
 export default function Home() {
   return (
