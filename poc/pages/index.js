@@ -38,10 +38,14 @@ export default function Home() {
           text-align: justify;
         }
 
-        video {
-          width: 500px;
-          border: 5px black solid;
-          border-radius: 5px;
+        #scanner-container {
+          position: relative;
+        }
+
+        .drawingBuffer {
+          position: absolute;
+          left: 0;
+          top: 0;
         }
       `}</style>
     </div>

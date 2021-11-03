@@ -1,11 +1,12 @@
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
+import Quagga from "quagga";
 
 interface Props {
 
 }
 interface State {
   wizardStep: number,
-  isUseBarcodeImage: boolean,
+  isbnEntryMethod: IsbnEntryMethod,
   isbn?: string,
   bookInfo?: BookInfo
 }
@@ -31,6 +32,14 @@ export default class CreatePostingWizard extends React.Component<Props, State> {
     });
   };
 
+  private lastStep: () => void = () => {
+    this.setState((state: State) => {
+      return {
+        wizardStep: state.wizardStep - 1
+      }
+    });
+  };
+
   private restart: () => void = () => {
     this.setState((_state: State) => {
       return {
@@ -48,10 +57,10 @@ export default class CreatePostingWizard extends React.Component<Props, State> {
     });
   };
 
-  private setUseBarcodeImage: (isUseBarcodeImage: boolean) => void = (isUseBarcodeImage) => {
+  private setIsbnEntryMethod: (isbnEntryMethod: IsbnEntryMethod) => void = (isbnEntryMethod) => {
     this.setState((_state: State) => {
       return {
-        isUseBarcodeImage: isUseBarcodeImage
+        isbnEntryMethod: isbnEntryMethod
       };
     });
   };
@@ -77,7 +86,7 @@ export default class CreatePostingWizard extends React.Component<Props, State> {
     super(props);
     this.state = {
       wizardStep: 0,
-      isUseBarcodeImage: true,
+      isbnEntryMethod: IsbnEntryMethod.Image,
       bookInfo: null,
     };
   }
@@ -85,10 +94,12 @@ export default class CreatePostingWizard extends React.Component<Props, State> {
   render() {
     switch (this.state.wizardStep) {
       case 0:
-        return <SelectCameraOrManual nextStep={this.nextStep} setUseBarcodeImage={this.setUseBarcodeImage} />;
+        return <SelectIsbnEntryMethod nextStep={this.nextStep} setIsbnEntryMethod={this.setIsbnEntryMethod} />;
       case 1:
-        if (this.state.isUseBarcodeImage) {
-          return <BarcodeScan nextStep={this.nextStep} setISBN={this.setISBN} />;
+        if (this.state.isbnEntryMethod == IsbnEntryMethod.Image) {
+          return <ImageScanner nextStep={this.nextStep} lastStep={this.lastStep} setISBN={this.setISBN} />;
+        } else if (this.state.isbnEntryMethod == IsbnEntryMethod.Video) {
+          return <VideoScanner nextStep={this.nextStep} lastStep={this.lastStep} setISBN={this.setISBN} />;
         } else {
           return <ISBNEntry nextStep={this.nextStep} setISBN={this.setISBN} />;
         }
@@ -107,25 +118,34 @@ export default class CreatePostingWizard extends React.Component<Props, State> {
 }
 
 // ---
-
-interface CameraOrManualProps {
+enum IsbnEntryMethod {
+  Image,
+  Video,
+  Typed
+}
+interface SelectIsbnEntryMethodProps {
   nextStep: () => void,
-  setUseBarcodeImage: (isUseBarcodeImage: boolean) => void
+  setIsbnEntryMethod: (isbnEntryMethod: IsbnEntryMethod) => void
 }
 
-class SelectCameraOrManual extends React.Component<CameraOrManualProps> {
+class SelectIsbnEntryMethod extends React.Component<SelectIsbnEntryMethodProps> {
 
-  private scanBarcodeClicked: () => void;
+  private scanBarcodeImageClicked: () => void;
+  private scanBarcodeVideoClicked: () => void;
   private typeISBNClicked: () => void;
 
-  constructor(props: CameraOrManualProps) {
+  constructor(props: SelectIsbnEntryMethodProps) {
     super(props);
-    this.scanBarcodeClicked = () => {
-      props.setUseBarcodeImage(true);
+    this.scanBarcodeImageClicked = () => {
+      props.setIsbnEntryMethod(IsbnEntryMethod.Image);
+      props.nextStep();
+    };
+    this.scanBarcodeVideoClicked = () => {
+      props.setIsbnEntryMethod(IsbnEntryMethod.Video);
       props.nextStep();
     };
     this.typeISBNClicked = () => {
-      props.setUseBarcodeImage(false);
+      props.setIsbnEntryMethod(IsbnEntryMethod.Typed);
       props.nextStep();
     };
   }
@@ -135,7 +155,9 @@ class SelectCameraOrManual extends React.Component<CameraOrManualProps> {
       <div>
         <p>The first step to making a book posting is getting the book information. You can either scan the barcode with your camera or type in the ISBN. We will handle getting the title, author, and edition for you.</p>
         <div>
-          <button onClick={this.scanBarcodeClicked}>Scan Barcode</button>
+          <button onClick={this.scanBarcodeImageClicked}>Scan Barcode From An Image File</button>
+          <span>&nbsp;&nbsp;&nbsp;</span>
+          <button onClick={this.scanBarcodeVideoClicked}>Scan Barcode From Your Camera Feed</button>
           <span>&nbsp;&nbsp;&nbsp;</span>
           <button onClick={this.typeISBNClicked}>Type in ISBN</button>
         </div>
@@ -146,6 +168,169 @@ class SelectCameraOrManual extends React.Component<CameraOrManualProps> {
 }
 
 // ---
+
+const ImageScanner = (props: any) => {
+  const { setISBN } = props;
+  const { nextStep } = props;
+  const { lastStep } = props;
+
+  const [selectedImage, setSelectedImage] = useState<File>(null);
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string>(null);
+  const [barcode, setBarcode] = useState<string>(null);
+
+  const updateBarcode = (result) => {
+      if(result.codeResult) {
+          setISBN(result.codeResult.code)
+          setBarcode(result.codeResult.code)
+      } 
+      else {
+          setBarcode("Not detected")
+      }
+  }
+  
+  const scanImage = useCallback((image) => {
+      Quagga.decodeSingle({
+        decoder: {
+            readers: ["ean_reader"]
+        },
+        locate: true, // try to locate the barcode in the image
+        src: image // or 'data:image/jpg;base64,' + data
+    }, updateBarcode);
+  }, []);
+
+  useEffect(() => {
+    if (selectedImageUrl != null) {
+      scanImage(selectedImageUrl);
+    }
+  }, [selectedImageUrl, scanImage])
+
+  useEffect(() => {
+      if (selectedImage != null) {
+        setSelectedImageUrl(URL.createObjectURL(selectedImage));
+      }
+  }, [selectedImage]);
+
+  return (
+      <div>
+          <input
+              type="file"
+              name="myImage"
+              onChange={(event) => setSelectedImage(event.target.files[0])}
+          />
+
+          {selectedImage && <div>
+              <img alt="not fount" width={"250px"} src={selectedImageUrl} />
+              <button onClick={() => setSelectedImage(null)}>Remove</button>
+              <h1> Detected Barcode: {barcode} </h1>
+          </div>}
+
+          <br />
+
+          <button onClick={lastStep}> Back </button>
+          {barcode != null && barcode != "Not detected" && <button onClick={nextStep}> Next </button>}
+      </div>
+  )
+}
+
+const VideoScanner = props => {
+  const { setISBN } = props;
+  const { nextStep } = props;
+  const { lastStep } = props;
+
+  const [barcode, setBarcode] = useState<string>(null);
+
+  const updateBarcode = (result) => {
+    if(result.codeResult) {
+        setISBN(result.codeResult.code)
+        setBarcode(result.codeResult.code)
+    } 
+    else {
+        setBarcode("Not detected")
+    }
+  }
+  
+  useEffect(() => {
+    Quagga.init({
+        "inputStream": {
+          "type": "LiveStream",
+          target: document.querySelector('#scanner-container')
+        },
+        "locator": {
+          "patchSize": "medium",
+          "halfSample": true
+        },
+        "numOfWorkers": 2,
+        "frequency": 10,
+        "decoder": {
+          "readers": ["ean_reader"]
+        },
+        "locate": true
+      }, err => {
+      if (err) {
+        console.log(err, "error msg");
+      }
+      Quagga.start();
+      return () => {
+        Quagga.stop()
+      }
+    });
+
+    //detecting boxes on stream
+    Quagga.onProcessed(result => {
+      var drawingCtx = Quagga.canvas.ctx.overlay,
+        drawingCanvas = Quagga.canvas.dom.overlay;
+
+      if (result) {
+        if (result.boxes) {
+          drawingCtx.clearRect(
+            0,
+            0,
+            Number(drawingCanvas.getAttribute("width")),
+            Number(drawingCanvas.getAttribute("height"))
+          );
+          result.boxes
+            .filter(function(box) {
+              return box !== result.box;
+            })
+            .forEach(function(box) {
+              Quagga.ImageDebug.drawPath(box, { x: 0, y: 1 }, drawingCtx, {
+                color: "green",
+                lineWidth: 2
+              });
+            });
+        }
+
+        if (result.box) {
+          Quagga.ImageDebug.drawPath(result.box, { x: 0, y: 1 }, drawingCtx, {
+            color: "#00F",
+            lineWidth: 2
+          });
+        }
+
+        if (result.codeResult && result.codeResult.code) {
+          Quagga.ImageDebug.drawPath(
+            result.line,
+            { x: "x", y: "y" },
+            drawingCtx,
+            { color: "red", lineWidth: 3 }
+          );
+        }
+      }
+    });
+
+    Quagga.onDetected(updateBarcode);
+  }, [setISBN]);
+
+
+  return (
+      <div>
+        <div id="scanner-container" />
+        <button onClick={lastStep}> Back </button>
+        <h1> Detected Barcode: {barcode} </h1>
+        {barcode != null && barcode != "Not detected" && <button onClick={nextStep}> Next </button>}
+      </div>
+  );
+};
 
 interface BarcodeScanProps {
   nextStep: () => void,
@@ -193,7 +378,6 @@ class BarcodeScan extends React.Component<BarcodeScanProps> {
       </div>
     );
   }
-
 }
 
 // ---
