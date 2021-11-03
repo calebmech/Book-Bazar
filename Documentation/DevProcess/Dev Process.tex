@@ -1,0 +1,302 @@
+\documentclass[fullpage]{article}
+
+%\setlength {\topmargin} {-1in}
+
+%\setlength {\textheight} {8.6in}
+
+%\setlength{\parindent}{1cm}
+
+\usepackage{amsmath, amsfonts}
+\usepackage[margin=1in]{geometry}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage{pgfgantt}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{blindtext}
+\usepackage{cancel}
+\usepackage{float}
+\usepackage{graphicx}    %  in the preamble
+
+
+\usepackage[table]{xcolor}
+\setlength{\tabcolsep}{18pt}
+\renewcommand{\arraystretch}{1.5}
+\renewcommand{\labelenumi}{\theenumi.}
+\renewcommand{\labelenumii}{\theenumii.}
+\renewcommand{\labelenumiii}{\theenumiii.}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand{\bv}{\begin{verbatim}}
+\newcommand{\ev}{\end{verbatim}}
+\newcommand{\ba}{\begin{align*}}
+\newcommand{\ea}{\end{align*}}
+\newcommand{\beq}{\begin{equation*}}
+\newcommand{\eeq}{\end{equation*}}
+\newcommand{\bs}{\begin{split}}
+\newcommand{\es}{\end{split}}
+\newcommand{\mname}[1]{\mbox{\sf #1}}
+\newcommand{\pnote}[1]{{\langle \text{#1} \rangle}}
+\renewcommand{\labelenumii}{\theenumii.}
+
+
+\begin{document}
+
+\vspace*{\fill}
+\begin{center}
+
+  {\Huge \textbf{Development Process}}\\
+\hrulefill\\[2mm]
+  {\huge \textbf{Book Bazar}}\\[2mm]
+{\large \today}\\[15mm]
+{\large
+\underline{\textbf{Group 6}}\\
+\begin{tabular}{ c c }
+
+ Caleb Mech & mechc2\\ 
+ David Thompson & thompd10\\
+ Matthew Williams & willim36\\
+ Ahmed Al Koasmh & alkoasma\\
+ Harsh Mahajan	& mahajanh    
+\end{tabular}
+}
+
+\end{center}
+
+\vspace*{\fill}
+
+%-----------END OF TITLE PAGE-------------------------------------------------------------
+\newpage
+\begingroup
+\hypersetup{hidelinks}
+\tableofcontents
+
+\listoffigures
+\listoftables
+\endgroup
+\newpage
+
+% ---
+
+\section{Table of Revisions}
+\begin{table}[h]
+\centering
+\begin{tabular}{| l | c | p{3cm}| p{3.5cm}|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Version} & \textbf{Date (dd.mm.yyy)} &\textbf{Author(s)} &\textbf{Description}\\
+\hline
+0 & 12.10.2021 & Caleb Mech\newline Ahmed Al Koasmh\newline  David Thompson \newline Matthew Williams \newline Harsh Mahajan & First draft of the document.\\
+\hline
+\end{tabular}
+\caption{Table of Revisions}
+\end{table}
+
+% ---
+
+\section{Development Workflow Summary}
+
+We aim to follow a Scrum-inspired workflow that makes use of GitHub and its project management tools, using a monorepo to store all the components of the software. \\
+
+\noindent Here is a brief summary of the process:
+\be
+\item Split up the requirements into units of work (“features”) that can be completed within a 3-week period and put these features into an issue tracking system.
+\item Perform several sprints, during which some of the features are implemented and some of the issues in the issue tracking system are addressed.
+\item Document new requirements that arise or are discovered to be missing in an issue tracking system, and address them in a future sprint (in a similar fashion to the features). Also, track the required changes to the documentation in the issue tracking system.
+\item Keep performing sprints until all the requirements are met.
+\ee
+
+% ---
+
+\section{Detailed Development Steps}
+
+\subsection{Steps}
+Here is a more detailed version of the workflow presented in the previous section:
+\be
+\item The team splits up the functional requirements into features to implement. Features are code necessary to meet a subset of a functional requirement that can be implemented in a few days and can be tested independently of other features.
+\item The team creates issues under the issue tracker for completing these features, labeling them as features and documenting which functional requirement they will meet.
+\item Complete the following activities in a 3 week loop, repeating until the software meets all the requirements
+\be
+\item \textbf{Planning:} Each team member picks a few issues from the issue tracker to work on for the next 3 weeks, taking into consideration their available work time, the priorities of the issues, and the estimated time it takes to complete working on the issue. The team meets to make sure that each team member is working on an equitable and realistic number of issues.
+\item \textbf{Standup:} At the beginning of the day, every other day, each team member joins a short 15-minute meeting in which members bring up anything that they are stuck on. The meeting is limited to resolving problems blocking the progress on the assigned issues and should remain within the 15-minute timeframe.
+\item During the day, each developer works at their own pace on their assigned issues and helps review the work of team members when they have written code or documentation to resolve a problem.
+\item When new functional requirements are discovered or added to the scope of the project, a team member must make new “feature” issues in the issue tracker, as well as make a new “documentation” issue in the issue tracker for updating the functional requirements.
+\item When a bug is found in an existing feature, a team member must make a new bug issue in the issue tracker.
+\item \textbf{Demos:} Every 3 weeks, a member of the team should prepare a short demonstration of a relevant feature for the meeting with the TA in order to demonstrate progress on the project. The team member who makes the demo will be selected during the retrospective meeting.
+\item \textbf{Retrospective:} On the last day of the sprint, the team members will meet to discuss issues or limitations of the development process (the process described in this document). They will draft lists of what went well, what went poorly, and what actions to take during the next sprint to improve the development process.
+\ee
+\ee
+
+\subsection{Standards}
+We will enforce code style in TypeScript files by using the eslint static analysis tool and the Prettier code formatting tool. eslint will be run as part of our continuous integration testing to ensure that new code being added to the main repository adheres to the code style. 
+
+\subsection{Tools}
+
+For all tools in this table with version ``TBD'', the version of the tool used during development will be specified in the \verb|package.json| file in the GitHub repository.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{| l | l | p{3cm} | p{4cm} |}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Tool} & \textbf{Version} & \textbf{Purpose} & \textbf{Configuration} \\
+\hline
+Git & \verb|>=2.0.0| & Version control & Use \verb|.gitignore| in the GitHub repository to specify which files not to track, use \verb|main| as the default branch \\
+\hline
+GitHub & N/A & Issue tracking, git repository hosting & Use default settings, but provide read/write access to all team members \\
+\hline
+GitHub Actions & N/A & Continuous integration testing  & Configured in the GitHub repository as a YAML file  \\
+\hline
+TypeScript & \verb|^4.0.0| & General purpose programming language & Configured in the GitHub repository as \verb|tsconfig.json| \\
+\hline
+VS Code & \verb|>=1.60.0| & IDE and text editor & Configured in the GitHub repository as a collection of JSON files in the \verb|.vscode| directory. A list of VS Code extensions will be provided through this mechanism \\
+\hline
+\end{tabular}
+\caption{List of Tools, Part 1}
+\end{table}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{| l | l | p{3cm} | p{4cm} |}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Tool} & \textbf{Version} & \textbf{Purpose} & \textbf{Configuration} \\
+\hline
+NodeJS & \verb|^14.0.0| & JavaScript runtime & Default \\
+\hline
+npm & \verb|^7.0.0| & JavaScript dependency management system & Default \\
+\hline
+eslint & TBD & Static analysis tool and style enforcer for JavaScript & Configured in the GitHub repository as \verb|.eslint.json| \\
+\hline
+Prettier & TBD & Code formatter for JavaScript & Configured in the GitHub repository as \verb|prettierrc.json| \\
+\hline
+jsdoc & TBD & API documentation generator for JavaScript & Configured in the GitHub repository with an arbitrary JSON file \\
+\hline
+swagger-jsdoc & TBD & REST API documentation generator for jsdoc & Configured at runtime in JavaScript  \\
+\hline
+Figma & N/A & Tool for creating high fidelity user interface prototypes & N/A \\
+\hline
+Overleaf & N/A & Online tool for editing \LaTeX~documents & N/A \\
+\hline
+\end{tabular}
+\caption{List of Tools, Part 2}
+\end{table}
+
+% ---
+
+\section{Version Control}
+
+\subsection{Overview}
+We will use \verb|git| for version control. GitHub will be utilized to host the central \verb|git| repository where the up-to-date version of the code will reside. We will use the \href{https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow}{\color{blue}\underline{feature branch workflow}} for version control. Tools and functionality provided by GitHub, such as forking and pull requests, will be utilized to facilitate this workflow. 
+
+\subsection{Workflow}
+The feature branch workflow means that the \verb|HEAD| of the \verb|main| branch on the central GitHub git repository consists of all the code that has been tested and reviewed. Each commit on the GitHub repository represents the implementation and testing of a particular feature. A feature is code that implements a subset of a functional requirement that can function and be tested independently of other portions of the functional requirement. When a feature is being developed, a branch is created on a downstream copy of the central repository. A developer creates commits on this branch to implement the new feature. When the feature is implemented and tested, the code for the implementation and tests is peer reviewed by another developer. After feedback from the review is addressed, the commits that make up the new feature are squashed into 1 commit, and the commit message is modified to specify which feature was implemented. Then, the branch is rebased onto the \verb|main| branch, so that when the branch with the feature is merged, the commit will appear as the most recent change. Finally, the feature branch is merged onto the main branch. The above process should avoid creating a merge commit on the main branch of the central git repository. 
+
+\subsection{Structure}
+We will be using a monorepo. This means that all the code related to the project is in one git repository, as opposed to each component of the project being in a separate git repository. This will ensure that it is easy to find the correct versions of components that will interface correctly, since versions of the components that are from the same commit should work together. 
+
+We will be editing \LaTeX~documentation using Overleaf. We will also upload key revisions of the document to the central GitHub repository. 
+
+% ---
+
+\section{Changes to Development Artifacts}
+
+\subsection{Bug Tracking and Change Request}
+We will be using GitHub's integrated issue system for tracking bugs and change requests. This system integrates with GitHub to allow connecting commits to bug reports or change requests.
+
+\subsection{How We Classify Changes}
+We will use the GitHub issues labeling functionality to categorize changes. Labels such as \verb|documentation|, \verb|bug|, \verb|enhancement|, \verb|dependencies|, and \verb|build|, as well as others, will be utilized to specify the relevant categories for each issue. The meaning of each label will be described using the tools provided in the GitHub interface. Issues should be classified by the team member that creates them.
+
+We will also classify issues according to their priority. Some issues should be classified as \verb|priority/high|. Some examples include bugs that pose a threat to the security of the software or our end users, or threaten the integrity of data that is collected. Some issues should be classified as \verb|priority/low|. Examples of such issues are inconsistencies in the UI that do not disrupt usability, feature requests for functionality outside of the current scope of the project, and unaddressed warnings from static analysis tools that do not affect correctness of the program. Finally, most of the issues should be marked as \verb|priority/regular|. Examples of these types of issues include features within the scope of the project and bugs that need to be addressed but don’t pose an immediate security/integrity issue.
+
+Due to the difficulty of properly assessing the time it takes to complete an issue, we will not be labelling issues with expected time to complete.
+
+\subsection{Issue Triage}
+Over time, issues in an issue tracking system may become outdated or incorrectly classified. For instance, the priority of an issue may change over time, or the scope of the project may change. To prevent the information in the issue tracking system from becoming outdated, all team members must regularly look at the issue tracking system and rename issues, remove issues, or reassign the labels on the issues if necessary.
+
+\subsection{Disposition of Changes}
+All changes will require a peer review. The most important aspect of a peer review is ensuring that the assigned task has been addressed. Another aspect of the peer review is ensuring that the change is free from obvious errors, such as bugs, spelling mistakes, and grammatical errors. The burden of testing code and proofreading documentation is shared between the developer/writer and the peer reviewer. After they have looked at the proposed changes, the reviewer provides feedback on what needs to be improved to the developer/writer. Once this feedback has been addressed by the developer/writer, the peer review process begins again. Once no substantial feedback is provided after a peer review, the reviewer “accepts” the change through the GitHub UI, signifying that the change is dispositioned. After this, the change is merged into the main branch of the GitHub repository as described in the version control section, and the issue related to the change is closed in the issue tracker.
+
+% ---
+
+\section{Milestones}
+
+\subsection{Sprint Schedule}
+\begin{itemize}
+    \item \textbf{Sprint 1}: 25 October, 2021 - 12 November, 2021
+    \item \textbf{Sprint 2}: 15 November, 2021 - 8 December, 2021
+    \item \textbf{Sprint 3}: 10 January, 2022 - 28 January, 2022
+    \item \textbf{Sprint 4}: 31 January, 2022 - 18 February, 2022
+    \item \textbf{Sprint 5}: 21 February, 2022 - 11 March, 2022
+    \item \textbf{Sprint 6}: 14 March, 2022 - 1 April, 2022
+    \item \textbf{Sprint 7}: 4 April, 2022 - 22 April, 2022
+\end{itemize}
+
+\subsection{Important Deadlines}
+\begin{itemize}
+    \item \textbf{Proof-of-Concept and Demo}: 8 November, 2021
+    \item \textbf{Expo deliverables}: 7 April, 2022
+    \item \textbf{Final presentations}: 25 April, 2022
+\end{itemize}
+
+\subsection{Gantt Chart}
+\begin{figure}[ftbp]
+\begin{center}
+
+\begin{ganttchart}[y unit title=0.4cm,
+y unit chart=0.5cm,
+vgrid,hgrid, 
+title label anchor/.style={below=-1.6ex},
+title left shift=.05,
+title right shift=-.05,
+title height=1,
+bar/.style={fill=gray!50},
+incomplete/.style={fill=white},
+progress label text={},
+bar height=0.7,
+group right shift=0,
+group top shift=.6,
+group height=.3,
+group peaks={}{}{.2}]{24}
+%labels
+\gantttitle{Week}{24} \\
+\gantttitle{Monday}{4} 
+\gantttitle{Tuesday}{4} 
+\gantttitle{Wednesday}{4} 
+\gantttitle{Thursday}{4} 
+\gantttitle{Friday}{4} 
+\gantttitle{Saturday}{4} \\
+%tasks
+\ganttbar{first task}{1}{2} \\
+\ganttbar{task 2}{3}{8} \\
+\ganttbar{task 3}{9}{10} \\
+\ganttbar{task 4}{11}{15} \\
+\ganttbar[progress=33]{task 5}{20}{22} \\
+\ganttbar{task 6}{18}{19} \\
+\ganttbar{task 7}{16}{18} \\
+\ganttbar[progress=0]{task 8}{21}{24}
+
+%relations 
+\ganttlink{elem0}{elem1} 
+\ganttlink{elem0}{elem3} 
+\ganttlink{elem1}{elem2} 
+\ganttlink{elem3}{elem4} 
+\ganttlink{elem1}{elem5} 
+\ganttlink{elem3}{elem5} 
+\ganttlink{elem2}{elem6} 
+\ganttlink{elem3}{elem6} 
+\ganttlink{elem5}{elem7} 
+\end{ganttchart}
+\end{center}
+\caption{Gantt Chart}
+\end{figure}
+
+\end{document}
