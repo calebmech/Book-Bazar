@@ -1,0 +1,116 @@
+\documentclass[fullpage]{article}
+
+%\setlength {\topmargin} {-1in}
+
+%\setlength {\textheight} {8.6in}
+
+%\setlength{\parindent}{1cm}
+
+\usepackage{amsmath, amsfonts}
+\usepackage[margin=1in]{geometry}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{blindtext}
+\usepackage{cancel}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{graphicx}    %  in the preamble
+%\usepackage[acronym]{glossaries}
+
+\usepackage[table]{xcolor}
+\setlength{\tabcolsep}{18pt}
+\renewcommand{\arraystretch}{1.5}
+\renewcommand{\labelenumi}{\theenumi.}
+\renewcommand{\labelenumii}{\theenumii.}
+\renewcommand{\labelenumiii}{\theenumiii.}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand{\bv}{\begin{verbatim}}
+\newcommand{\ev}{\end{verbatim}}
+\newcommand{\ba}{\begin{align*}}
+\newcommand{\ea}{\end{align*}}
+\newcommand{\beq}{\begin{equation*}}
+\newcommand{\eeq}{\end{equation*}}
+\newcommand{\bs}{\begin{split}}
+\newcommand{\es}{\end{split}}
+\newcommand{\mname}[1]{\mbox{\sf #1}}
+\newcommand{\pnote}[1]{{\langle \text{#1} \rangle}}
+\renewcommand{\labelenumii}{\theenumii.}
+
+\begin{comment}
+\makeglossaries
+\newacronym{SRS}{System Requirements Specification}
+\newacronym{UPC}{Universal Product Code}
+\newacronym{ISBN}{International Standard Book Number}
+\newacronym{GUI}{Graphical User Interface}
+\newacronym{NFR}{Non-Functional Requirements}
+\end{comment}
+\begin{document}
+
+\vspace*{\fill}
+\begin{center}
+
+  {\Huge \textbf{Contract}}\\
+\hrulefill\\[2mm]
+  {\huge \textbf{Book Bazar}}\\[2mm]
+{\large \today}\\[15mm]
+{\large
+\underline{\textbf{Group 6}}\\
+\begin{tabular}{ c c }
+
+ Caleb Mech & mechc2\\ 
+ David Thompson & thompd10\\
+ Matthew Williams & willim36\\
+ Ahmed Al Koasmh & alkoasma\\
+ Harsh Mahajan	& mahajanh    
+\end{tabular}
+}
+
+\end{center}
+
+\vspace*{\fill}
+
+%-----------END OF TITLE PAGE-------------------------------------------------------------
+\newpage
+We, the undersigned, members of Group 6, guarantee the following for the final demonstration of our project, ``Book Bazar'' :
+\bi
+\item A video recording that demonstrates Book Bazar being used.
+\item Allow users to create an account.
+\item Allow users to delete their account.
+%Harsh: Above two are from FR, are they OK?
+\item Have textbook matched with course codes and course titles.
+\item Allow users to make a posting to sell a textbook.
+\item Allow users to delete an existing posting.
+\item Verify that users are members of the McMaster University community via their MAC ID (email) before they can make a posting to sell the book or contact a seller to buy a book.
+\item Be able to scan the UPC (Unified Product Code) of textbooks from an image of the book while making a book posting.
+\item Provide users with means to contact sellers and discuss book sale.
+\item Find textbooks using search parameters and filters (such as textbook name, course title, semester, department, term, program, etc.).
+\item The Book Bazar application will be accessible via a web browser.\\
+\ei
+
+
+Signed,\\
+
+
+\vspace{1.5cm}
+
+Caleb Mech \hspace{3.5cm} Matthew Williams \hspace{3.5cm} Ahmed Al Koasmh\\
+
+ \vspace{1.75cm} 
+
+David Thompson \hspace{2.8cm} Harsh Mahajan
+%\printglossary[type=\acronymtype]
+
+\end{document}
+
+
