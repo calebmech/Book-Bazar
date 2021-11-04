@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "cdigit": "^3.0.1",
     "next": "^11.0.0",
     "quagga": "^0.12.1",
     "react": "17.0.2",
