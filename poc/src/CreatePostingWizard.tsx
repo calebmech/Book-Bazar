@@ -82,7 +82,7 @@ export default class CreatePostingWizard extends React.Component<Props, State> {
       let wait = setTimeout(() => {
         clearTimeout(wait);
         resolve();
-      }, 2000);
+      }, 1000);
     })
   }
 
