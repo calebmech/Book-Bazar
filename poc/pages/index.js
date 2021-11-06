@@ -29,7 +29,7 @@ export default function Home() {
         }
 
         main {
-          width: 500px;
+          max-width: 500px;
           margin: 0 auto;
           padding: 18px;
         }

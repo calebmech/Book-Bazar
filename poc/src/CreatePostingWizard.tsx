@@ -1,5 +1,8 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from "react";
 import Quagga from "quagga";
+import scrappedData from "../bookstore-scrapper/books.json";
+import { GoogleBooksResponse, VolumeInfo } from "./google-books-types";
+import { gtin } from 'cdigit';
 
 interface Props {
 
@@ -11,18 +14,19 @@ interface State {
   bookInfo?: BookInfo
 }
 interface BookInfo {
-  title: string,
-  author: string,
-  edition: string
+  isbn: string,
+  name: string,
+  program: string,
+  term: string,
+  course: string,
+  dept: string,
+  section: string,
+  image: string
 }
 
-export default class CreatePostingWizard extends React.Component<Props, State> {
+const isbnToBookMap = new Map<string, BookInfo>(scrappedData.books.map(book => [book.isbn, book]));
 
-  private static BOOK_INFO: BookInfo = {
-    author: "You and I",
-    edition: "3rd",
-    title: "Us"
-  }
+export default class CreatePostingWizard extends React.Component<Props, State> {
 
   private nextStep: () => void = () => {
     this.setState((state: State) => {
@@ -67,7 +71,7 @@ export default class CreatePostingWizard extends React.Component<Props, State> {
 
   getBookInfoFromISBN: () => Promise<void> = async () => {
     const bookInfo = await (async (isbn: string): Promise<BookInfo> => {
-      return CreatePostingWizard.BOOK_INFO;
+      return isbnToBookMap.get(isbn);
     })(this.state.isbn);
     this.setState((_state: State) => {
       return {
@@ -78,7 +82,7 @@ export default class CreatePostingWizard extends React.Component<Props, State> {
       let wait = setTimeout(() => {
         clearTimeout(wait);
         resolve();
-      }, 2000);
+      }, 1000);
     })
   }
 
@@ -106,9 +110,9 @@ export default class CreatePostingWizard extends React.Component<Props, State> {
       case 2:
         return <FindingBook bookInfoPromise={this.getBookInfoFromISBN} nextStep={this.nextStep} />;
       case 3:
-        return <IsThisYourBook isbn={this.state.isbn} nextStep={this.nextStep} bookInfo={CreatePostingWizard.BOOK_INFO} restart={this.restart} />
+        return <IsThisYourBook isbn={this.state.isbn} nextStep={this.nextStep} bookInfo={this.state.bookInfo} restart={this.restart} />
       case 4:
-        return <PriceAndPhotoInput isbn={this.state.isbn} bookInfo={CreatePostingWizard.BOOK_INFO} nextStep={this.nextStep} />;
+        return <PriceAndPhotoInput isbn={this.state.isbn} bookInfo={this.state.bookInfo} nextStep={this.nextStep} />;
       case 5:
         return <Congrats />;
       default:
@@ -238,7 +242,7 @@ const VideoScanner = props => {
   const { lastStep } = props;
 
   const updateBarcode = (result) => {
-    if(result.codeResult) {
+    if(result.codeResult && gtin.validate(result.codeResult.code)) {
         Quagga.stop();
         setISBN(result.codeResult.code)
         nextStep();
@@ -447,7 +451,8 @@ class IsThisYourBook extends React.Component<BookVerifyProps> {
     return (
       <div>
         <h2>2. Is This Your Book?</h2>
-        <SeeInfoSetPrice isbn={this.props.isbn} bookInfo={this.props.bookInfo} />
+        <SeeInfoSetPrice bookInfo={this.props.bookInfo} />
+        <GoogleBook isbn={this.props.isbn} />
         <button onClick={this.props.restart}>No</button>
         <span>&nbsp;&nbsp;&nbsp;</span>
         <button onClick={this.props.nextStep}>Yes</button>
@@ -460,26 +465,66 @@ class IsThisYourBook extends React.Component<BookVerifyProps> {
 // ---
 
 interface SeeInfoSetPriceProps {
-  isbn: string,
   bookInfo: BookInfo,
 }
 
 function SeeInfoSetPrice(props: SeeInfoSetPriceProps) {
   return (
-    <div>
-      <div>
-        <i>ISBN:</i> {props.isbn}
-      </div>
-      <div>
-        <i>Title:</i> {props.bookInfo.title}
-      </div><div>
-        <i>Author:</i> {props.bookInfo.author}
-      </div>
-      <div>
-        <i>Edition:</i> {props.bookInfo.edition}
-      </div>
+    <div style={{display: "flex", marginBottom: "1em"}}>
+      <img src={props.bookInfo.image} style={{marginRight: "1em"}}/>
+      <ul>
+        <li>ISBN: {props.bookInfo.isbn}</li>
+        <li>Title: {props.bookInfo.name}</li>
+        <li>Course: {props.bookInfo.program} {props.bookInfo.course}</li>
+      </ul>
     </div>
   );
+}
+
+// ---
+
+interface GoogleBookProps {
+  isbn: string
+}
+
+function GoogleBook({isbn}: GoogleBookProps) {
+  const [book, setBook] = useState<VolumeInfo>(undefined);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!book && isbn) {
+      setIsLoading(true);
+      fetch("https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn)
+        .then(res => res.json())
+        .then((res: GoogleBooksResponse) => {
+          if (res.items && res.items.length > 0) {
+            setBook(res.items[0].volumeInfo);
+          }
+        })
+        .finally(() => setIsLoading(false))
+    }
+  }, [isbn])
+
+  
+  return <div>
+    <h3>Google Book</h3>
+    {isLoading && <p>Finding book... <img src="/throbber.gif" width='16px' height='16px' /></p>}
+    {!isLoading && !book && <p>No book found</p>}
+    {!isLoading && book && (
+      <div style={{display: "flex", marginBottom: "1em"}}>
+        <img src={book.imageLinks.thumbnail} style={{marginRight: "1em"}}/>
+        <ul>
+          <li>Title: {book.title}</li>
+          <li>Authors: {book.authors?.join(', ') ?? '?'}</li>
+          <li>Publisher: {book.publisher ?? '?'}</li>
+          <li>Publish date: {book.publishedDate ?? '?'}</li>
+          {book.previewLink && (
+            <li>Link: <a href={book.previewLink}>Google Books</a></li>
+          )}
+        </ul>
+      </div>
+    )}
+  </div>;
 }
 
 // ---
@@ -499,7 +544,7 @@ class PriceAndPhotoInput extends React.Component<PriceProps> {
     return (
       <div>
         <h2>3. Photo and Price</h2>
-        <SeeInfoSetPrice isbn={this.props.isbn} bookInfo={this.props.bookInfo} />
+        <SeeInfoSetPrice bookInfo={this.props.bookInfo} />
         <hr />
         <div>
           Photo of Textbook: <input type="file" />
