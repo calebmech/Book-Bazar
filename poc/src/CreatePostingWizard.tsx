@@ -475,7 +475,7 @@ function SeeInfoSetPrice(props: SeeInfoSetPriceProps) {
       <ul>
         <li>ISBN: {props.bookInfo.isbn}</li>
         <li>Title: {props.bookInfo.name}</li>
-        <li>Course: {props.bookInfo.program} {props.bookInfo.course}</li>
+        <li>Course: {props.bookInfo.dept} {props.bookInfo.course}</li>
       </ul>
     </div>
   );

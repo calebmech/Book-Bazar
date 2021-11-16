@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Dept {
+  id           String   @id @default(uuid())
+  name         String
+  abbreviation String
+  courses      Course[]
+}
+
+model Course {
+  id     String @id @default(uuid())
+  name   String
+  code   String
+  term   String
+  year   Int
+  dept   Dept   @relation(fields: [deptId], references: [id])
+  deptId String
+  books  Book[]
+}
+
+model Book {
+  id                String   @id @default(uuid())
+  isbn              String
+  name              String
+  imageUrl          String?
+  googleBooksId     String?
+  isCampusStoreBook Boolean
+  courses           Course[]
+  posts             Post[]
+}
+
+model Post {
+  id          String     @id @default(uuid())
+  price       Int
+  description String
+  imageUrl    String?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now())
+  status      PostStatus @default(ACTIVE)
+  userId      String
+  book        Book       @relation(fields: [bookId], references: [id])
+  bookId      String
+}
+
+enum PostStatus {
+  ACTIVE
+  DELETED
+  SOLD
+}
