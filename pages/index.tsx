@@ -55,13 +55,12 @@ const Home: NextPage = () => {
 
       <footer className={styles.footer}>
         <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+          href="https://www.vercel.com?utm_source=book-bazaar?utm_campaign=oss"
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
           <span className={styles.logo}>
-            <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
+            <Image src="/powered-by-vercel.svg" alt="Powered by Vercel" width={212} height={44} />
           </span>
         </a>
       </footer>
