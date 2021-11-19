@@ -13,7 +13,10 @@ async function getBooksForCourse(id: string) {
     }
   });
 
-  return course ? course.books : null;
+
+  // return course ? course.books : null;
+
+  return course;
 }
 
 export type Books = Prisma.PromiseReturnType<typeof getBooksForCourse>;
