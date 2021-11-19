@@ -17,7 +17,9 @@ async function getPostsForCourse(id: string) {
     },
   });
 
-  return course ? course.books.map(book => book.posts).flat() : null;
+  // return course ? course.books.map(book => book.posts).flat() : null;
+
+  return course;
 }
 
 export type Posts = Prisma.PromiseReturnType<typeof getPostsForCourse>;
