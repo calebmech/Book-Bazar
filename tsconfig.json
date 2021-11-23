@@ -19,8 +19,12 @@
       "@components/*": ["components/*"],
       "@lib/*": ["lib/*"],
       "@styles/*": ["styles/*"]
-    }
+    },
+    "types": ["cypress", "@testing-library/cypress"]
+  },
+  "typeAcquisition": {
+    "include": ["jest"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "poc"]
 }
