@@ -45,7 +45,7 @@ model Post {
   description String
   imageUrl    String?
   createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   status      PostStatus @default(ACTIVE)
   userId      String
   book        Book       @relation(fields: [bookId], references: [id])
