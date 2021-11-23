@@ -81,9 +81,35 @@
 \tableofcontents
 
 %\listoffigures
-%\listoftables
+\listoftables
 \endgroup
 \newpage
+
+
+\section*{Table of Revisions}
+\begin{table}[h]
+\centering
+\begin{tabular}{| l | c | p{4cm}| p{5cm}|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Version} & \textbf{Date(dd.mm.yyy)} &\textbf{Author(s)} &\textbf{Description}\\
+\hline
+0 & 16.11.2021 &  Harsh Mahajan & First version compiled. Inputs recieved from the entire team and \LaTeX doc compiled.\\
+\hline
+1 & 23.11.2021 &  Harsh Mahajan & Edits made to match rubric and feedback from TA.\\
+\hline
+\end{tabular}
+\caption{Table of Revisions}
+
+\end{table}
+
+\section{Overview}
+The hazards for Book Bazar were identify by recognising the vulnerabilities of Book Bazar that could be exploited by a malicious user. The causes of the events have been addressed by our mitigation strategies to either eliminate the hazard or to avoid it to the best of our capabilities. Our system is not a safety-critical system, yet it does possess some soceital hazards, like the first hazard, that been addressed. \\
+
+
+Our system shall be authenticating users using their McMaster emails and users may share thier contact information with each other to buy/sell a textbook. In such scenarios, we've assumed the security of the systems that are providing the services. For eg. we're assuming the security of McMaster issues emails when we authenticate users via their McMaster emails.\\
+\newline
+Below are the hazards that we have identified and our means to mitigate them.
 
 \section{Meeting Strangers to Buy Textbooks}
 \subsection*{Explanation}
@@ -93,7 +119,9 @@ Meeting unkown strangers, even though they're verifed as McMaster community memb
 This event occurs when there are malicious users using Book Bazar.
 
 \subsection*{Mitigation}
-Safety tips for meeting strangers via Book Bazar will be provided when a user makes a post to sell a textbook or contacts a seller. Tips may include links to awareness tools, like the McMaster Safety App, that could be used to improve safety. Furthermore, a means of reporting malicious users may be created if deemed necessary.
+Safety tips for meeting strangers via Book Bazar will be provided when a user makes a post to sell a textbook or contacts a seller. Tips may include links to awareness tools, like the McMaster Safety App, that could be used to improve safety. Furthermore, a means of reporting malicious users may be created if deemed necessary.\\
+\newline
+Section 11.9 of our System Requirements Rev0 document covers this hazard.
 
 \section{User's Password Gets Leaked}
 
@@ -104,7 +132,9 @@ Depending on how the user stores their password (written down or in a file on th
 One of the means via which the attacker may acquire a user's password is by accessing the database where the information regarding the password is stored. This could be done either via a remote connection or physically accessing the computer. Another means of acquiring the user's password would be  via a man-in-the-middle attack, where some or all of the user's network communication is first routed to the attacker before reaching its intended destination. Lastly, an attacker may use a social engineeirng schemeto trick a user into providing the password to a service that may seem affiliated with Book Bazar but in-reality is completly separate.
 
 \subsection*{Mitigation}
-We shall use a trusted $3^{rd}$ party solution to authenticate the user, i.e., Booz Bazar may owrk without storing the user's password or any information related to the password, like the hash of the password. This would ensure that, even if Book Bazar's database were to be compromised, the user's passwords may not be obtained. Furthermore, we shall ensure that any requests between the user and our servers will use HTTPS, preventing man-in-the-middle attacks.
+We shall assume the security of the email provided by McMaster University. We will use the user's McMaster email to authenticate the user. Booz Bazar shall work without storing the user's password or any information related to the password, like the hash of the password. This would ensure that, even if Book Bazar's database were to be compromised, the user's passwords may not be obtained. Furthermore, we shall ensure that any requests between the user and our servers will use HTTPS, preventing man-in-the-middle attacks.\\
+\newline
+Section 11.6 of our System Requirements Rev0 document covers this hazard.
 
 \section{User's Personal Information Gets Leaked}
 
