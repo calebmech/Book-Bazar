@@ -4,7 +4,11 @@ import { prisma } from './db';
 import { createSession } from './session';
 import { findOrCreateUser } from './user';
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
+if (process.env.SENDGRID_API_KEY) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+} else {
+  throw new Error('process.env.SENDGRID_API_KEY must be set.');
+}
 
 function getMagicLinkExpirationDate(): Date {
   return new Date(Date.now() + 1000 * 60 * 60); // 1 hour from now
@@ -22,10 +26,16 @@ export async function sendMagicLink(email: string): Promise<void> {
     },
   });
 
+  if (!process.env.VERCEL_URL) {
+    throw new Error('process.env.VERCEL_URL must be set.');
+  }
   const magicLink = 'https://' + process.env.VERCEL_URL + '/magic?token=' + encodeURIComponent(token);
 
+  if (!process.env.SENDGRID_EMAIL_FROM) {
+    throw new Error('process.env.SENDGRID_EMAIL_FROM must be set.');
+  }
   await sgMail.send({
-    from: process.env.SENDGRID_EMAIL_FROM!,
+    from: process.env.SENDGRID_EMAIL_FROM,
     to: email,
     subject: 'Login to Book Bazaar',
     html: `<a href="${magicLink}">Click here</a> to login`,
