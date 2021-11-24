@@ -47,6 +47,7 @@ model Post {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   status      PostStatus @default(ACTIVE)
+  user        User       @relation(fields: [userId], references: [id])
   userId      String
   book        Book       @relation(fields: [bookId], references: [id])
   bookId      String
@@ -56,4 +57,31 @@ enum PostStatus {
   ACTIVE
   DELETED
   SOLD
+}
+
+model User {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  email     String    @unique
+  name      String?
+  imageUrl  String?
+  posts     Post[]
+  sessions  Session[]
+}
+
+model Session {
+  id             String   @id @default(uuid())
+  createdAt      DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id])
+  userId         String
+  hashedToken    String   @unique
+  expirationDate DateTime
+}
+
+model VerificationEmail {
+  id             String   @id @default(uuid())
+  email          String
+  hashedToken    String   @unique
+  expirationDate DateTime
 }
