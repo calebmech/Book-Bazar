@@ -19,5 +19,5 @@ async function logout(req: NextApiRequest, res: NextApiResponse) {
   await deleteSession(token);
 
   res.setHeader('Set-Cookie', createDeleteSessionCookie());
-  res.redirect('/');
+  res.status(200).end();
 }
