@@ -3,7 +3,9 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "(local-ssl-proxy --source 4000 --target 3000) & next dev",
+    "dev": "next dev",
+    "dev-ssl": "npm-run-all --parallel ssl-proxy dev",
+    "ssl-proxy": "local-ssl-proxy --source 4000 --target 3000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -28,6 +30,7 @@
     "eslint": "7.32.0",
     "eslint-config-next": "12.0.4",
     "local-ssl-proxy": "1.2.3",
+    "npm-run-all": "^4.1.5",
     "prisma": "^3.5.0",
     "typescript": "4.5.2"
   }
