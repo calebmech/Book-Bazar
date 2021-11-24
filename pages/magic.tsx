@@ -4,21 +4,31 @@ import { StatusCodes } from 'http-status-codes';
 import { GetServerSideProps, NextPage } from 'next';
 
 interface MagicProps {
-  message: string;
+  errorMessage: string;
 }
 
-const Magic: NextPage<MagicProps> = ({ message }) => {
-  return <p>{message}</p>;
+/**
+ * Displays an error message if magic link consumption fails.
+ *
+ * WIP
+ */
+const Magic: NextPage<MagicProps> = ({ errorMessage }) => {
+  return <p>{errorMessage}</p>;
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ res, query }) => {
+/**
+ * Consumes a magic link and redirects to the base URL.
+ *
+ * If consumption fails, an error message is returned instead.
+ */
+export const getServerSideProps: GetServerSideProps<MagicProps> = async ({ res, query }) => {
   const { token } = query;
 
   if (typeof token !== 'string') {
     res.statusCode = StatusCodes.BAD_REQUEST;
     return {
       props: {
-        message: 'Invalid URL',
+        errorMessage: 'Invalid login link.',
       },
     };
   }
@@ -29,7 +39,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res, query }) => 
     res.statusCode = StatusCodes.UNAUTHORIZED;
     return {
       props: {
-        message: 'Invalid token',
+        errorMessage: 'This login link is invalid and may have expired or already been used.',
       },
     };
   }
