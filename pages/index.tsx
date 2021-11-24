@@ -1,5 +1,5 @@
 import Login from '@components/Login';
-import { useUserQuery } from '@lib/hooks/user';
+import { useLogout, useUserQuery } from '@lib/hooks/user';
 import styles from '@styles/Home.module.css';
 import type { NextPage } from 'next';
 import Head from 'next/head';
@@ -7,6 +7,7 @@ import Image from 'next/image';
 
 const Home: NextPage = () => {
   const { data: user } = useUserQuery();
+  const logout = useLogout();
 
   return (
     <div className={styles.container}>
@@ -22,7 +23,7 @@ const Home: NextPage = () => {
         ) : (
           <>
             <pre>{JSON.stringify(user, null, 2)}</pre>
-            <a href="/logout">Sign out</a>
+            <button onClick={() => logout()}>Sign out</button>
           </>
         )}
       </main>
