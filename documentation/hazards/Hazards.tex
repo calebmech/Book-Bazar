@@ -111,60 +111,62 @@ Our system shall be authenticating users using their McMaster emails and users m
 \newline
 Below are the hazards that we have identified and our means to mitigate them.
 
-\section{Meeting Strangers to Buy Textbooks}
-\subsection*{Explanation}
+\section{Book Bazar Hazards}
+
+\subsection{Meeting Strangers to Buy Textbooks}
+\subsubsection*{Explanation}
 Meeting unkown strangers, even though they're verifed as McMaster community members, does posses a certain level of danger. A user with malicious intent may post a frequently needed textbook on Book Bazar at a steep discount. The lucrative price may attract several college students who always appreciate a steep discount. The malicious user may set up a meeting in a secluded area where the users, especially first-year students who aren't familiar with the neighbourhood, may be susceptible to robbery/assault.
 
-\subsection*{Cause of Event}
+\subsubsection*{Cause of Event}
 This event occurs when there are malicious users using Book Bazar.
 
-\subsection*{Mitigation}
+\subsubsection*{Mitigation}
 Safety tips for meeting strangers via Book Bazar will be provided when a user makes a post to sell a textbook or contacts a seller. Tips may include links to awareness tools, like the McMaster Safety App, that could be used to improve safety. Furthermore, a means of reporting malicious users may be created if deemed necessary.\\
 \newline
 Section 11.9 of our System Requirements Rev0 document covers this hazard.
 
-\section{User's Password Gets Leaked}
+\subsection{User's Password Gets Leaked}
 
-\subsection*{Explanation}
+\subsubsection*{Explanation}
 Depending on how the user stores their password (written down or in a file on the computer), an attacker may attain the user's password through various means. Ergo, the attacker may impersonate the user on Book Bazar. A worst-case-scenario would be if the user uses the same password for multiple services and the attacker could now access all thse other services using the user's password. 
 
-\subsection*{Cause of Event}
+\subsubsection*{Cause of Event}
 One of the means via which the attacker may acquire a user's password is by accessing the database where the information regarding the password is stored. This could be done either via a remote connection or physically accessing the computer. Another means of acquiring the user's password would be  via a man-in-the-middle attack, where some or all of the user's network communication is first routed to the attacker before reaching its intended destination. Lastly, an attacker may use a social engineeirng schemeto trick a user into providing the password to a service that may seem affiliated with Book Bazar but in-reality is completly separate.
 
-\subsection*{Mitigation}
+\subsubsection*{Mitigation}
 We shall assume the security of the email provided by McMaster University. We will use the user's McMaster email to authenticate the user. Booz Bazar shall work without storing the user's password or any information related to the password, like the hash of the password. This would ensure that, even if Book Bazar's database were to be compromised, the user's passwords may not be obtained. Furthermore, we shall ensure that any requests between the user and our servers will use HTTPS, preventing man-in-the-middle attacks.\\
 \newline
 Section 11.6 of our System Requirements Rev0 document covers this hazard.
 
-\section{User's Personal Information Gets Leaked}
+\subsection{User's Personal Information Gets Leaked}
 
-\subsection*{Explanation}
+\subsubsection*{Explanation}
 Personal information may be valuable to attackers since contact information could be used to run scams. Furthermore, a collection of personal information could allow an attacker to imitate a user for personal gain. Lastly, an attacker could use the personal contact information of a user to harass the user.
-\subsection*{Cause of Event}
+\subsubsection*{Cause of Event}
 Misconfigured access levels to data or providing access to data without requiring authentication.
-\subsection*{Mitigation}
+\subsubsection*{Mitigation}
 To mitigate leaking users’ personal information, we will only store personal information required to operate Book Bazar, such as the user’s McMaster email, their name, and photos of the textbooks that they intend to sell. Furthermore, we shall require users to sign in before viewing personal information related to textbook postings. Ergo, only individuals affiliated with McMaster may access the contact information of sellers.
 
-\section{Cross-Site Scripting (XSS)}
+\subsection{Cross-Site Scripting (XSS)}
 
-\subsection*{Explanation}
+\subsubsection*{Explanation}
 Cross-site scripting (often abbreviated as XSS) is a common form of arbitrary code execution that is prevalent in web applications. It allows an attacker to write JavaScript code in a textbox, then run this code. See \url{https://en.wikipedia.org/wiki/Cross-site_scripting}  for more information.
 
-\subsection*{Cause of Event}
+\subsubsection*{Cause of Event}
 An attacker sets their name on Book Bazaar to contain an HTML tag which contains JavaScript that mines cryptocurrency and deposits it in the attacker’s cryptocurrency wallet. When a user views a textbook posting from the attacker, if the name set by the attacker is displayed, means that the malicious script is loaded onto their computer, and their computer mines cryptocurrency for the attacker.
 
-\subsection*{Mitigation}
+\subsubsection*{Mitigation}
 Input fields will be sanitized such that text with HTML or JavaScript content that is input into textboxes gets transformed into a form that, when displayed on will be interpreted as plain text instead of code or marked up text.
 
-\section{SQL Injection}
+\subsection{SQL Injection}
 
-\subsection*{Explanation}
+\subsubsection*{Explanation}
 An attacker performs an unauthorized SQL query through appending the query to one of the parameters of a service that interacts with the database. This query could compromise the integrity of the database, for instance, by erasing all the data. See \url{https://en.wikipedia.org/wiki/SQL_injection} for more information.
 
-\subsection*{Cause of Event}
+\subsubsection*{Cause of Event}
 An attacker passes an SQL query to a service, and Book Bazar’s server executes this SQL query.
 
-\subsection*{Mitigation}
+\subsubsection*{Mitigation}
 Use an object-relational mapping library (ORM) to interact with the database. This shall provide a layer of abstraction between the code that operates with data and the SQL calls. This way, developers don’t need to write SQL queries directly, instead interact with the database using object-oriented paradigms. This prevents making calls to the database that may contain SQL injections.\\
 \newline
 Another approach we shall take to mitigate the effects of an SQL injection is by creating backups of the database. So if we detect that the integrity of the database has been compromised, then we can restore the backup of the database.
