@@ -8,7 +8,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     case HttpMethod.GET:
       return getCurrentUserHandler(req, res);
     default:
-      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).end();
+      return res.status(StatusCodes.METHOD_NOT_ALLOWED).end();
   }
 }
 
