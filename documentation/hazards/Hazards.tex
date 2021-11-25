@@ -153,7 +153,7 @@ To mitigate leaking users’ personal information, we will only store personal i
 Cross-site scripting (often abbreviated as XSS) is a common form of arbitrary code execution that is prevalent in web applications. It allows an attacker to write JavaScript code in a textbox, then run this code. See \url{https://en.wikipedia.org/wiki/Cross-site_scripting}  for more information.
 
 \subsubsection*{Cause of Event}
-An attacker sets their name on Book Bazaar to contain an HTML tag which contains JavaScript that mines cryptocurrency and deposits it in the attacker’s cryptocurrency wallet. When a user views a textbook posting from the attacker, if the name set by the attacker is displayed, means that the malicious script is loaded onto their computer, and their computer mines cryptocurrency for the attacker.
+An attacker sets their name on Book Bazar to contain an HTML tag which contains JavaScript that mines cryptocurrency and deposits it in the attacker’s cryptocurrency wallet. When a user views a textbook posting from the attacker, if the name set by the attacker is displayed, means that the malicious script is loaded onto their computer, and their computer mines cryptocurrency for the attacker.
 
 \subsubsection*{Mitigation}
 Input fields will be sanitized such that text with HTML or JavaScript content that is input into textboxes gets transformed into a form that, when displayed on will be interpreted as plain text instead of code or marked up text.

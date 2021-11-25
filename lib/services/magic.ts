@@ -37,7 +37,7 @@ export async function sendMagicLink(email: string): Promise<void> {
   await sgMail.send({
     from: process.env.SENDGRID_EMAIL_FROM,
     to: email,
-    subject: 'Login to Book Bazaar',
+    subject: 'Login to Book Bazar',
     html: `<a href="${magicLink}">Click here</a> to login`,
   });
 }
