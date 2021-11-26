@@ -1,7 +1,7 @@
-import { createSessionCookie } from '@lib/helpers/backend/session-cookie';
-import { consumeMagicLink } from '@lib/services/magic';
-import { StatusCodes } from 'http-status-codes';
-import { GetServerSideProps, NextPage } from 'next';
+import { createSessionCookie } from "@lib/helpers/backend/session-cookie";
+import { consumeMagicLink } from "@lib/services/magic";
+import { StatusCodes } from "http-status-codes";
+import { GetServerSideProps, NextPage } from "next";
 
 interface MagicProps {
   errorMessage: string;
@@ -21,14 +21,17 @@ const Magic: NextPage<MagicProps> = ({ errorMessage }) => {
  *
  * If consumption fails, an error message is returned instead.
  */
-export const getServerSideProps: GetServerSideProps<MagicProps> = async ({ res, query }) => {
+export const getServerSideProps: GetServerSideProps<MagicProps> = async ({
+  res,
+  query,
+}) => {
   const { token } = query;
 
-  if (typeof token !== 'string') {
+  if (typeof token !== "string") {
     res.statusCode = StatusCodes.BAD_REQUEST;
     return {
       props: {
-        errorMessage: 'Invalid login link.',
+        errorMessage: "Invalid login link.",
       },
     };
   }
@@ -39,16 +42,20 @@ export const getServerSideProps: GetServerSideProps<MagicProps> = async ({ res, 
     res.statusCode = StatusCodes.UNAUTHORIZED;
     return {
       props: {
-        errorMessage: 'This login link is invalid and may have expired or already been used.',
+        errorMessage:
+          "This login link is invalid and may have expired or already been used.",
       },
     };
   }
 
-  res.setHeader('Set-Cookie', createSessionCookie(sessionToken.token, sessionToken.expirationDate));
+  res.setHeader(
+    "Set-Cookie",
+    createSessionCookie(sessionToken.token, sessionToken.expirationDate)
+  );
 
   return {
     redirect: {
-      destination: '/',
+      destination: "/",
       permanent: false,
     },
   };

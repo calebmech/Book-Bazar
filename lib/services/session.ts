@@ -1,5 +1,5 @@
-import { prisma } from './db';
-import { hashToken } from '../helpers/backend/tokens';
+import { prisma } from "./db";
+import { hashToken } from "../helpers/backend/tokens";
 
 function getSessionRenewalDate(): Date {
   return new Date(Date.now() + 1000 * 60 * 60 * 24 * 30 * 1); // ~1 months from now
@@ -53,5 +53,7 @@ export async function createSession(sessionToken: string, userId: string) {
 }
 
 export async function deleteSession(sessionToken: string) {
-  await prisma.session.delete({ where: { hashedToken: hashToken(sessionToken) } });
+  await prisma.session.delete({
+    where: { hashedToken: hashToken(sessionToken) },
+  });
 }
