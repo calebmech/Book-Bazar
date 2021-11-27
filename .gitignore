@@ -39,3 +39,13 @@ yarn-error.log*
 # cypress
 /cypress/videos
 /cypress/screenshots
+
+# LaTeX
+**/*.aux
+**/*.fdb_latexmk
+**/*.fls
+**/*.log
+**/*.lot
+**/*.out
+**/*.synctex.gz
+**/*.toc
