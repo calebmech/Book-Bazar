@@ -1,9 +1,34 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Prisma, PrismaClient } from '@prisma/client';
+import { HttpMethod } from "@lib/http-method";
+import { StatusCodes } from "http-status-codes";
 
-const prisma = new PrismaClient();
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  switch (req.method as HttpMethod) {
+    case HttpMethod.GET:
+      return getCourseWithBooksWithPostsHandler(req, res);
+    default:
+      return res.status(StatusCodes.METHOD_NOT_ALLOWED).end();
+  }
+}
+
+export type CourseWithBooksWithPosts = Prisma.PromiseReturnType<typeof getCourseWithBooksWithPosts>;
+
+async function getCourseWithBooksWithPostsHandler(req: NextApiRequest, res: NextApiResponse<CourseWithBooksWithPosts>) {
+  const { id } = req.query;
+  const courseID = id as string;
+
+  const course = await getCourseWithBooksWithPosts(courseID);
+  if (course) {
+    res.status(StatusCodes.OK).json(course);
+  }
+  else {
+    res.status(StatusCodes.NOT_FOUND).json(null);
+  }
+}
 
 async function getCourseWithBooksWithPosts(id: string) {
+  const prisma = new PrismaClient();
   const course = await prisma.course.findFirst({
     where: {
       id: id,
@@ -18,19 +43,4 @@ async function getCourseWithBooksWithPosts(id: string) {
   });
 
   return course;
-}
-
-export type CourseWithBooksWithPosts = Prisma.PromiseReturnType<typeof getCourseWithBooksWithPosts>;
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse<CourseWithBooksWithPosts>) {
-  const { id } = req.query;
-  const courseID = id as string;
-
-  const course = await getCourseWithBooksWithPosts(courseID);
-  if (course) {
-    res.status(200).json(course);
-  }
-  else {
-    res.status(404).json(null);
-  }
 }
