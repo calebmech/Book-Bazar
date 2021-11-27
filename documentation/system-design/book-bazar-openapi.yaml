@@ -1,0 +1,609 @@
+openapi: 3.0.1
+info:
+  title: Book Bazar
+  description: "[Book Bazar](https://bookbazar.me) API documentation."
+  version: 0.0.0
+externalDocs:
+  description: Check out Book Bazar on GitHub
+  url: https://github.com/calebmech/Book-Bazar
+servers:
+  - url: https://www.bookbazar.me/api
+  - url: https://localhost:4000/api
+tags:
+  - name: Search
+  - name: Post
+  - name: Book
+  - name: Course
+  - name: Auth
+  - name: User
+paths:
+  /search:
+    get:
+      tags:
+        - Search
+      summary: Search courses and books
+      parameters:
+        - name: q
+          in: query
+          description: Search query
+          required: true
+          schema:
+            type: string
+        - name: coursesLength
+          in: query
+          description: Maximum number of courses to return
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 20
+            default: 3
+        - name: booksLength
+          in: query
+          description: Maximum number of books to return
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 20
+            default: 5
+        - name: coursesPage
+          in: query
+          description: Page of courses to return
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: booksPage
+          in: query
+          description: Page of books to return
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  courses:
+                    type: array
+                    maxLength: 5
+                    items:
+                      $ref: "#/components/schemas/Course"
+                  books:
+                    type: array
+                    maxLength: 5
+                    items:
+                      $ref: "#/components/schemas/Book"
+        400:
+          description: Invalid ID query supplied
+  /post:
+    post:
+      tags:
+        - Post
+      summary: Create a new post
+      requestBody:
+        required: true
+        description: Post to create
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreatablePost"
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+        400:
+          description: Invalid request body supplied
+      security:
+        - auth: []
+  /post/{id}:
+    get:
+      tags:
+        - Post
+      summary: Get a post by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of post to return
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Successful response. User object will only be populated if the request is authenticated.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: "#/components/schemas/Post"
+                  - type: array
+                    items:
+                      $ref: "#/components/schemas/PostWithUser"
+        400:
+          description: Invalid ID supplied
+        404:
+          description: Post was not found
+      security:
+        - {}
+        - auth: []
+    put:
+      tags:
+        - Post
+      summary: Update the post with the given ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of post to update
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        description: Updated properties on post object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ModifiablePost"
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+        400:
+          description: Invalid ID or request body supplied
+        403:
+          description: Authenticated user is forbidden from updating the requested post
+      security:
+        - auth: []
+    delete:
+      tags:
+        - Post
+      summary: Delete the post with the given ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of post to delete
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Successful response
+        400:
+          description: Invalid ID supplied
+        403:
+          description: Authenticated user is forbidden from deleting the requested post
+      security:
+        - auth: []
+  /book/{id}:
+    get:
+      tags:
+        - Book
+      summary: Get a book by ID, including posts for it
+      parameters:
+        - name: id
+          in: path
+          description: ID of book to return
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: length
+          in: query
+          description: Maximum number of posts to return
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 100
+            default: 20
+        - name: page
+          in: query
+          description: Page of posts to return
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        200:
+          description: Successful response. Users in attached posts are only populated if the request is authenticated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BookWithPostsAndCourses"
+        400:
+          description: Invalid ID supplied
+        404:
+          description: Book was not found
+      security:
+        - {}
+        - auth: []
+  /course/{id}:
+    get:
+      tags:
+        - Course
+      summary: Get a course by ID, including all books for it
+      parameters:
+        - name: id
+          in: path
+          description: ID of course to return
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CourseWithBooks"
+        400:
+          description: Invalid ID supplied
+        404:
+          description: Course was not found
+  /course/{id}/posts:
+    get:
+      tags:
+        - Course
+      summary: Get posts for a course by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of book to return posts for
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: length
+          in: query
+          description: Maximum number of posts to return
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 100
+            default: 20
+        - name: page
+          in: query
+          description: Page of posts to return
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        200:
+          description: Successful response. Users in posts are only populated if the request is authenticated.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: "#/components/schemas/Post"
+                  - type: array
+                    items:
+                      $ref: "#/components/schemas/PostWithUser"
+
+        400:
+          description: Invalid ID supplied
+        404:
+          description: Course was not found
+      security:
+        - {}
+        - auth: []
+  /auth/magic:
+    post:
+      tags:
+        - Auth
+      summary: Email a magic link to the user with the specified MacID
+      description: Email a magic link to the user with the specified MacID. Once the user clicks the magic link, a new session will be started in their browser.
+      requestBody:
+        required: true
+        description: Post to create
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                macID:
+                  type: string
+                  example: mechc2
+      responses:
+        200:
+          description: Successful response; email has been sent
+        400:
+          description: Invalid request body supplied
+  /auth/logout:
+    post:
+      tags:
+        - Auth
+      summary: Logout the currently authenticated user
+      responses:
+        200:
+          description: Successful response; user session has ended
+      security:
+        - auth: []
+  /user:
+    get:
+      tags:
+        - User
+      summary: Get the currently logged in user
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        204:
+          description: There is no user logged in
+  /user/{id}:
+    get:
+      tags:
+        - User
+      summary: Get a user by ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        400:
+          description: Invalid ID supplied
+        404:
+          description: User was not found
+      security:
+        - auth: []
+    put:
+      tags:
+        - User
+      summary: Update the user with the given ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to update
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        description: Updated properties on user object
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ModifiableUser"
+      responses:
+        200:
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        400:
+          description: Invalid ID or request body supplied
+        403:
+          description: Authenticated user is forbidden from updating the requested user
+      security:
+        - auth: []
+    delete:
+      tags:
+        - User
+      summary: Delete the user with the given ID
+      parameters:
+        - name: id
+          in: path
+          description: ID of user to delete
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        200:
+          description: Successful response
+        400:
+          description: Invalid ID supplied
+        403:
+          description: Authenticated user is forbidden from deleting the requested user
+      security:
+        - auth: []
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        imageUrl:
+          type: string
+          format: uri
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    ModifiableUser:
+      type: object
+      properties:
+        name:
+          type: string
+        imageUrl:
+          type: string
+          format: uri
+    Book:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        isbn:
+          type: string
+        imageUrl:
+          type: string
+          format: uri
+        googleBooksId:
+          type: string
+        isCampusStoreBook:
+          type: boolean
+    BookWithPostsAndCourses:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Book"
+      properties:
+        posts:
+          oneOf:
+            - type: array
+              items:
+                $ref: "#/components/schemas/Post"
+            - type: array
+              items:
+                $ref: "#/components/schemas/PostWithUser"
+        courses:
+          type: array
+          items:
+            $ref: "#/components/schemas/Course"
+    Post:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        price:
+          type: integer
+        description:
+          type: string
+        imageUrl:
+          type: string
+          format: uri
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - SOLD
+        userId:
+          type: string
+          format: uuid
+        bookId:
+          type: string
+          format: uuid
+        book:
+          $ref: "#/components/schemas/Book"
+    PostWithUser:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Post"
+      properties:
+        user:
+          $ref: "#/components/schemas/User"
+    CreatablePost:
+      type: object
+      properties:
+        price:
+          type: integer
+        description:
+          type: string
+        imageUrl:
+          type: string
+          format: uri
+        bookId:
+          type: string
+          format: uuid
+    ModifiablePost:
+      type: object
+      properties:
+        price:
+          type: integer
+        description:
+          type: string
+        imageUrl:
+          type: string
+          format: uri
+        status:
+          type: string
+          enum:
+            - ACTIVE
+            - SOLD
+    Dept:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "Software Engineering"
+        abbreviation:
+          type: string
+          example: "SFWRENG"
+    Course:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "Data Structures and Algorithms"
+        code:
+          type: string
+          example: "2C03"
+        term:
+          type: string
+          example: "Winter"
+        year:
+          type: integer
+          example: 2019
+        deptId:
+          type: string
+          format: uuid
+        dept:
+          $ref: "#/components/schemas/Dept"
+    CourseWithBooks:
+      type: object
+      allOf:
+        - $ref: "#/components/schemas/Course"
+      properties:
+        books:
+          type: array
+          items:
+            $ref: "#/components/schemas/Book"
+  securitySchemes:
+    auth:
+      type: apiKey
+      in: cookie
+      name: session-token
