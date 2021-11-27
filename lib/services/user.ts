@@ -1,5 +1,5 @@
-import { User } from '@prisma/client';
-import { prisma } from '@lib/services/db';
+import { User } from "@prisma/client";
+import { prisma } from "@lib/services/db";
 
 export async function findOrCreateUser(email: string): Promise<User> {
   return prisma.user.upsert({

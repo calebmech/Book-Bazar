@@ -1,8 +1,11 @@
-import { createDeleteSessionCookie, SESSION_TOKEN_COOKIE } from '@lib/helpers/backend/session-cookie';
-import { HttpMethod } from '@lib/http-method';
-import { deleteSession } from '@lib/services/session';
-import { StatusCodes } from 'http-status-codes';
-import { NextApiRequest, NextApiResponse } from 'next';
+import {
+  createDeleteSessionCookie,
+  SESSION_TOKEN_COOKIE,
+} from "@lib/helpers/backend/session-cookie";
+import { HttpMethod } from "@lib/http-method";
+import { deleteSession } from "@lib/services/session";
+import { StatusCodes } from "http-status-codes";
+import { NextApiRequest, NextApiResponse } from "next";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method as HttpMethod) {
@@ -18,6 +21,6 @@ async function logout(req: NextApiRequest, res: NextApiResponse) {
 
   await deleteSession(token);
 
-  res.setHeader('Set-Cookie', createDeleteSessionCookie());
+  res.setHeader("Set-Cookie", createDeleteSessionCookie());
   res.status(200).end();
 }
