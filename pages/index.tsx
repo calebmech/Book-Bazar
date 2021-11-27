@@ -1,9 +1,9 @@
-import Login from '@components/Login';
-import { useLogout, useUserQuery } from '@lib/hooks/user';
-import styles from '@styles/Home.module.css';
-import type { NextPage } from 'next';
-import Head from 'next/head';
-import Image from 'next/image';
+import Login from "@components/Login";
+import { useLogout, useUserQuery } from "@lib/hooks/user";
+import styles from "@styles/Home.module.css";
+import type { NextPage } from "next";
+import Head from "next/head";
+import Image from "next/image";
 
 const Home: NextPage = () => {
   const { data: user } = useUserQuery();
@@ -35,7 +35,12 @@ const Home: NextPage = () => {
           rel="noopener noreferrer"
         >
           <span className={styles.logo}>
-            <Image src="/powered-by-vercel.svg" alt="Powered by Vercel" width={212} height={44} />
+            <Image
+              src="/powered-by-vercel.svg"
+              alt="Powered by Vercel"
+              width={212}
+              height={44}
+            />
           </span>
         </a>
       </footer>

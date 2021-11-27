@@ -1,9 +1,9 @@
-import { HttpMethod } from '@lib/http-method';
-import { sendMagicLink } from '@lib/services/magic';
-import { StatusCodes } from 'http-status-codes';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { HttpMethod } from "@lib/http-method";
+import { sendMagicLink } from "@lib/services/magic";
+import { StatusCodes } from "http-status-codes";
+import { NextApiRequest, NextApiResponse } from "next";
 
-const MCMASTER_EMAIL_SUFFIX = '@mcmaster.ca';
+const MCMASTER_EMAIL_SUFFIX = "@mcmaster.ca";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method as HttpMethod) {
@@ -19,7 +19,7 @@ export interface SendMagicLinkBody {
 }
 
 function instanceOfSendMagicLinkBody(object: any): object is SendMagicLinkBody {
-  return typeof object === 'object' && typeof object.macID === 'string';
+  return typeof object === "object" && typeof object.macID === "string";
 }
 
 async function sendMagicLinkHandler(req: NextApiRequest, res: NextApiResponse) {
