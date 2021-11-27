@@ -3,7 +3,7 @@ import { Prisma, PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-async function getPostsForCourse(id: string) {
+async function getCourseWithBooksWithPosts(id: string) {
   const course = await prisma.course.findFirst({
     where: {
       id: id,
@@ -17,18 +17,16 @@ async function getPostsForCourse(id: string) {
     },
   });
 
-  // return course ? course.books.map(book => book.posts).flat() : null;
-
   return course;
 }
 
-export type Posts = Prisma.PromiseReturnType<typeof getPostsForCourse>;
+export type CourseWithBooksWithPosts = Prisma.PromiseReturnType<typeof getCourseWithBooksWithPosts>;
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Posts>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<CourseWithBooksWithPosts>) {
   const { id } = req.query;
   const courseID = id as string;
 
-  const course = await getPostsForCourse(courseID);
+  const course = await getCourseWithBooksWithPosts(courseID);
   if (course) {
     res.status(200).json(course);
   }
