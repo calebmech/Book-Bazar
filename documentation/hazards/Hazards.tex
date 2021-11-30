@@ -100,6 +100,8 @@
 \hline
 2 & 26.11.2021 & David Thompson & Fixed some spelling, grammar, and formatting errors in the document. \\
 \hline
+3 & 26.11.2021 & Harsh Mahajan & Added onto the Safety Requirements and edited hazard 2.2\\
+\hline
 \end{tabular}
 \caption{Table of Revisions}
 
@@ -128,23 +130,18 @@ Safety tips for meeting strangers via Book Bazar will be provided when a user ma
 \subsubsection*{Safety Requirements}
 Section 11.9 of our System Requirements Rev0 document covers this hazard.
 
-\subsection{User's Password Gets Leaked}
+\subsection{User's Magic Link Gets Leaked}
 
-\emph{Since we are no longer using a password-based system, we should rewrite this section}
-\begin{comment}
+
 \subsubsection*{Explanation}
-Depending on how the user stores their password (written down or in a file on the computer), an attacker may attain the user's password through various means. Ergo, the attacker may impersonate the user on Book Bazar. A worst-case-scenario would be if the user uses the same password for multiple services and the attacker could now access all these other services using the user's password.
-
+To verify that a user is a member of the McMaster community, Book Bazar shall generate magic links which will be emailed to their McMaster emails. A malicious user may guess the link by brute force. When they access the link, they may use that to impersonate the user on Book Bazar platform. 
 \subsubsection*{Cause of Event}
-One of the means via which the attacker may acquire a user's password is by accessing the database where the information regarding the password is stored. This could be done either via a remote connection or physically accessing the computer. Another means of acquiring the user's password would be  via a man-in-the-middle attack, where some or all of the user's network communication is first routed to the attacker before reaching its intended destination. Lastly, an attacker may use a social engineering scheme to trick a user into providing the password to a service that may seem affiliated with Book Bazar but in-reality is completely separate.
+One of the means via which an attacker may acquire a user's magic link is by brute forcing all possible combinations. Apart from this, if the user is sharing their screen, then a malicious user viewing the screen would be able to note down the magic link.
 
 \subsubsection*{Mitigation}
-We shall assume the security of the email provided by McMaster University. We will use the user's McMaster email to authenticate the user. Book Bazar shall work without storing the user's password or any information related to the password, like the hash of the password. This would ensure that, even if Book Bazar's database were to be compromised, the user's passwords may not be obtained. Furthermore, we shall ensure that any requests between the user and our servers will use HTTPS, preventing man-in-the-middle attacks.
-
+We shall ensure that the magic links generated are sufficiently random and long to avoid someone viewing a screen from noting down the magic link. Furthermore the magic link will also have a short-enough lifespan to prevent any brute-force attempts.
 \subsubsection*{Safety Requirements}
-Section 11.6 of our System Requirements Rev0 document covers this hazard.
-
-\end{comment}
+\emph{A system requirement mitigating this hazard shall be added to the next revision of the System Requirements document.}
 
 \subsection{User's Personal Information Gets Leaked}
 
@@ -158,7 +155,7 @@ Misconfigured access levels to data or providing access to data without requirin
 To mitigate leaking users’ personal information, we will only store personal information required to operate Book Bazar, such as the user’s McMaster email, their name, and photos of the textbooks that they intend to sell. Furthermore, we shall require users to sign in before viewing personal information related to textbook postings. This means that only individuals affiliated with McMaster may access the contact information of sellers.
 
 \subsubsection*{Safety Requirements}
-\emph{TODO}
+\emph{A system requirement mitigating this hazard shall be added to the next revision of the System Requirements document.}
 
 \subsection{Cross-Site Scripting (XSS)}
 
@@ -172,7 +169,7 @@ What follows is an example of an XSS attack. An attacker sets their name on Book
 Input fields will be sanitized such that text with HTML or JavaScript content that is input into textboxes gets transformed into a form that, when displayed on another user's computer, will be interpreted as plain text instead of code or marked up text.
 
 \subsubsection*{Safety Requirements}
-\emph{TODO}
+\emph{A system requirement mitigating this hazard shall be added to the next revision of the System Requirements document.}
 
 \subsection{SQL Injection}
 
@@ -188,7 +185,7 @@ We will use an object-relational mapping library (ORM) to interact with the data
 Another approach we shall take to mitigate the effects of an SQL injection is by creating backups of the database. If we detect that the integrity of the data has been compromised, then we can restore the backup of the database.
 
 \subsubsection*{Safety Requirements}
-\emph{TODO}
+\emph{A system requirement mitigating this hazard shall be added to the next revision of the System Requirements document.}
 
 \begin{comment}
 \begin{thebibliography}{9}
