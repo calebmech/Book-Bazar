@@ -1,7 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { HttpMethod } from "@lib/http-method";
+import { isValidUUID } from "@lib/helpers/backend/valid-uuid";
 import { StatusCodes } from "http-status-codes";
+
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method as HttpMethod) {
@@ -18,12 +20,17 @@ async function getCourseWithBooksWithPostsHandler(req: NextApiRequest, res: Next
   const { id } = req.query;
   const courseID = id as string;
 
-  const course = await getCourseWithBooksWithPosts(courseID);
-  if (course) {
-    res.status(StatusCodes.OK).json(course);
+  if (isValidUUID(courseID)) {
+    const course = await getCourseWithBooksWithPosts(courseID);
+    if (course) {
+      res.status(StatusCodes.OK).json(course);
+    }
+    else {
+      res.status(StatusCodes.NOT_FOUND).json(null);
+    }
   }
   else {
-    res.status(StatusCodes.NOT_FOUND).json(null);
+    res.status(StatusCodes.BAD_REQUEST).json(null);
   }
 }
 
