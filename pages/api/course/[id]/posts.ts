@@ -14,16 +14,19 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export type CourseWithBooksWithPosts = Prisma.PromiseReturnType<typeof getCourseWithBooksWithPosts>;
+export type Posts = Prisma.PromiseReturnType<typeof getPosts>;
 
-async function getCourseWithBooksWithPostsHandler(req: NextApiRequest, res: NextApiResponse<CourseWithBooksWithPosts>) {
-  const { id } = req.query;
+async function getCourseWithBooksWithPostsHandler(req: NextApiRequest, res: NextApiResponse<Posts>) {
+  const { id, length, page } = req.query;
   const courseID = id as string;
 
+  const lengthInt = length ? parseInt(length as string) : 20;
+  const pageInt = page ? parseInt(page as string) : 0;
+
   if (isValidUUID(courseID)) {
-    const course = await getCourseWithBooksWithPosts(courseID);
-    if (course) {
-      res.status(StatusCodes.OK).json(course);
+    const posts = await getPosts(courseID, lengthInt, pageInt);
+    if (posts) {
+      res.status(StatusCodes.OK).json(posts);
     }
     else {
       res.status(StatusCodes.NOT_FOUND).json(null);
@@ -32,6 +35,16 @@ async function getCourseWithBooksWithPostsHandler(req: NextApiRequest, res: Next
   else {
     res.status(StatusCodes.BAD_REQUEST).json(null);
   }
+}
+
+async function getPosts(id : string, length: number, page: number) {
+  const course = await getCourseWithBooksWithPosts(id);
+  if (course) {
+    const start: number = page*length;
+    const end: number = (page+1)*length;
+    return course.books.map(book => book.posts).flat().slice(start, end);
+  }
+  else return null;
 }
 
 async function getCourseWithBooksWithPosts(id: string) {
