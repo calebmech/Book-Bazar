@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Prisma, PrismaClient } from '@prisma/client';
 import { HttpMethod } from "@lib/http-method";
 import { isValidUUID } from "@lib/helpers/backend/valid-uuid";
+import { getCourseWithBooks } from "@lib/services/course";
 import { StatusCodes } from "http-status-codes";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -13,37 +13,19 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export type CourseWithBooks = Prisma.PromiseReturnType<typeof getCourseWithBooks>;
-
-async function getCourseWithBooksHandler(req: NextApiRequest, res: NextApiResponse<CourseWithBooks>) {
+async function getCourseWithBooksHandler(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query;
   const courseID = id as string;
 
-  if (isValidUUID(courseID)) {
-    const course = await getCourseWithBooks(courseID);
-    if (course) {
-      res.status(StatusCodes.OK).json(course);
-    }
-    else {
-      res.status(StatusCodes.NOT_FOUND).json(null);
-    }
+  if (!isValidUUID(courseID)) {
+    return res.status(StatusCodes.BAD_REQUEST).end();
   }
-  else {
-    res.status(StatusCodes.BAD_REQUEST).json(null);
+
+  const course = await getCourseWithBooks(courseID);
+
+  if (!course) {
+    return res.status(StatusCodes.NOT_FOUND).end();
   }
-}
 
-
-async function getCourseWithBooks(id: string) {
-  const prisma = new PrismaClient();
-  const course = await prisma.course.findFirst({
-    where: {
-      id: id,
-    },
-    include: {
-      books: true,
-    }
-  });
-
-  return course;
+  return res.status(StatusCodes.OK).json(course);
 }
