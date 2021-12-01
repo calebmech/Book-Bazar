@@ -1,7 +1,10 @@
+// TODO: Add UID Validation similar to PR 27
+// https://github.com/calebmech/Book-Bazar/pull/27
+
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { Prisma, PrismaClient } from '@prisma/client';
 import { HttpMethod } from "@lib/http-method";
 import { StatusCodes } from "http-status-codes";
+import { prisma } from "../../../lib/services/db";
 
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -13,9 +16,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-export type BookWithPosts = Prisma.PromiseReturnType<typeof getBookWithPosts>;
-
-async function getBookWithPostsHandler(req: NextApiRequest, res: NextApiResponse<BookWithPosts>) {
+async function getBookWithPostsHandler(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query;
   const bookID = id as string;
 
@@ -29,7 +30,6 @@ async function getBookWithPostsHandler(req: NextApiRequest, res: NextApiResponse
 }
 
 async function getBookWithPosts(id: string) {
-  const prisma = new PrismaClient();
   const book = await prisma.book.findFirst({
     where: {
       id: id,
