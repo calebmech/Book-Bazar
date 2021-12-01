@@ -1,7 +1,9 @@
-if (!process.env.BASE_URL) {
-  throw new Error("process.env.BASE_URL must be set.");
+if (!process.env.BASE_URL && !process.env.VERCEL_URL) {
+  throw new Error(
+    "process.env.BASE_URL or process.env.VERCEL_URL must be set."
+  );
 }
-export const BASE_URL = process.env.BASE_URL;
+export const BASE_URL = process.env.BASE_URL || process.env.VERCEL_URL;
 
 if (!process.env.SENDGRID_API_KEY) {
   throw new Error("process.env.SENDGRID_API_KEY must be set.");
