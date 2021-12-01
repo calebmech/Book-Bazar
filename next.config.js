@@ -3,10 +3,10 @@ module.exports = {
   reactStrictMode: true,
   async rewrites() {
     return {
-      afterFiles: [
+      fallback: [
         {
           source: "/api/swagger",
-          destination: "/api/swagger/index.html",
+          destination: "/swagger",
         },
       ],
     };
