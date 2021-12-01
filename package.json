@@ -20,7 +20,7 @@
     "cy:run": "cypress run",
     "cy:dev": "cypress open",
     "docker:up": "docker-compose up -d",
-    "docker:down": "docker-compose down -v *"
+    "docker:down": "docker-compose down -v"
   },
   "dependencies": {
     "@prisma/client": "^3.5.0",
