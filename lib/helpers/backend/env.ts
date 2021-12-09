@@ -14,3 +14,5 @@ if (!process.env.SENDGRID_EMAIL_FROM) {
   throw new Error("process.env.SENDGRID_EMAIL_FROM must be set.");
 }
 export const SENDGRID_EMAIL_FROM = process.env.SENDGRID_EMAIL_FROM;
+
+export const IS_E2E = process.env.RUNNING_E2E === "true";

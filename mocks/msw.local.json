@@ -1,0 +1,28 @@
+{
+  "email": {
+    "from": {
+      "email": "test@bookbazar.me"
+    },
+    "subject": "Login to Book Bazar",
+    "personalizations": [
+      {
+        "to": [
+          {
+            "email": "to-delete3079ae8e-9002-4131-9059-33602d72eeca@mcmaster.ca"
+          }
+        ]
+      }
+    ],
+    "content": [
+      {
+        "value": "<a href=\"https://localhost:4000/magic?token=629e9ca2-d751-45e4-8f80-1e07c698b2eb\">Click here</a> to login",
+        "type": "text/html"
+      }
+    ],
+    "mail_settings": {
+      "sandbox_mode": {
+        "enable": true
+      }
+    }
+  }
+}

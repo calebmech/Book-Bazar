@@ -1,0 +1,28 @@
+{
+  "email": {
+    "from": {
+      "email": "test@bookbazar.me"
+    },
+    "subject": "Login to Book Bazar",
+    "personalizations": [
+      {
+        "to": [
+          {
+            "email": "macid@mcmaster.ca"
+          }
+        ]
+      }
+    ],
+    "content": [
+      {
+        "value": "<a href=\"https://localhost:4000/magic?token=29c83b67-68a8-49a7-bd21-832238515092\">Click here</a> to login",
+        "type": "text/html"
+      }
+    ],
+    "mail_settings": {
+      "sandbox_mode": {
+        "enable": true
+      }
+    }
+  }
+}

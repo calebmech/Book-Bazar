@@ -1,5 +1,6 @@
 import {
   BASE_URL,
+  IS_E2E,
   SENDGRID_API_KEY,
   SENDGRID_EMAIL_FROM,
 } from "@lib/helpers/backend/env";
@@ -9,6 +10,10 @@ import { prisma } from "./db";
 import { createSession } from "./session";
 import { findOrCreateUser } from "./user";
 
+if (process.env.RUNNING_E2E === "true") {
+  require("../../mocks/server");
+}
+
 function getMagicLinkExpirationDate(): Date {
   return new Date(Date.now() + 1000 * 60 * 60); // 1 hour from now
 }
@@ -17,6 +22,7 @@ export async function sendMagicLink(email: string): Promise<void> {
   const token = createToken();
   const hashedToken = hashToken(token);
 
+  console.log({ token, hashedToken });
   await prisma.verificationEmail.create({
     data: {
       email,
@@ -37,7 +43,7 @@ export async function sendMagicLink(email: string): Promise<void> {
     subject: "Login to Book Bazar",
     html: `<a href="${magicLink}">Click here</a> to login`,
     mailSettings: {
-      sandboxMode: { enable: process.env.RUNNING_E2E === "true" },
+      sandboxMode: { enable: IS_E2E },
     },
   });
 }
