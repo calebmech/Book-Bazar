@@ -24,7 +24,7 @@ paths:
         required: true
         description: Post to create
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: "#/components/schemas/CreatablePost"
       responses:
@@ -124,15 +124,15 @@ paths:
           description: Authenticated user is forbidden from deleting the requested post
       security:
         - auth: []
-  /book/{id}:
+  /book/{isbn}:
     get:
       tags:
         - Book
-      summary: Get a book by ID, including posts for it
+      summary: Get a book by ISBN, including posts for it
       parameters:
-        - name: id
+        - name: isbn
           in: path
-          description: ID of book to return
+          description: ISBN of book to return
           required: true
           schema:
             type: string
@@ -158,9 +158,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BookWithPostsAndCourses"
+                $ref: "#/components/schemas/PopulatedBook"
         400:
-          description: Invalid ID supplied
+          description: Invalid ISBN supplied
         404:
           description: Book was not found
       security:
@@ -327,7 +327,7 @@ paths:
         required: true
         description: Updated properties on user object
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: "#/components/schemas/ModifiableUser"
       responses:
@@ -392,9 +392,9 @@ components:
       properties:
         name:
           type: string
-        imageUrl:
+        imageFile:
           type: string
-          format: uri
+          format: binary
     Book:
       type: object
       properties:
@@ -410,7 +410,7 @@ components:
           type: string
         isCampusStoreBook:
           type: boolean
-    BookWithPostsAndCourses:
+    PopulatedBook:
       type: object
       allOf:
         - $ref: "#/components/schemas/Book"
@@ -427,6 +427,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Course"
+        googleBook:
+          type: object
     Post:
       type: object
       properties:
@@ -473,9 +475,9 @@ components:
           type: integer
         description:
           type: string
-        imageUrl:
+        imageFile:
           type: string
-          format: uri
+          format: binary
         bookId:
           type: string
           format: uuid
