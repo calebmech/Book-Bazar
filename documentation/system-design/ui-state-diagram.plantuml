@@ -1,0 +1,96 @@
+@startuml UIStateDiagram
+hide empty description
+
+[*] --> HomePage
+
+state HomePage {
+  [*] --> LoggedOut
+  LoggedOut --> ModalLoginFromLogin: Click "Log In"
+  LoggedOut --> ModalLoginFromSell: Click "Sell your used textbooks!"
+  ModalLoginFromLogin --> LoggedIn: Enter MacID, click log in, then access the Magic Link
+  ModalLoginFromSell --> CreatePost: Enter MacID, click log in, then access the Magic Link
+  LoggedOut -> SearchLoggedOut: Enter search query and click search
+  LoggedIn --> SearchLoggedIn: Enter search query and click search
+  LoggedIn --> CreatePost: Click "Sell your used textbooks!"
+  LoggedIn --> AccountInfo: Click profile picture
+}
+
+state CreatePost {
+  [*] --> ScanOrType
+  ScanOrType --> IsThisYourBook: Type in ISBN
+  ScanOrType --> Scanning: Click "Scan Barcode"
+  Scanning --> IsThisYourBook: Computer scans the textbook barcode
+  IsThisYourBook --> UploadBookCover: Click "Yes"
+  IsThisYourBook --> ScanOrType: Click "No"
+  UploadBookCover --> SetPrice: Upload a photo of the book cover
+  SetPrice --> PostCreated: Enter description and asking price
+  PostCreated --> AccountInfo: Click "Go to my posts"
+}
+
+state SearchLoggedOut {
+  [*] --> SearchResultsLoggedOut
+  SearchResultsLoggedOut --> CourseLoggedOut: Click on a course
+  SearchResultsLoggedOut --> BookLoggedOut: Click on a book
+  SearchResultsLoggedOut --> ViewPostingModalLogin: Click on a posting
+  BookLoggedOut --> ViewPostingModalLogin: Click on a posting
+
+  CourseLoggedOut --> BookLoggedOut: Click on a book
+  CourseLoggedOut --> ViewPostingModalLogin: Click on a posting
+
+  ViewPostingModalLogin: User needs to be logged in
+  ViewPostingModalLogin: to view a posting since they will
+  ViewPostingModalLogin: be able to see other user's
+  ViewPostingModalLogin: contact information.
+  ViewPostingModalLogin -> PostingLoggedIn: Enter MacID, click log in, then access the Magic Link
+
+  SearchResultsLoggedOut --> SearchResultsModalLogin: Click "Log In"
+  SearchResultsModalLogin --> SearchResultsLoggedIn: Enter MacID, click log in, then access the Magic Link
+
+  BookLoggedOut --> BookModalLogin: Click "Log In"
+  BookModalLogin -> BookLoggedIn: Enter MacID, click log in, then access the Magic Link
+
+  CourseLoggedOut --> CourseModalLogin: Click "Log In"
+  CourseModalLogin -> CourseLoggedIn: Enter MacID, click log in, then access the Magic Link
+}
+
+state SearchLoggedIn {
+  [*] --> SearchResultsLoggedIn
+  state SearchResultsLoggedIn {
+  }
+  state CourseLoggedIn {
+  }
+  state BookLoggedIn {
+  }
+  state PostingLoggedIn {
+  }
+  SearchResultsLoggedIn --> CourseLoggedIn: Click on a course
+  SearchResultsLoggedIn --> BookLoggedIn: Click on a book
+  SearchResultsLoggedIn --> PostingLoggedIn: Click on a posting
+  BookLoggedIn --> PostingLoggedIn: Click on a posting
+  CourseLoggedIn --> BookLoggedIn: Click on a book
+  CourseLoggedIn --> PostingLoggedIn: Click on a posting
+}
+
+state AccountInfo {
+  [*] --> AccountOverview
+  AccountOverview --> AccountOverview: Click "Delete" on one of your posts
+  AccountOverview -l-> EditPost: Click "Edit" on one of your posts
+  EditPost -r-> AccountOverview: Click "Save Changes"
+  EditPost -r-> AccountOverview: Click "Cancel Changes"
+
+  AccountOverview --> ModalDeleteAccount: Click "Delete Account"
+  ModalDeleteAccount --> AccountOverview: Click "No"
+  ModalDeleteAccount --> AccountDeleted: Click "Yes"
+  AccountDeleted -> HomePage: Click "Return to home page"
+}
+
+CreatePost ---> AccountInfo: Click profile picture
+SearchLoggedIn ---> AccountInfo: Click profile picture
+
+CreatePost -u-> SearchLoggedIn: Enter search query then click search
+AccountInfo -u-> SearchLoggedIn: Enter search query then click search
+SearchLoggedIn -u-> SearchLoggedIn: Enter new search query then click search
+
+SearchLoggedOut ---> SearchLoggedOut: Enter new search query then click search
+
+@enduml
