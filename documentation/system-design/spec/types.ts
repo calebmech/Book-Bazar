@@ -18,6 +18,12 @@ export const NextApiResponseType: Type = {
   ),
 };
 
+export const BufferType: Type = {
+  name: "Buffer",
+  kind: TypeKind.EXTERNAL,
+  customRef: new URL("https://nodejs.org/dist/latest-v16.x/docs/api/buffer.html#class-buffer")
+};
+
 export const BlobType: Type = {
   name: "Blob",
   kind: TypeKind.EXTERNAL,
@@ -38,13 +44,13 @@ export const PostType: Type = {
   customRef: DATABASE_SECTION_LABEL,
 };
 
-export const CreateablePostType: Type = {
+export const CreatablePostType: Type = {
   name: "CreatablePost",
   kind: TypeKind.TUPLE,
   values: {
     price: "integer",
     description: "string",
-    imageUrl: "string",
+    image: BufferType,
     bookId: "string",
   },
 };
@@ -61,7 +67,7 @@ export const UpdatablePostType: Type = {
   values: {
     price: "integer",
     description: "string",
-    imageUrl: "string",
+    image: BufferType,
     status: PostStatusType,
   },
 };
