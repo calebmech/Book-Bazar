@@ -1,11 +1,8 @@
-// TODO: Add UID Validation similar to PR 27
-// https://github.com/calebmech/Book-Bazar/pull/27
-
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { HttpMethod } from "@lib/http-method";
 import { StatusCodes } from "http-status-codes";
-import { prisma } from "../../../lib/services/db";
-
+import { getBookWithPosts } from "../../../lib/services/book";
+import { isValidISBN } from "../../../lib/helpers/backend/valid-isbn";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method as HttpMethod) {
@@ -17,27 +14,19 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function getBookWithPostsHandler(req: NextApiRequest, res: NextApiResponse) {
-  const { id } = req.query;
-  const bookID = id as string;
+  const { isbn } = req.query;
+  const bookISBN = isbn as string;
 
-  const book = await getBookWithPosts(bookID);
+  if (!isValidISBN(bookISBN)){
+    return res.status(StatusCodes.BAD_REQUEST).end();
+  }
+
+  const book = await getBookWithPosts(bookISBN);
   if (book) {
     res.status(StatusCodes.OK).json(book);
   }
   else {
     res.status(StatusCodes.NOT_FOUND).json(null);
   }
-}
 
-async function getBookWithPosts(id: string) {
-  const book = await prisma.book.findFirst({
-    where: {
-      id: id,
-    },
-    include: {
-      posts: true,
-    }
-  });
-
-  return book;
 }
