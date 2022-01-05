@@ -124,15 +124,15 @@ paths:
           description: Authenticated user is forbidden from deleting the requested post
       security:
         - auth: []
-  /book/{id}:
+  /book/{isbn}:
     get:
       tags:
         - Book
-      summary: Get a book by ID, including posts for it
+      summary: Get a book by ISBN, including posts for it
       parameters:
-        - name: id
+        - name: isbn
           in: path
-          description: ID of book to return
+          description: ISBN of book to return
           required: true
           schema:
             type: string
@@ -158,9 +158,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BookWithPostsAndCourses"
+                $ref: "#/components/schemas/PopulatedBook"
         400:
-          description: Invalid ID supplied
+          description: Invalid ISBN supplied
         404:
           description: Book was not found
       security:
@@ -410,7 +410,7 @@ components:
           type: string
         isCampusStoreBook:
           type: boolean
-    BookWithPostsAndCourses:
+    PopulatedBook:
       type: object
       allOf:
         - $ref: "#/components/schemas/Book"
@@ -427,6 +427,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Course"
+        googleBook:
+          type: object
     Post:
       type: object
       properties:
