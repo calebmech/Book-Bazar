@@ -6,10 +6,9 @@ import {
   npmLink,
 } from "./spec-helpers.ts";
 import {
-  BlobType,
   PopulatedBookType,
   CourseWithBooksType,
-  CreateablePostType,
+  CreatablePostType,
   ModifiableUserType,
   NextApiRequestType,
   NextApiResponseType,
@@ -22,6 +21,7 @@ import {
   UserType,
   UserWithPostsType,
   DateType,
+  BufferType,
 } from "./types.ts";
 
 export enum Implementer {
@@ -280,7 +280,7 @@ const ImageServiceModule: Module = {
         {
           name: "upload",
           in: {
-            file: BlobType,
+            file: BufferType,
           },
           out: "string",
           semantics: [
@@ -315,7 +315,7 @@ const PostServiceModule: Module = {
   associatedRequirements: [FR.FR1, FR.FR2, FR.FR3],
   contents: {
     syntax: {
-      exportedTypes: [PostWithUserType, CreateablePostType, UpdatablePostType],
+      exportedTypes: [PostWithUserType, CreatablePostType, UpdatablePostType],
       exportedAccessPrograms: [
         {
           name: "getPost",
@@ -323,7 +323,7 @@ const PostServiceModule: Module = {
             id: "string",
             includeUser: "boolean",
           },
-          out: [PostType, PostWithUserType],
+          out: [PostType, PostWithUserType, "null"],
           semantics: [
             "Gets a post from the database by ID and populates the post with the corresponding user",
             "The user is only populated if includeUser is true",
@@ -332,10 +332,13 @@ const PostServiceModule: Module = {
         {
           name: "createPost",
           in: {
-            post: CreateablePostType,
+            post: CreatablePostType,
           },
           out: [PostType],
-          semantics: ["Create a new post in the database"],
+          semantics: [
+            "Create a new post in the database",
+            `Uploads the textbook picture using ${moduleReference(ImageServiceModule)} if one is provided`,
+          ],
         },
         {
           name: "updatePost",
@@ -344,7 +347,11 @@ const PostServiceModule: Module = {
             post: UpdatablePostType,
           },
           out: [PostType],
-          semantics: ["Updates a post in the database"],
+          semantics: [
+            "Updates a post in the database",
+            `Uploads the new textbook picture using ${moduleReference(ImageServiceModule)} if a new one is provided`,
+            `Deletes the old textbook picture using ${moduleReference(ImageServiceModule)} if a new one is provided`,
+          ],
         },
         {
           name: "deletePost",
