@@ -36,6 +36,9 @@ export async function sendMagicLink(email: string): Promise<void> {
     to: email,
     subject: "Login to Book Bazar",
     html: `<a href="${magicLink}">Click here</a> to login`,
+    mailSettings: {
+      sandboxMode: { enable: process.env.RUNNING_E2E === "true" },
+    },
   });
 }
 
