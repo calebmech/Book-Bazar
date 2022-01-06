@@ -1,0 +1,92 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table Dept {
+  id String [pk]
+  name String [not null]
+  abbreviation String [not null]
+  courses Course [not null]
+}
+
+Table Course {
+  id String [pk]
+  name String [not null]
+  code String [not null]
+  term String [not null]
+  year Int [not null]
+  dept Dept [not null]
+  deptId String [not null]
+  books Book [not null]
+}
+
+Table Book {
+  id String [pk]
+  isbn String [not null]
+  name String [not null]
+  imageUrl String
+  googleBooksId String
+  isCampusStoreBook Boolean [not null]
+  campusStorePrice Int
+  courses Course [not null]
+  posts Post [not null]
+}
+
+Table Post {
+  id String [pk]
+  price Int [not null]
+  description String [not null]
+  imageUrl String
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  status PostStatus [not null, default: 'ACTIVE']
+  user User [not null]
+  userId String [not null]
+  book Book [not null]
+  bookId String [not null]
+}
+
+Table User {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  email String [unique, not null]
+  name String
+  imageUrl String
+  posts Post [not null]
+  sessions Session [not null]
+}
+
+Table Session {
+  id String [pk]
+  createdAt DateTime [default: `now()`, not null]
+  user User [not null]
+  userId String [not null]
+  hashedToken String [unique, not null]
+  expirationDate DateTime [not null]
+}
+
+Table VerificationEmail {
+  id String [pk]
+  email String [not null]
+  hashedToken String [unique, not null]
+  expirationDate DateTime [not null]
+}
+
+Table BookToCourse {
+  booksId String [ref: > Book.id]
+  coursesId String [ref: > Course.id]
+}
+
+Enum PostStatus {
+  ACTIVE
+  SOLD
+}
+
+Ref: Course.deptId > Dept.id
+
+Ref: Post.userId > User.id
+
+Ref: Post.bookId > Book.id
+
+Ref: Session.userId > User.id

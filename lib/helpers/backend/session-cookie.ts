@@ -19,6 +19,7 @@ export function createSessionCookie(
     sameSite: "lax",
   });
 }
+
 export function createDeleteSessionCookie(): string {
   return createSessionCookie("deleted", new Date(0));
 }
