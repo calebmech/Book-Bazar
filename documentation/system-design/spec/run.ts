@@ -21,4 +21,4 @@ pdflatex.stdin.close();
 
 await pdflatex.status();
 
-await move("texput.pdf", "spec.pdf");
+await move("texput.pdf", "spec.pdf", { overwrite: true });
