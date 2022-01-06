@@ -672,7 +672,7 @@ const UserHelpersModule: Module = {
   services: "Provides methods to perform common tasks with user objects",
   implementedBy: Implementer.BOOK_BAZAR,
   type: ModuleType.SOFTWARE_DECISION,
-  uses: [UserServiceModule, SessionCookieModule],
+  uses: [UserServiceModule, SessionServiceModule, SessionCookieModule],
   associatedRequirements: [],
   contents: {
     syntax: {
