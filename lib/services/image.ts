@@ -1,13 +1,15 @@
 import { s3 } from './s3';
 import sharp from 'sharp';
-const AWS_S3_BUCKET_NAME = "book-bazar-images";
+import { v4 } from 'uuid';
+
+const AWS_S3_BUCKET_NAME = process.env.AWS_BUCKET_NAME_BOOKBAZAR as string;
 const IMAGE_WIDTH = 300;
 const IMAGE_HEIGHT = 400;
 
-export async function uploadImage(image: string, key: string): Promise<string>
+export async function uploadImage(image: string): Promise<string>
 {
   const buffer = await resizeImage(image);
-
+  const key: string = v4()
   const params = {
     Body: buffer, 
     Bucket: AWS_S3_BUCKET_NAME, 
@@ -39,7 +41,10 @@ async function resizeImage(image: string): Promise<Buffer> {
     .toBuffer();
 }
 
-export async function deleteImage(key: string) {
+export async function deleteImage(link: string) {
+  const r: RegExp = /\/([^\/]*)$/;
+  const key = (r.exec(link) as RegExpExecArray)[1];
+  
   const params = {
     Bucket: AWS_S3_BUCKET_NAME, 
     Key: key
