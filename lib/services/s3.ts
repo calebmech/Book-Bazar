@@ -1,11 +1,12 @@
 import * as AWS from "aws-sdk";
+import { AWS_ACCESS_KEY_ID_BOOKBAZAR, AWS_REGION_BOOKBAZAR, AWS_SECRET_ACCESS_KEY_BOOKBAZAR } from "@lib/helpers/backend/env";
 
 AWS.config.update({
   'credentials': {
-      'accessKeyId': process.env.AWS_ACCESS_KEY_ID_BOOKBAZAR as string,
-      'secretAccessKey': process.env.AWS_SECRET_ACCESS_KEY_BOOKBAZAR as string
+      'accessKeyId': AWS_ACCESS_KEY_ID_BOOKBAZAR,
+      'secretAccessKey': AWS_SECRET_ACCESS_KEY_BOOKBAZAR
     },
-  'region': process.env.AWS_REGION_MYAPP
+  'region': AWS_REGION_BOOKBAZAR
 })
 
 export const s3: AWS.S3 = (global as any).s3 || new AWS.S3();
