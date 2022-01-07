@@ -25,5 +25,5 @@
     "include": ["jest"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "poc"]
+  "exclude": ["node_modules", "poc", "documentation/system-design"]
 }

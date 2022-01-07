@@ -1,4 +1,4 @@
-import { getCurrentUser } from "@lib/helpers/backend/get-current-user";
+import { getCurrentUser } from "@lib/helpers/backend/user-helpers";
 import { HttpMethod } from "@lib/http-method";
 import { StatusCodes } from "http-status-codes";
 import { NextApiRequest, NextApiResponse } from "next";

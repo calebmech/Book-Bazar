@@ -1,0 +1,10 @@
+.vscode
+
+*.aux
+*.log
+*.out
+*.pdf
+*.txt
+
+!UIStateDiagram.pdf
+!spec.pdf

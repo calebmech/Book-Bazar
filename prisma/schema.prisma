@@ -5,6 +5,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -35,6 +39,7 @@ model Book {
   imageUrl          String?
   googleBooksId     String?
   isCampusStoreBook Boolean
+  campusStorePrice  Int?
   courses           Course[]
   posts             Post[]
 }
@@ -55,7 +60,6 @@ model Post {
 
 enum PostStatus {
   ACTIVE
-  DELETED
   SOLD
 }
 
