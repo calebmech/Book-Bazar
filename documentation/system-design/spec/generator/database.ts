@@ -14,8 +14,6 @@ export async function renderDatabase() {
     "..",
     "..",
     "..",
-    "..",
-    "Book-Bazar",
     "prisma",
     "dbml",
     "schema.dbml"
