@@ -2,7 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { HttpMethod } from "@lib/http-method";
 import { StatusCodes } from "http-status-codes";
 import { getBookWithPosts } from "../../../lib/services/book";
-import { isValidISBN } from "../../../lib/helpers/backend/valid-isbn";
+
+var ISBN = require('isbn').ISBN;
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method as HttpMethod) {
@@ -14,19 +15,20 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function getBookWithPostsHandler(req: NextApiRequest, res: NextApiResponse) {
-  const { isbn } = req.query;
-  const bookISBN = isbn as string;
 
-  if (!isValidISBN(bookISBN)){
+  const { isbn } = req.query;
+
+  if (Array.isArray(isbn) || !ISBN?.parse(isbn)){
     return res.status(StatusCodes.BAD_REQUEST).end();
   }
 
-  const book = await getBookWithPosts(bookISBN);
+  const book = await getBookWithPosts(isbn);
+
   if (book) {
     res.status(StatusCodes.OK).json(book);
   }
   else {
-    res.status(StatusCodes.NOT_FOUND).json(null);
+    res.status(StatusCodes.NOT_FOUND).end();
   }
 
 }
