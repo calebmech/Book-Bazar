@@ -34,6 +34,7 @@ async function getCourseWithBooksWithPosts(id: string, includeUser: boolean) {
         include: {
           posts: {
             include: {
+              book: true,
               user: includeUser
             }
           }
