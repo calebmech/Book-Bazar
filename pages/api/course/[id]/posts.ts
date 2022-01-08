@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { HttpMethod } from "@lib/http-method";
-import { isValidUUID } from "@lib/helpers/backend/valid-uuid";
 import { getPostsForCourse } from "@lib/services/course";
 import { StatusCodes } from "http-status-codes";
 import { isAuthenticated } from '@lib/helpers/backend/user-helpers';
+import { validate } from 'uuid';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method as HttpMethod) {
@@ -18,7 +18,7 @@ async function getPostsForCourseHandler(req: NextApiRequest, res: NextApiRespons
   const { id, length, page } = req.query;
   const courseID = id as string;
   
-  if (!isValidUUID(courseID)) {
+  if (!validate(courseID)) {
     return res.status(StatusCodes.BAD_REQUEST).end();
   }
 
