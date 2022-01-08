@@ -47,7 +47,5 @@ export async function getPopulatedBook(isbn: string, includeUser: boolean, lengt
   const googleBookData = await getGoogleBooksData(populatedBook.isbn);
   if (googleBookData) populatedBook.googleBook = googleBookData as googleBook;
 
-
   return populatedBook;
-
 }
