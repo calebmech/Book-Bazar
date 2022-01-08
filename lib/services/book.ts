@@ -1,5 +1,5 @@
 import {prisma} from "@lib/services/db";
-import { book, googleBook } from "../../common/types";
+import { GoogleBook, BookWithPostWithUserWithCourseWithDept } from "../../common/types";
 import { getGoogleBooksData } from "../helpers/backend/googleBooksSearch";
 
 /**
@@ -8,7 +8,7 @@ import { getGoogleBooksData } from "../helpers/backend/googleBooksSearch";
  * @returns {Promise} An object containing book information and relevant posts
  */
 export async function getPopulatedBook(isbn: string, includeUser: boolean, length: number, page: number) {
-  const populatedBookPrisma = await prisma.book.findFirst({
+  const populatedBookPrisma : BookWithPostWithUserWithCourseWithDept = await prisma.book.findFirst({
     where: {
       isbn: isbn,
     },
@@ -41,13 +41,11 @@ export async function getPopulatedBook(isbn: string, includeUser: boolean, lengt
 
   if (!populatedBookPrisma) return null;
 
-  const populatedBook = populatedBookPrisma as book;
-
-  populatedBook.googleBook = {};
-
   // Searching by ISBN provides the most accurate result
-  const googleBookData = await getGoogleBooksData(populatedBook.isbn);
-  if (googleBookData) populatedBook.googleBook = googleBookData as googleBook;
+  const googleBookData : GoogleBook | Object = await getGoogleBooksData(populatedBookPrisma.isbn);
+
+  const populatedBook = {...populatedBookPrisma,...{ googleBook: googleBookData }};
 
   return populatedBook;
+
 }

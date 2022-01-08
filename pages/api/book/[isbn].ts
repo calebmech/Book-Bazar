@@ -27,11 +27,11 @@ async function getPopulatedBookHandler(req: NextApiRequest, res: NextApiResponse
   const includeUser : boolean = await isAuthenticated(req, res);
 
   // Get relevant book from the database
-  const book = await getPopulatedBook(isbn, includeUser, lengthInt, pageInt);
+  const populatedBook = await getPopulatedBook(isbn, includeUser, lengthInt, pageInt);
 
   // Return response to user
-  if (book) {
-    res.status(StatusCodes.OK).json(book);
+  if (populatedBook) {
+    res.status(StatusCodes.OK).json(populatedBook);
   }
   else {
     res.status(StatusCodes.NOT_FOUND).end();
