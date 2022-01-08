@@ -7,7 +7,7 @@ import { getGoogleBooksData } from "../helpers/backend/googleBooksSearch";
  * @param {string} isbn The 13-digit ISBN code
  * @returns {Promise} An object containing book information and relevant posts
  */
-export async function getPopulatedBook(isbn: string, includeUser: boolean, length: number, page: number) : Promise<book | null> {
+export async function getPopulatedBook(isbn: string, includeUser: boolean, length: number, page: number) {
   const populatedBook : book = await prisma.book.findFirst({
     where: {
       isbn: isbn,

@@ -3,7 +3,6 @@ import { HttpMethod } from "@lib/http-method";
 import { StatusCodes } from "http-status-codes";
 import { getPopulatedBook } from "../../../lib/services/book";
 import { isAuthenticated } from '@lib/helpers/backend/user-helpers';
-import { book } from '../../../common/types';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method as HttpMethod) {
@@ -28,7 +27,7 @@ async function getPopulatedBookHandler(req: NextApiRequest, res: NextApiResponse
   const includeUser : boolean = await isAuthenticated(req, res);
 
   // Get relevant book from the database
-  const book : book | null = await getPopulatedBook(isbn, includeUser, lengthInt, pageInt);
+  const book = await getPopulatedBook(isbn, includeUser, lengthInt, pageInt);
 
   // Return response to user
   if (book) {
