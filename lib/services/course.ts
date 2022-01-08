@@ -1,5 +1,6 @@
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@lib/services/db";
+import { paginateResults } from "@lib/helpers/backend/paginate";
 
 export type CourseWithBooks = Prisma.PromiseReturnType<typeof getCourseWithBooks>;
 
@@ -17,9 +18,8 @@ export async function getCourseWithBooks(id: string)  {
 export async function getPostsForCourse(id : string, length: number, page: number, includeUser: boolean) {
   const course = await getCourseWithBooksWithPosts(id, includeUser);
   if (course) {
-    const start: number = page*length;
-    const end: number = (page+1)*length;
-    return course.books.map(book => book.posts).flat().slice(start, end);
+    const postArray = course.books.map(book => book.posts).flat();
+    return paginateResults(postArray, length, page);
   }
   else return null;
 }
