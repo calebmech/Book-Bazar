@@ -22,6 +22,7 @@ import {
   UserType,
   UserWithPostsType,
   DateType,
+  CourseWithDeptType,
 } from "./types.ts";
 
 export enum Implementer {
@@ -424,7 +425,7 @@ const CourseServiceModule: Module = {
   associatedRequirements: [FR.FR5],
   contents: {
     syntax: {
-      exportedTypes: [CourseWithBooksType],
+      exportedTypes: [CourseWithBooksType, CourseWithDeptType],
       exportedAccessPrograms: [
         {
           name: "getCourseWithBooks",

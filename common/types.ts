@@ -1,55 +1,55 @@
 // This file contains common types used through out the project.
-import { Book, Post, Course, Dept } from '@prisma/client'
+import { Book, Post, Course, Dept } from "@prisma/client";
 
-export type CourseWtihDept = Course & {
-  dept: Dept
-}
+export type CourseWithDept = Course & {
+  dept: Dept;
+};
 
 export type BookWithPostWithUserWithCourseWithDept = Book & {
-  courses: CourseWtihDept[]
-  posts: Post[]
-}
+  courses: CourseWithDept[];
+  posts: Post[];
+};
 
 export interface GoogleBook {
-  title: string
-  authors: string[]
-  publisher: string
-  publishedDate: string[]
-  description: string
-  industryIdentifiers: Object
-  readingModes: Object
-  pageCount: number
-  printType: string
-  categories: string[]
-  averageRating: number
-  ratingsCount: number
-  maturityRating: string
-  allowAnonLogging: boolean
-  contentVersion: string
-  imageLinks: Object
-  language: string
-  previewLink: string
-  infoLink: string
-  canonicalVolumeLink: string
+  title: string;
+  authors: string[];
+  publisher: string;
+  publishedDate: string[];
+  description: string;
+  industryIdentifiers: object;
+  readingModes: object;
+  pageCount: number;
+  printType: string;
+  categories: string[];
+  averageRating: number;
+  ratingsCount: number;
+  maturityRating: string;
+  allowAnonLogging: boolean;
+  contentVersion: string;
+  imageLinks: object;
+  language: string;
+  previewLink: string;
+  infoLink: string;
+  canonicalVolumeLink: string;
 }
 
-export type PrismaWithGoogleBook = BookWithPostWithUserWithCourseWithDept & {
-  googleBook: GoogleBook | Object
+export type PopulatedBook = BookWithPostWithUserWithCourseWithDept & {
+  googleBook: GoogleBook | null;
+};
+
+export interface GoogleBookItem {
+  kind: string;
+  id: string;
+  etag: string;
+  selfLink: string;
+  volumeInfo: GoogleBook;
+  saleInfo: object[];
+  accessInfo: object[];
+  searchInfo: object[];
 }
 
-export interface googleBookItem {
-  kind: string
-  id: string
-  etag: string
-  selfLink: string
-  volumeInfo: GoogleBook
-  saleInfo: Object[]
-  accessInfo: Object[]
-  searchInfo: Object[]
-}
-
-export interface googleBookSearchResult {
-  kind: string
-  totalItems: number
-  items: googleBookItem[]
+export interface GoogleBookSearchResult {
+  kind: string;
+  totalItems: number;
+  items: GoogleBookItem[];
 }
