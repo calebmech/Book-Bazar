@@ -15,6 +15,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
 async function getCourseWithBooksHandler(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query;
+
+  if (Array.isArray(id)) {
+    return res.status(StatusCodes.BAD_REQUEST).end();
+  }
+  
   const courseID = id as string;
 
   if (!validate(courseID)) {

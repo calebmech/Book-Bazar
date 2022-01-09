@@ -16,8 +16,13 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
 async function getPostsForCourseHandler(req: NextApiRequest, res: NextApiResponse) {
   const { id, length, page } = req.query;
+
+  if (Array.isArray(id) || Array.isArray(length) || Array.isArray(page)){
+    return res.status(StatusCodes.BAD_REQUEST).end();
+  }
+
   const courseID = id as string;
-  
+
   if (!validate(courseID)) {
     return res.status(StatusCodes.BAD_REQUEST).end();
   }
