@@ -436,7 +436,10 @@ const CourseServiceModule: Module = {
         {
           name: "getCourseWithBooks",
           in: { id: "string" },
-          out: CourseWithBooksType,
+          out: [
+            CourseWithBooksType,
+            "null",
+          ],
           semantics: [
             "Gets a course by ID and populates the books for that course",
           ],
@@ -452,6 +455,7 @@ const CourseServiceModule: Module = {
           out: [
             { kind: TypeKind.SEQUENCE, type: PostType },
             { kind: TypeKind.SEQUENCE, type: PostWithUserType },
+            "null",
           ],
           semantics: [
             "Get posts for a course ID",
