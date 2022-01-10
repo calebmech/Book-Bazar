@@ -9,6 +9,18 @@ const handlers = [
 
     return res(ctx.status(StatusCodes.OK));
   }),
+  rest.post(
+    `https://${process.env.AWS_BUCKET_NAME_BOOKBAZAR}.s3.${process.env.AWS_REGION_BOOKBAZAR}.amazonaws.com/*`,
+    async (req, res, ctx) => {
+      return res(ctx.status(StatusCodes.OK));
+    }
+  ),
+  rest.delete(
+    `https://${process.env.AWS_BUCKET_NAME_BOOKBAZAR}.s3.${process.env.AWS_REGION_BOOKBAZAR}.amazonaws.com/*`,
+    async (req, res, ctx) => {
+      return res(ctx.status(StatusCodes.OK));
+    }
+  ),
 ];
 
 export const server = setupServer(...handlers);
