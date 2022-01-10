@@ -11,25 +11,26 @@ export type BookWithPostWithUserWithCourseWithDept = Book & {
 };
 
 export interface GoogleBook {
-  title: string;
-  authors: string[];
-  publisher: string;
-  publishedDate: string[];
-  description: string;
-  industryIdentifiers: object;
-  readingModes: object;
-  pageCount: number;
-  printType: string;
-  categories: string[];
-  averageRating: number;
-  ratingsCount: number;
-  maturityRating: string;
-  allowAnonLogging: boolean;
-  contentVersion: string;
-  imageLinks: object;
-  language: string;
-  previewLink: string;
-  infoLink: string;
+  title?: string;
+  authors?: string[];
+  publisher?: string;
+  publishedDate?: string[];
+  description?: string;
+  industryIdentifiers?: object;
+  readingModes?: object;
+  pageCount?: number;
+  printType?: string;
+  categories?: string[];
+  averageRating?: number;
+  ratingsCount?: number;
+  maturityRating?: string;
+  allowAnonLogging?: boolean;
+  contentVersion?: string;
+  panelizationSummary?: object;
+  imageLinks?: object;
+  language?: string;
+  previewLink?: string;
+  infoLink?: string;
   canonicalVolumeLink: string;
 }
 
