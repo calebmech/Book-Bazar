@@ -1,10 +1,19 @@
 import { prisma } from "@lib/services/db";
-import {
-  GoogleBook,
-  BookWithPostWithUserWithCourseWithDept,
-  PopulatedBook,
-} from "../../common/types";
-import { getGoogleBooksData } from "../helpers/backend/googleBooksSearch";
+import { getGoogleBooksData, GoogleBook } from "./googleBooksSearch";
+import { Book, Post, Course, Dept } from "@prisma/client";
+
+export type CourseWithDept = Course & {
+  dept: Dept;
+};
+
+export type BookWithPostWithUserWithCourseWithDept = Book & {
+  courses: CourseWithDept[];
+  posts: Post[];
+};
+
+export type PopulatedBook = BookWithPostWithUserWithCourseWithDept & {
+  googleBook: GoogleBook | null;
+};
 
 /**
  * Get a book's data with it's posts based on the ISBN (International Standard Book Number)
