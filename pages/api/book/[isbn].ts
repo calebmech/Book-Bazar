@@ -3,7 +3,7 @@ import { HttpMethod } from "@lib/http-method";
 import { StatusCodes } from "http-status-codes";
 import { getPopulatedBook } from "../../../lib/services/book";
 import { isAuthenticated } from "@lib/helpers/backend/user-helpers";
-import { PopulatedBook } from "common/types";
+import { PopulatedBook } from "../../../lib/services/book";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method as HttpMethod) {

@@ -18,7 +18,7 @@ export type PopulatedBook = BookWithPostWithUserWithCourseWithDept & {
 /**
  * Get a book's data with it's posts based on the ISBN (International Standard Book Number)
  * @param {string} isbn The 13-digit ISBN code
- * @returns {Promise} A promise containing book information and relevant posts
+ * @returns {Promise<PopulatedBook | null> } A promise containing book information and relevant posts
  */
 export async function getPopulatedBook(
   isbn: string,
