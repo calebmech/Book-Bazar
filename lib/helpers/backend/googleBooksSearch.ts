@@ -1,6 +1,3 @@
-// Note that I was having trouble with https://www.npmjs.com/package/google-books-search
-// The following code provides the same data and provides more information
-
 import { GoogleBook } from "../../../common/types";
 import { google, books_v1 } from "googleapis";
 import { GaxiosResponse } from "gaxios";
