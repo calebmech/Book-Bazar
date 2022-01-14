@@ -21,9 +21,20 @@
       "@styles/*": ["styles/*"]
     }
   },
+  "ts-node": {
+    // these options are overrides used only by ts-node
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  },
   "typeAcquisition": {
     "include": ["jest"]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "cypress/support/commands.ts"
+  ],
   "exclude": ["node_modules", "poc", "documentation/system-design"]
 }
