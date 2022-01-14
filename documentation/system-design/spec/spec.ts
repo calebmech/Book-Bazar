@@ -542,10 +542,16 @@ const UserServiceModule: Module = {
         },
         {
           name: "updateUser",
-          in: { id: "string", updatedUser: ModifiableUserType },
+          in: { id: "string", updatedProperties: ModifiableUserType },
           out: UserType,
           semantics: [
             "Updates a user in the database by ID using the given object",
+            `Uploads a new user image ${moduleReference(
+              ImageServiceModule
+            )} if one is provided`,
+            `If an existing user image is present and a new image is provided, it will be deleted using ${moduleReference(
+              ImageServiceModule
+            )}`,
           ],
         },
         {
