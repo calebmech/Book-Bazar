@@ -30,11 +30,6 @@
   "typeAcquisition": {
     "include": ["jest"]
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "cypress/support/commands.ts"
-  ],
-  "exclude": ["node_modules", "poc", "documentation/system-design"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "poc", "documentation/system-design", "cypress"]
 }
