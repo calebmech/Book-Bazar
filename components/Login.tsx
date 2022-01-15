@@ -26,15 +26,14 @@ export default function Login() {
       return (
         <form onSubmit={handleSubmit}>
           <p>
-            <label>
-              <input
-                type="text"
-                name="macID"
-                required
-                placeholder={macIDPlaceholder}
-              />
-              @mcmaster.ca
-            </label>
+            <input
+              type="text"
+              name="macID"
+              aria-label="macID"
+              required
+              placeholder={macIDPlaceholder}
+            />
+            @mcmaster.ca
           </p>
           <input type="submit" value="Login" />
         </form>
