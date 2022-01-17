@@ -5,29 +5,32 @@
 Table Dept {
   id String [pk]
   name String [not null]
-  abbreviation String [not null]
+  abbreviation String [unique, not null]
   courses Course [not null]
 }
 
 Table Course {
   id String [pk]
-  name String [not null]
+  name String
   code String [not null]
   term String [not null]
-  year Int [not null]
   dept Dept [not null]
   deptId String [not null]
   books Book [not null]
+
+  indexes {
+    (code, deptId) [unique]
+  }
 }
 
 Table Book {
   id String [pk]
-  isbn String [not null]
+  isbn String [unique, not null]
   name String [not null]
   imageUrl String
   googleBooksId String
   isCampusStoreBook Boolean [not null]
-  campusStorePrice Int
+  campusStorePrice Float
   courses Course [not null]
   posts Post [not null]
 }
@@ -73,7 +76,7 @@ Table VerificationEmail {
   expirationDate DateTime [not null]
 }
 
-Table BookToCourse {
+Table _CourseBookRelationTable {
   booksId String [ref: > Book.id]
   coursesId String [ref: > Course.id]
 }

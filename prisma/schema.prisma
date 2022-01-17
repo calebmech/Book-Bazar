@@ -11,36 +11,37 @@ generator dbml {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgres://ssyvmyxygqknph:e84832604fe48e6469c7d10341ffff1fd43849752c534748fc2b5a8656e3d1b9@ec2-34-203-114-67.compute-1.amazonaws.com:5432/dfqebun1okmhlc"
 }
 
 model Dept {
   id           String   @id @default(uuid())
   name         String
-  abbreviation String
+  abbreviation String   @unique
   courses      Course[]
 }
 
 model Course {
   id     String @id @default(uuid())
-  name   String
+  name   String?
   code   String
   term   String
-  year   Int
   dept   Dept   @relation(fields: [deptId], references: [id])
   deptId String
-  books  Book[]
+  books  Book[]   @relation("_CourseBookRelationTable")
+
+  @@unique([code, deptId], name: "courseIdentifier")
 }
 
 model Book {
   id                String   @id @default(uuid())
-  isbn              String
+  isbn              String   @unique
   name              String
   imageUrl          String?
   googleBooksId     String?
   isCampusStoreBook Boolean
-  campusStorePrice  Int?
-  courses           Course[]
+  campusStorePrice  Float?
+  courses           Course[]   @relation("_CourseBookRelationTable")
   posts             Post[]
 }
 
