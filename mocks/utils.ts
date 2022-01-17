@@ -1,5 +1,6 @@
-import path from "path";
+import { existsSync } from "fs";
 import fs from "fs/promises";
+import path from "path";
 
 /**
  * Store MSW data in a file to use in an E2E test
@@ -25,5 +26,19 @@ export async function updateFixture(updates: Record<string, unknown>) {
       `Error reading and parsing the msw fixture. Clearing it.`,
       (error as { stack?: string }).stack ?? error
     );
+  }
+}
+
+/**
+ * Creates the file to store MSW data if it does not exist
+ */
+export async function createFixtureStorage(): Promise<void> {
+  const mswDataPath = path.join(
+    __dirname,
+    "../../..",
+    "./mocks/msw.local.json"
+  );
+  if (!existsSync(mswDataPath)) {
+    await fs.appendFile(mswDataPath, "{}");
   }
 }

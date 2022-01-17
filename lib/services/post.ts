@@ -65,11 +65,19 @@ export async function createPost(creatablePost: CreatablePost): Promise<Post> {
   try {
     return prisma.post.create({
       data: {
-        bookId: creatablePost.bookId,
         description: creatablePost.description,
         imageUrl: imageUrl,
         price: creatablePost.price,
-        userId: creatablePost.userId,
+        book: {
+          connect: {
+            id: creatablePost.bookId,
+          },
+        },
+        user: {
+          connect: {
+            id: creatablePost.userId,
+          },
+        },
       },
     });
   } catch (e) {

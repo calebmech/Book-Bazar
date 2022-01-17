@@ -25,7 +25,7 @@ module.exports = {
     "<rootDir>/node_modules/",
     "<rootDir>/.next/",
     "<rootDir>/cypress/",
-    "<rootDir>/documentation/"
+    "<rootDir>/documentation/",
   ],
   transform: {
     // Use babel-jest to transpile tests with the next/babel preset

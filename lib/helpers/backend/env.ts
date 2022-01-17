@@ -36,3 +36,5 @@ if (!process.env.AWS_BUCKET_NAME_BOOKBAZAR) {
   throw new Error("process.env.AWS_BUCKET_NAME_BOOKBAZAR must be set.");
 }
 export const AWS_BUCKET_NAME_BOOKBAZAR = process.env.AWS_BUCKET_NAME_BOOKBAZAR;
+
+export const IS_E2E: boolean = process.env.IS_E2E === "true";

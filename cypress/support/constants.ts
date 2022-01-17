@@ -1,7 +1,12 @@
 import { User } from ".prisma/client";
 
+export const TEST_USER_UUID = "e8b7ad6d-7086-4d8d-b831-079d5be7caa8";
 export const TEST_USER: Partial<User> = {
   email: "test@mcmaster.ca",
   name: "Test User",
   imageUrl: "https://example.com",
+  id: TEST_USER_UUID,
 };
+export const TEST_BOOK_UUID = "a176ef48-56cc-4fc5-bf9e-7b40e3e8e884";
+export const TEST_POST_UUID = "a510b3dd-1ffb-4fdb-b2d3-9b8e3c4c0f63";
+export const TEST_OTHER_PERSON_POST_UUID = "230beb00-48e8-4e93-8b20-da77e69dc5cb";
