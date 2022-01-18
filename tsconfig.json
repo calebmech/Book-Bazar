@@ -36,6 +36,6 @@
     "poc",
     "documentation/system-design",
     "cypress",
-    "lib/bookstore-scrapper"
+    "bookstore-scrapper"
   ]
 }
