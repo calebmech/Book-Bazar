@@ -176,6 +176,10 @@ function renderTypeDeclaration(type: Type): string {
     );
   }
 
+  if (type.kind === TypeKind.EXTERNAL) {
+    return renderType(type);
+  }
+
   return `${type.name} = ${renderTypeValue(type)} \\label{type:${type.name}}`;
 }
 
