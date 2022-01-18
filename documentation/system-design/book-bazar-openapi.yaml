@@ -36,6 +36,8 @@ paths:
                 $ref: "#/components/schemas/Post"
         400:
           description: Invalid request body supplied
+        401:
+          description: The user is not authenticated
       security:
         - auth: []
   /post/{id}:
@@ -87,7 +89,7 @@ paths:
         required: true
         description: Updated properties on post object
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: "#/components/schemas/ModifiablePost"
       responses:
@@ -99,8 +101,12 @@ paths:
                 $ref: "#/components/schemas/Post"
         400:
           description: Invalid ID or request body supplied
+        401:
+          description: The user is not authenticated
         403:
           description: Authenticated user is forbidden from updating the requested post
+        404:
+          description: The post with the given ID couldn't be found
       security:
         - auth: []
     delete:
@@ -120,6 +126,8 @@ paths:
           description: Successful response
         400:
           description: Invalid ID supplied
+        401:
+          description: The user is not authenticated
         403:
           description: Authenticated user is forbidden from deleting the requested post
       security:
@@ -473,7 +481,7 @@ components:
           type: integer
         description:
           type: string
-        imageFile:
+        image:
           type: string
           format: binary
         bookId:
@@ -486,9 +494,9 @@ components:
           type: integer
         description:
           type: string
-        imageUrl:
+        image:
           type: string
-          format: uri
+          format: binary
         status:
           type: string
           enum:

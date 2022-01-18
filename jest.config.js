@@ -3,6 +3,7 @@ module.exports = {
     "**/*.{js,jsx,ts,tsx}",
     "!**/*.d.ts",
     "!**/node_modules/**",
+    "!**/documentation/**",
   ],
   moduleNameMapper: {
     // Handle CSS imports (with CSS modules)
@@ -24,6 +25,7 @@ module.exports = {
     "<rootDir>/node_modules/",
     "<rootDir>/.next/",
     "<rootDir>/cypress/",
+    "<rootDir>/documentation/",
   ],
   transform: {
     // Use babel-jest to transpile tests with the next/babel preset
