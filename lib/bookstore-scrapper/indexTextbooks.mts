@@ -12,7 +12,7 @@ import {
     updateAlgoliaIndex,
     getAlgoliaObject,
 } from './algolia/updateAlgoliaIndex.mjs';
-import fs from 'fs';
+import fs from 'fs/promises';
 
 // Algolia constants - FILL BEFORE RUNNING
 export const algoliaAppId: string = '';
@@ -34,7 +34,7 @@ const indexTextbooks = async () => {
     );
 
     let data = JSON.stringify(campusStoreData);
-    fs.writeFileSync('data.json', '{ "Data":' + data + '}');
+    await fs.writeFile('data.json', '{ "Data":' + data + '}');
 
     const databaseUpdate = await updateDatabase(campusStoreData);
 

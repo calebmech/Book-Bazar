@@ -1,77 +1,58 @@
 import algoliasearch, { SearchIndex } from 'algoliasearch';
-import { Book, Course, Dept } from '@prisma/client';
+import { Book, Course } from '@prisma/client';
 import { prisma } from '../prisma-client/prismaClient.mjs';
 
-const bookType: string = 'book';
-const courseType: string = 'course';
-
-interface AlgoliaData {
-    id: string;
-    name: string;
-    isbn?: string;
-    imageUrl?: string;
-    code?: string;
-    deptName?: string;
-    deptAbv?: string;
+enum EntryType {
+    BOOK = 'book',
+    COURSE = 'course',
 }
 
 interface AlgoliaEntry {
-    type: string;
-    data: AlgoliaData;
+    type: EntryType;
+    entry: Book | Course;
 }
 
 const searchableAttributes: string[] = [
-    'data.deptAbv',
-    'data.deptName',
-    'data.code',
-    'data.name',
-    'data.isbn',
+    'entry.dept.abbreviation',
+    'entry.dept.name',
+    'entry.code',
+    'entry.name',
+    'entry.isbn',
 ];
 
 const rankings: string[] = ['exact', 'words', 'proximity'];
 
-export const getAlgoliaObject = async () => {
+export const getAlgoliaObject = async (): Promise<AlgoliaEntry[]> => {
     const dbBooks: Book[] = await prisma.book.findMany();
 
-    const dbCourses: Course[] = await prisma.course.findMany();
-
-    const dbDepts: Dept[] = await prisma.dept.findMany();
-
-    const algoliaBooks: AlgoliaEntry[] = dbBooks.map((book) => {
-        const information: AlgoliaEntry = {
-            type: bookType,
-            data: {
-                id: book.id,
-                isbn: book.isbn,
-                name: book.name,
-                imageUrl: book.imageUrl,
-            },
-        };
-        return information;
+    const dbCourses: Course[] = await prisma.course.findMany({
+        include: {
+            dept: true,
+        },
     });
 
-    const algoliaCourses: AlgoliaEntry[] = dbCourses.map((course) => {
-        const dept = dbDepts.filter((dept) => dept.id === course.deptId)[0];
-        const information: AlgoliaEntry = {
-            type: courseType,
-            data: {
-                id: course.id,
-                code: course.code,
-                name: course.name,
-                deptName: dept.name,
-                deptAbv: dept.abbreviation,
-            },
+    const algoliaBookEntries: AlgoliaEntry[] = dbBooks.map((book: Book) => {
+        const algoliaBookEntry: AlgoliaEntry = {
+            type: EntryType.BOOK,
+            entry: book,
         };
-        return information;
+        return algoliaBookEntry;
     });
 
-    return algoliaBooks.concat(algoliaCourses);
+    const algoliaCourseEntries: AlgoliaEntry[] = dbCourses.map(
+        (course: Course) => {
+            const algoliaCourseEntry: AlgoliaEntry = {
+                type: EntryType.COURSE,
+                entry: course,
+            };
+            return algoliaCourseEntry;
+        }
+    );
+
+    return algoliaBookEntries.concat(algoliaCourseEntries);
 };
 
-const updateAlgoliaObjects = async (
-    index: SearchIndex,
-    data: AlgoliaEntry[]
-) => {
+const updateAlgoliaObjects = async (index: SearchIndex, data: Object[]) => {
     await index.replaceAllObjects(data, {
         autoGenerateObjectIDIfNotExist: true,
     });

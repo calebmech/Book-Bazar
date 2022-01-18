@@ -4,7 +4,7 @@ const arrayDefine = 'new Array(';
 const arrayEnd = ');';
 
 // Checks if book store HTML contains expected content
-export const isEvalSafe = (variables: string): boolean => {
+export const doesStoreScriptContainExpectedContent = (variables: string): boolean => {
     const variablesSplit = variables.split('\n');
     for (let c = 0; c < variablesSplit.length; c++) {
         const variableLine = variablesSplit[c].trim();

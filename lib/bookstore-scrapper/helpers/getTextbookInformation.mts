@@ -20,12 +20,12 @@ const parseBookName = 'alt="';
 
 // Path to Course Name
 const startCourseNamePath =
-    'https://academiccalendars.romcmaster.ca/content.php?filter%5B27%5D=';
-const middleCourseNamePath = '&filter%5B29%5D=';
+    'https://academiccalendars.romcmaster.ca/content.php?catoid=44&catoid=44&navoid=9045&filter%5B27%5D=&filter%5B29%5D=&filter%5Bcourse_type%5D=&filter%5Bkeyword%5D=&filter%5B32%5D=1&filter%5Bcpage%5D=';
 const endCourseNamePath =
-    '&filter%5Bcourse_type%5D=-1&filter%5Bkeyword%5D=&filter%5B32%5D=1&filter%5Bcpage%5D=1&cur_cat_oid=44&expand=&navoid=9045&search_database=Filter#acalog_template_course_filter;';
+    '&filter%5Bexact_match%5D=1&filter%5Bitem_type%5D=3&filter%5Bonly_active%5D=1&filter%5B3%5D=1#acalog_template_course_filter';
 const endCourseParseOne = '  opens a new window';
 const endCourseParseTwo = '</a><span';
+const finalPageText = 'Other Courses';
 
 // Values to parse price from book page
 const startParsePrice = 'value="';
@@ -126,24 +126,36 @@ export const getTextbookInformation = async (
     return campusStoreEntries;
 };
 
+const getCourseNameHTML = async (): Promise<string> => {
+    let page: number = 1;
+    let courseNameHTML: string = '';
+    while (!courseNameHTML.includes(finalPageText)) {
+        const courseNamePageHTML = (await axiosRequest(
+            `${startCourseNamePath}${page}${endCourseNamePath}`
+        )) as string;
+        courseNameHTML = courseNameHTML.concat(courseNamePageHTML);
+        page += 1;
+    }
+    return courseNameHTML;
+};
+
+const courseNameHTML = await getCourseNameHTML();
+
 const getCourseName = async (dept: string, code: string) => {
-    const courseNamePageHTML = (await axiosRequest(
-        `${startCourseNamePath}${dept}${middleCourseNamePath}${code}${endCourseNamePath}`
-    )) as string;
     const startParseCourseName = `${dept} ${code} - `;
     const startParseIndex: number =
-        courseNamePageHTML.indexOf(startParseCourseName);
+        courseNameHTML.indexOf(startParseCourseName);
 
-    let courseName: string = courseNamePageHTML.substring(
+    if (startParseIndex < 0) return notAvailable;
+
+    let courseName: string = courseNameHTML.substring(
         startParseIndex + startParseCourseName.length
     );
 
     const endParseIndexOne: number = courseName.indexOf(endCourseParseOne);
-
     courseName = courseName.substring(0, endParseIndexOne);
 
     const endParseIndexTwo: number = courseName.indexOf(endCourseParseTwo);
-
     courseName = courseName.substring(0, endParseIndexTwo) || courseName;
 
     return courseName || notAvailable;
@@ -166,5 +178,7 @@ const getBookPrice = (bookHTML: string, ISBN: string): number | null => {
         return notAvailable;
     }
 
-    return parseFloat(priceString);
+    priceString = priceString.replace('.', '');
+
+    return parseInt(priceString);
 };

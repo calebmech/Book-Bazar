@@ -12,10 +12,10 @@ export const getBookData = async (
 ): Promise<CampusStoreEntry[]> => {
     const bookData = [];
     const bookPrograms = await getProgramOptions(courseMaterialRAW);
-    for (let p = 0; p < bookPrograms.length; p++) {
-        const programData = await getProgramBookData(bookPrograms[p]);
-        for (let pD = 0; pD < programData.length; pD++) {
-            bookData.push(programData[pD]);
+    for (const program of bookPrograms) {
+        const programData = await getProgramBookData(program);
+        for (const data of programData) {
+            bookData.push(data);
         }
     }
     return bookData;
@@ -38,45 +38,41 @@ const getProgramOptions = async (courseMaterialRAW: string) => {
 const getProgramBookData = async (program: string) => {
     const bookData = [];
     const terms = getNextMenu2(program, '', '', '', '');
-    for (let t = 0; t < terms.length; t++) {
-        const depts = getNextMenu2(program, terms[t].value, '', '', '');
-        for (let d = 0; d < depts.length; d++) {
+    for (const term of terms) {
+        const depts = getNextMenu2(program, term.value, '', '', '');
+        for (const dept of depts) {
             const courses = getNextMenu2(
                 program,
-                terms[t].value,
-                depts[d].value,
+                term.value,
+                dept.value,
                 '',
                 ''
             );
-            for (let c = 0; c < courses.length; c++) {
+            for (const course of courses) {
                 const sections = getNextMenu2(
                     program,
-                    terms[t].value,
-                    depts[d].value,
-                    courses[c],
+                    term.value,
+                    dept.value,
+                    course,
                     ''
                 );
-                for (let s = 0; s < sections.length; s++) {
+                for (const section of sections) {
                     const bookLink = getBookLink(
                         program,
-                        terms[t],
-                        depts[d],
-                        courses[c],
-                        sections[s]
+                        term,
+                        dept,
+                        course,
+                        section
                     );
                     const textbookInfo = await getTextbookInformation(
                         bookLink,
                         program,
-                        terms[t].text,
-                        depts[d].text,
-                        courses[c]
+                        term.text,
+                        dept.text,
+                        course
                     );
-                    for (
-                        let bookNum = 0;
-                        bookNum < textbookInfo.length;
-                        bookNum++
-                    ) {
-                        bookData.push(textbookInfo[bookNum]);
+                    for (const info of textbookInfo) {
+                        bookData.push(info);
                     }
                 }
             }

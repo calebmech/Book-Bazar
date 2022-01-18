@@ -20,27 +20,26 @@ const updateDepartments = async (
         1. The deptId of campus store data extracted in this file
         2. The departments in the database
     */
-    for (let d = 0; d < campusStoreData.length; d++) {
+    for (const campusStoreEntry of campusStoreData) {
         // Find out if the current department for a campus store entry exists in the database.
         const department = currentDbDept.filter((book) => {
-            return book.abbreviation === campusStoreData[d].dept.abbreviation;
+            return book.abbreviation === campusStoreEntry.dept.abbreviation;
         });
 
         // If the department exists, update the current campus store data with the correct id
         // and move on.
         if (department.length !== 0) {
-            campusStoreData[d].dept.id = department[0].id;
-            campusStoreData[d].course.deptId = department[0].id;
-            continue;
+            campusStoreEntry.dept.id = department[0].id;
+            campusStoreEntry.course.deptId = department[0].id;
+        } else {
+            // If the department does not exist, create it with the UUID previously generated and move on
+            const deptPrisma = await prisma.dept.create({
+                data: campusStoreEntry.dept,
+            });
+
+            // Update the current database department array being used in the for loop
+            currentDbDept.push(campusStoreEntry.dept);
         }
-
-        // If the department does not exist, create it with the UUID previously generated and move on
-        const deptPrisma = await prisma.dept.create({
-            data: campusStoreData[d].dept,
-        });
-
-        // Update the current database department array being used in the for loop
-        currentDbDept.push(campusStoreData[d].dept);
     }
 
     return campusStoreData;
@@ -64,19 +63,19 @@ const updateCourses = async (campusStoreData: CampusStoreEntry[]) => {
     );
 
     // Update or create required courses
-    for (let c = 0; c < coursesToUpsert.length; c++) {
+    for (const course of coursesToUpsert) {
         const coursePrisma = await prisma.course.upsert({
             where: {
                 courseIdentifier: {
-                    deptId: coursesToUpsert[c].deptId,
-                    code: coursesToUpsert[c].code,
+                    deptId: course.deptId,
+                    code: course.code,
                 },
             },
             update: {
-                name: coursesToUpsert[c].name,
-                term: coursesToUpsert[c].term,
+                name: course.name,
+                term: course.term,
             },
-            create: coursesToUpsert[c],
+            create: course,
         });
     }
 
@@ -87,10 +86,10 @@ const updateCourses = async (campusStoreData: CampusStoreEntry[]) => {
         lodash.isEqual
     );
 
-    for (let toDelete = 0; toDelete < coursesToDelete.length; toDelete++) {
+    for (const course of coursesToDelete) {
         const deletedCourses = await prisma.course.delete({
             where: {
-                id: coursesToDelete[toDelete].id,
+                id: course.id,
             },
         });
     }
@@ -99,14 +98,14 @@ const updateCourses = async (campusStoreData: CampusStoreEntry[]) => {
 // Update the book data
 const updateBooks = async (campusStoreData: CampusStoreEntry[]) => {
     // Update or create data for all books in the campus store
-    for (let b = 0; b < campusStoreData.length; b++) {
+    for (const campusStoreEntry of campusStoreData) {
         /* Create the courseConnection that wil be upserted
         if there is an update being completed. */
         const courseConnection = {
             connect: {
                 courseIdentifier: {
-                    deptId: campusStoreData[b].course.deptId,
-                    code: campusStoreData[b].course.code,
+                    deptId: campusStoreEntry.course.deptId,
+                    code: campusStoreEntry.course.code,
                 },
             },
         };
@@ -114,7 +113,7 @@ const updateBooks = async (campusStoreData: CampusStoreEntry[]) => {
         // Create the courseConnection that wil be upserted
         // if there is a create being completed
         const bookConnection = {
-            ...campusStoreData[b].book,
+            ...campusStoreEntry.book,
             ...{
                 courses: courseConnection,
             },
@@ -123,10 +122,10 @@ const updateBooks = async (campusStoreData: CampusStoreEntry[]) => {
         // Upsert book data
         const bookPrisma = await prisma.book.upsert({
             where: {
-                isbn: campusStoreData[b].book.isbn,
+                isbn: campusStoreEntry.book.isbn,
             },
             update: {
-                campusStorePrice: campusStoreData[b].book.campusStorePrice,
+                campusStorePrice: campusStoreEntry.book.campusStorePrice,
                 isCampusStoreBook: true,
                 courses: courseConnection,
             },
@@ -146,10 +145,10 @@ const updateBooks = async (campusStoreData: CampusStoreEntry[]) => {
         sameBook
     );
 
-    for (let b = 0; b < booksNotInCampusStore.length; b++) {
+    for (const nonCampusStoreEntry of booksNotInCampusStore) {
         const notInCampusStorePrisma = await prisma.book.update({
             where: {
-                isbn: booksNotInCampusStore[b].isbn,
+                isbn: nonCampusStoreEntry.isbn,
             },
             data: {
                 isCampusStoreBook: false,

@@ -1,5 +1,5 @@
 import { axiosRequest } from './axiosRequest.mjs';
-import { isEvalSafe } from './isEvalSafe.mjs';
+import { doesStoreScriptContainExpectedContent } from './doesStoreScriptContainExpectedContent.mjs';
 
 // Variables used to build links that connect to campus store
 const storeDomain = 'https://campusstore.mcmaster.ca';
@@ -34,7 +34,7 @@ export const courseMaterialHTML = await axiosRequest(
 // Define variables from course website instead of defining those above
 const courseMaterialVariables = getCourseMaterialVariables(courseMaterialHTML);
 
-if (!isEvalSafe(courseMaterialVariables)) {
+if (!doesStoreScriptContainExpectedContent(courseMaterialVariables)) {
     throw new Error('Eval is not safe to run');
 } else {
     // eslint-disable-next-line no-eval
