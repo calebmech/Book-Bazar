@@ -18,6 +18,12 @@ export const NextApiResponseType: Type = {
   ),
 };
 
+export const BufferType: Type = {
+  name: "Buffer",
+  kind: TypeKind.EXTERNAL,
+  customRef: new URL("https://nodejs.org/dist/latest-v16.x/docs/api/buffer.html#class-buffer")
+};
+
 export const BlobType: Type = {
   name: "Blob",
   kind: TypeKind.EXTERNAL,
@@ -38,13 +44,13 @@ export const PostType: Type = {
   customRef: DATABASE_SECTION_LABEL,
 };
 
-export const CreateablePostType: Type = {
+export const CreatablePostType: Type = {
   name: "CreatablePost",
   kind: TypeKind.TUPLE,
   values: {
     price: "integer",
     description: "string",
-    imageUrl: "string",
+    image: BufferType,
     bookId: "string",
   },
 };
@@ -61,7 +67,7 @@ export const UpdatablePostType: Type = {
   values: {
     price: "integer",
     description: "string",
-    imageUrl: "string",
+    image: BufferType,
     status: PostStatusType,
   },
 };
@@ -211,4 +217,12 @@ export const UserWithPostsType: Type = {
       },
     },
   ],
+};
+
+export const GoogleBookType: Type = {
+  name: "GoogleBook",
+  kind: TypeKind.EXTERNAL,
+  customRef: new URL(
+    "https://github.com/googleapis/google-api-nodejs-client/blob/01bf480d3e35354cc3fdc7d7aa2559611d459b50/src/apis/books/v1.ts#L1049"
+  ),
 };

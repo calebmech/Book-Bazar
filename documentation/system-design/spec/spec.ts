@@ -6,10 +6,9 @@ import {
   npmLink,
 } from "./spec-helpers.ts";
 import {
-  BlobType,
   PopulatedBookType,
   CourseWithBooksType,
-  CreateablePostType,
+  CreatablePostType,
   ModifiableUserType,
   NextApiRequestType,
   NextApiResponseType,
@@ -23,6 +22,8 @@ import {
   UserWithPostsType,
   DateType,
   CourseWithDeptType,
+  GoogleBookType,
+  BufferType,
 } from "./types.ts";
 
 export enum Implementer {
@@ -119,14 +120,31 @@ const GoogleBooksSearchModule: Module = {
   secrets: "How to interact with the Google Books search service",
   services:
     "Provides method to search for and retrieve books from Google Books",
-  implementedBy: npmLink("google-books-search"),
+  implementedBy: npmLink("googleapis"),
   type: ModuleType.BEHAVIOUR_HIDING,
   uses: [],
   associatedRequirements: [],
-  contents: [
-    "\\subsection*{Syntax \\& Semantics}",
-    "\\url{https://github.com/smilledge/node-google-books-search}",
-  ].join("\n"),
+  contents: {
+    syntax: {
+      exportedTypes: [GoogleBookType],
+      exportedAccessPrograms: [
+        {
+          name: "getGoogleBooksData",
+          in: {
+            isbn: "string",
+          },
+          out: ["GoogleBook" , "null"],
+          semantics: [
+            "Gets Google Books data using a book's ISBN",
+            "Makes a call to the \\href{https://www.npmjs.com/package/googleapis}{Google Books API}",
+            "Returns a \\href{https://github.com/googleapis/google-api-nodejs-client/blob/01bf480d3e35354cc3fdc7d7aa2559611d459b50/src/apis/books/v1.ts#L1049}{GoogleBooks object} if the response contains relevant data",
+            "Returns null if the response does not contain relevant data"
+          ],
+        }
+      ],
+    },
+    semantics: {}
+  },
 };
 
 // Software Decision modules
@@ -281,7 +299,7 @@ const ImageServiceModule: Module = {
         {
           name: "upload",
           in: {
-            file: BlobType,
+            file: BufferType,
           },
           out: "string",
           semantics: [
@@ -316,7 +334,7 @@ const PostServiceModule: Module = {
   associatedRequirements: [FR.FR1, FR.FR2, FR.FR3],
   contents: {
     syntax: {
-      exportedTypes: [PostWithUserType, CreateablePostType, UpdatablePostType],
+      exportedTypes: [PostWithUserType, CreatablePostType, UpdatablePostType],
       exportedAccessPrograms: [
         {
           name: "getPost",
@@ -324,7 +342,7 @@ const PostServiceModule: Module = {
             id: "string",
             includeUser: "boolean",
           },
-          out: [PostType, PostWithUserType],
+          out: [PostType, PostWithUserType, "null"],
           semantics: [
             "Gets a post from the database by ID and populates the post with the corresponding user",
             "The user is only populated if includeUser is true",
@@ -333,10 +351,13 @@ const PostServiceModule: Module = {
         {
           name: "createPost",
           in: {
-            post: CreateablePostType,
+            post: CreatablePostType,
           },
           out: [PostType],
-          semantics: ["Create a new post in the database"],
+          semantics: [
+            "Create a new post in the database",
+            `Uploads the textbook picture using ${moduleReference(ImageServiceModule)} if one is provided`,
+          ],
         },
         {
           name: "updatePost",
@@ -345,7 +366,11 @@ const PostServiceModule: Module = {
             post: UpdatablePostType,
           },
           out: [PostType],
-          semantics: ["Updates a post in the database"],
+          semantics: [
+            "Updates a post in the database",
+            `Uploads the new textbook picture using ${moduleReference(ImageServiceModule)} if a new one is provided`,
+            `Deletes the old textbook picture using ${moduleReference(ImageServiceModule)} if a new one is provided`,
+          ],
         },
         {
           name: "deletePost",
@@ -430,7 +455,10 @@ const CourseServiceModule: Module = {
         {
           name: "getCourseWithBooks",
           in: { id: "string" },
-          out: CourseWithBooksType,
+          out: [
+            CourseWithBooksType,
+            "null",
+          ],
           semantics: [
             "Gets a course by ID and populates the books for that course",
           ],
@@ -446,6 +474,7 @@ const CourseServiceModule: Module = {
           out: [
             { kind: TypeKind.SEQUENCE, type: PostType },
             { kind: TypeKind.SEQUENCE, type: PostWithUserType },
+            "null",
           ],
           semantics: [
             "Get posts for a course ID",
@@ -532,10 +561,16 @@ const UserServiceModule: Module = {
         },
         {
           name: "updateUser",
-          in: { id: "string", updatedUser: ModifiableUserType },
+          in: { id: "string", updatedProperties: ModifiableUserType },
           out: UserType,
           semantics: [
             "Updates a user in the database by ID using the given object",
+            `Uploads a new user image ${moduleReference(
+              ImageServiceModule
+            )} if one is provided`,
+            `If an existing user image is present and a new image is provided, it will be deleted using ${moduleReference(
+              ImageServiceModule
+            )}`,
           ],
         },
         {
