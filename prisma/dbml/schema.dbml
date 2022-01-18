@@ -30,7 +30,7 @@ Table Book {
   imageUrl String
   googleBooksId String
   isCampusStoreBook Boolean [not null]
-  campusStorePrice Float
+  campusStorePrice Int
   courses Course [not null]
   posts Post [not null]
 }
