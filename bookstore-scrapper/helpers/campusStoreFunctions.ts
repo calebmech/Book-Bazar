@@ -36,7 +36,6 @@ export async function evaluateCourseMaterialVariables() {
   if (!doesStoreScriptContainExpectedContent(courseMaterialVariables)) {
     throw new Error("Eval is not safe to run");
   } else {
-    // eslint-disable-next-line no-eval
     (0, eval)(courseMaterialVariables);
   }
 }
@@ -85,7 +84,6 @@ export const getNextMenu2 = (
   sectionid: string
 ) => {
   /// / This function is used to fill in Program/Term/Dept/Course and Section dropdowns on Textbook search page. The required Javascript arrays are created in Perl script - webstore_scripts.pm
-  // eslint-disable-next-line no-array-constructor
   let dataarray = [];
   const termid = "term";
   const deptid = "dept";
@@ -143,7 +141,6 @@ const listMenu2 = (menu: string[], menuid: string) => {
   menu.sort();
   const list: any[] = [];
   let Optn: ValueText = { value: "", text: "" };
-  // eslint-disable-next-line no-array-constructor
   let subarr = [];
   for (let inc = 0; inc < menu.length; inc++) {
     if (menuid === "term" || menuid === "dept") {

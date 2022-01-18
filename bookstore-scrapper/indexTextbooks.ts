@@ -8,10 +8,16 @@ import {
 } from "./algolia/updateAlgoliaIndex";
 import fs from "fs/promises";
 
-// Algolia constants - FILL BEFORE RUNNING
-export const algoliaAppId: string = "";
-export const algoliaApiKey: string = "";
-export const algoliaIndexName: string = "";
+// If node env is not provided in command line, default to values in env.development
+if (!process.env.NODE_ENV) process.env.NODE_ENV = "development";
+require("dotenv").config({ path: `../.env.${process.env.NODE_ENV}` });
+
+export const algoliaAppId = process.env.ALGOLIA_APP_ID;
+export const algoliaApiKey = process.env.ALGOLIA_API_KEY;
+export const algoliaIndexName = process.env.ALGOLIA_INDEX_NAME;
+
+if (!algoliaAppId || !algoliaApiKey || !algoliaIndexName)
+  throw Error("Please set Algolia environment variables");
 
 // Variables used to build links that connect to campus store
 const storeDomain = "https://campusstore.mcmaster.ca";
@@ -30,11 +36,11 @@ const indexTextbooks = async () => {
   let data = JSON.stringify(campusStoreData);
   await fs.writeFile("data.json", '{ "Data":' + data + "}");
 
-  const databaseUpdate = await updateDatabase(campusStoreData);
+  await updateDatabase(campusStoreData);
 
   const algoliaObject = await getAlgoliaObject();
 
-  const algoliaIndexUpdate = await updateAlgoliaIndex(
+  await updateAlgoliaIndex(
     algoliaAppId,
     algoliaApiKey,
     algoliaIndexName,

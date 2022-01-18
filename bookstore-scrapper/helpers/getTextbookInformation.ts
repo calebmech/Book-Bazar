@@ -1,6 +1,6 @@
 // Return textbook information given link and it's parameters
 import { axiosRequest } from "./axiosRequest";
-import { randomUUID } from "crypto";
+import { v4 } from "uuid";
 import { Dept, Course, Book } from "@prisma/client";
 import { getGoogleBooksId } from "./getGoogleBooksId";
 
@@ -18,14 +18,8 @@ const parseISBN = "?isbn=";
 const parseEndBookHTML = "Additional Supplies Recommended for this Course";
 const parseBookName = 'alt="';
 
-// Path to Course Name
-const startCourseNamePath =
-  "https://academiccalendars.romcmaster.ca/content.php?catoid=44&catoid=44&navoid=9045&filter%5B27%5D=&filter%5B29%5D=&filter%5Bcourse_type%5D=&filter%5Bkeyword%5D=&filter%5B32%5D=1&filter%5Bcpage%5D=";
-const endCourseNamePath =
-  "&filter%5Bexact_match%5D=1&filter%5Bitem_type%5D=3&filter%5Bonly_active%5D=1&filter%5B3%5D=1#acalog_template_course_filter";
 const endCourseParseOne = "  opens a new window";
 const endCourseParseTwo = "</a><span";
-const finalPageText = "Other Courses";
 
 // Values to parse price from book page
 const startParsePrice = 'value="';
@@ -42,10 +36,10 @@ export interface CampusStoreEntry {
 
 export const getTextbookInformation = async (
   link: string,
-  program: string,
   term: string,
   dept: string,
-  course: string
+  course: string,
+  courseNameHTML: string
 ): Promise<CampusStoreEntry[]> => {
   // Array to return
   const campusStoreEntries: CampusStoreEntry[] = [];
@@ -70,15 +64,15 @@ export const getTextbookInformation = async (
     deptName = deptSplit[1].trim();
   }
   const deptData: Dept = {
-    id: randomUUID(),
+    id: v4(),
     name: deptName,
     abbreviation: deptAbv,
   };
 
   // Find out the course
-  const courseName = await getCourseName(deptAbv, course);
+  const courseName = await getCourseName(deptAbv, course, courseNameHTML);
   const courseData: Course = {
-    id: randomUUID(),
+    id: v4(),
     name: courseName,
     code: course,
     term: term,
@@ -106,7 +100,7 @@ export const getTextbookInformation = async (
     const googleBooksId = await getGoogleBooksId(isbn);
 
     const bookData: Book = {
-      id: randomUUID(),
+      id: v4(),
       isbn,
       name,
       imageUrl,
@@ -121,27 +115,17 @@ export const getTextbookInformation = async (
       dept: deptData,
     };
 
+    console.log(campusStoreEntry);
     campusStoreEntries.push(campusStoreEntry);
   }
   return campusStoreEntries;
 };
 
-const getCourseNameHTML = async (): Promise<string> => {
-  let page: number = 1;
-  let courseNameHTML: string = "";
-  while (!courseNameHTML.includes(finalPageText)) {
-    const courseNamePageHTML = (await axiosRequest(
-      `${startCourseNamePath}${page}${endCourseNamePath}`
-    )) as string;
-    courseNameHTML = courseNameHTML.concat(courseNamePageHTML);
-    page += 1;
-  }
-  return courseNameHTML;
-};
-
-const getCourseName = async (dept: string, code: string) => {
-  const courseNameHTML = await getCourseNameHTML();
-
+const getCourseName = async (
+  dept: string,
+  code: string,
+  courseNameHTML: String
+) => {
   const startParseCourseName = `${dept} ${code} - `;
   const startParseIndex: number = courseNameHTML.indexOf(startParseCourseName);
 
