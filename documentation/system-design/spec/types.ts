@@ -84,6 +84,12 @@ export const CourseType: Type = {
   customRef: DATABASE_SECTION_LABEL,
 };
 
+export const DeptType: Type = {
+  name: "Dept",
+  kind: TypeKind.EXTERNAL,
+  customRef: DATABASE_SECTION_LABEL,
+};
+
 export const UserType: Type = {
   name: "User",
   kind: TypeKind.EXTERNAL,
@@ -132,6 +138,18 @@ export const PostWithUserType: Type = {
   ],
 };
 
+export const CourseWithDeptType: Type = {
+  name: "CourseWithDept",
+  kind: TypeKind.UNION,
+  types: [
+    CourseType,
+    {
+      kind: TypeKind.TUPLE,
+      values: { dept: DeptType },
+    },
+  ],
+};
+
 export const TokenWithExpirationType: Type = {
   name: "TokenWithExpiration",
   kind: TypeKind.TUPLE,
@@ -164,7 +182,7 @@ export const PopulatedBookType: Type = {
         },
         courses: {
           kind: TypeKind.SET,
-          values: new Set([CourseType]),
+          values: new Set([CourseWithDeptType]),
         },
         googleBook: {
           kind: TypeKind.TUPLE,
@@ -199,4 +217,12 @@ export const UserWithPostsType: Type = {
       },
     },
   ],
+};
+
+export const GoogleBookType: Type = {
+  name: "GoogleBook",
+  kind: TypeKind.EXTERNAL,
+  customRef: new URL(
+    "https://github.com/googleapis/google-api-nodejs-client/blob/01bf480d3e35354cc3fdc7d7aa2559611d459b50/src/apis/books/v1.ts#L1049"
+  ),
 };

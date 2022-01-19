@@ -21,6 +21,8 @@ import {
   UserType,
   UserWithPostsType,
   DateType,
+  CourseWithDeptType,
+  GoogleBookType,
   BufferType,
 } from "./types.ts";
 
@@ -118,14 +120,31 @@ const GoogleBooksSearchModule: Module = {
   secrets: "How to interact with the Google Books search service",
   services:
     "Provides method to search for and retrieve books from Google Books",
-  implementedBy: npmLink("google-books-search"),
+  implementedBy: npmLink("googleapis"),
   type: ModuleType.BEHAVIOUR_HIDING,
   uses: [],
   associatedRequirements: [],
-  contents: [
-    "\\subsection*{Syntax \\& Semantics}",
-    "\\url{https://github.com/smilledge/node-google-books-search}",
-  ].join("\n"),
+  contents: {
+    syntax: {
+      exportedTypes: [GoogleBookType],
+      exportedAccessPrograms: [
+        {
+          name: "getGoogleBooksData",
+          in: {
+            isbn: "string",
+          },
+          out: ["GoogleBook" , "null"],
+          semantics: [
+            "Gets Google Books data using a book's ISBN",
+            "Makes a call to the \\href{https://www.npmjs.com/package/googleapis}{Google Books API}",
+            "Returns a \\href{https://github.com/googleapis/google-api-nodejs-client/blob/01bf480d3e35354cc3fdc7d7aa2559611d459b50/src/apis/books/v1.ts#L1049}{GoogleBooks object} if the response contains relevant data",
+            "Returns null if the response does not contain relevant data"
+          ],
+        }
+      ],
+    },
+    semantics: {}
+  },
 };
 
 // Software Decision modules
@@ -431,7 +450,7 @@ const CourseServiceModule: Module = {
   associatedRequirements: [FR.FR5],
   contents: {
     syntax: {
-      exportedTypes: [CourseWithBooksType],
+      exportedTypes: [CourseWithBooksType, CourseWithDeptType],
       exportedAccessPrograms: [
         {
           name: "getCourseWithBooks",
