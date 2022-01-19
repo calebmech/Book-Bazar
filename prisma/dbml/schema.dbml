@@ -76,7 +76,7 @@ Table VerificationEmail {
   expirationDate DateTime [not null]
 }
 
-Table _CourseBookRelationTable {
+Table BookToCourse {
   booksId String [ref: > Book.id]
   coursesId String [ref: > Course.id]
 }
