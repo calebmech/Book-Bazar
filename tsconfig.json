@@ -31,5 +31,11 @@
     "include": ["jest"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "poc", "documentation/system-design", "cypress"]
+  "exclude": [
+    "node_modules",
+    "poc",
+    "documentation/system-design",
+    "cypress",
+    "bookstore-scrapper"
+  ]
 }

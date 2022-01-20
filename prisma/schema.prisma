@@ -17,24 +17,25 @@ datasource db {
 model Dept {
   id           String   @id @default(uuid())
   name         String
-  abbreviation String
+  abbreviation String   @unique
   courses      Course[]
 }
 
 model Course {
   id     String @id @default(uuid())
-  name   String
+  name   String?
   code   String
   term   String
-  year   Int
   dept   Dept   @relation(fields: [deptId], references: [id])
   deptId String
   books  Book[]
+
+  @@unique([code, deptId], name: "courseIdentifier")
 }
 
 model Book {
   id                String   @id @default(uuid())
-  isbn              String
+  isbn              String   @unique
   name              String
   imageUrl          String?
   googleBooksId     String?

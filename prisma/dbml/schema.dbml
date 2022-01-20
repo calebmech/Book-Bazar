@@ -5,24 +5,27 @@
 Table Dept {
   id String [pk]
   name String [not null]
-  abbreviation String [not null]
+  abbreviation String [unique, not null]
   courses Course [not null]
 }
 
 Table Course {
   id String [pk]
-  name String [not null]
+  name String
   code String [not null]
   term String [not null]
-  year Int [not null]
   dept Dept [not null]
   deptId String [not null]
   books Book [not null]
+
+  indexes {
+    (code, deptId) [unique]
+  }
 }
 
 Table Book {
   id String [pk]
-  isbn String [not null]
+  isbn String [unique, not null]
   name String [not null]
   imageUrl String
   googleBooksId String
