@@ -11,7 +11,7 @@ generator dbml {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgres://ssyvmyxygqknph:e84832604fe48e6469c7d10341ffff1fd43849752c534748fc2b5a8656e3d1b9@ec2-34-203-114-67.compute-1.amazonaws.com:5432/dfqebun1okmhlc"
+  url      = "env("DATABASE_URL")"
 }
 
 model Dept {
