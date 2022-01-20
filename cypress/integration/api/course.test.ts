@@ -23,7 +23,6 @@ describe("test course api", () => {
       expect(response.body.name).to.equal("Very Hard Course");
       expect(response.body.code).to.equal("2H03");
       expect(response.body.term).to.equal("Winter");
-      expect(response.body.year).to.equal(2022);
     });
   });
 
@@ -50,10 +49,10 @@ describe("test course api", () => {
     }).then((response) => {
       expect(response.status).to.equal(StatusCodes.OK);
       expect(response.body.length).to.equal(4);
-      expect(response.body[0].user.name).to.not.equal(null)
-      expect(response.body[1].user.name).to.not.equal(null)
-      expect(response.body[2].user.name).to.not.equal(null)
-      expect(response.body[3].user.name).to.not.equal(null)
+      expect(response.body[0].user.name).to.be.oneOf(["Test User", "Other"])
+      expect(response.body[1].user.name).to.be.oneOf(["Test User", "Other"])
+      expect(response.body[2].user.name).to.be.oneOf(["Test User", "Other"])
+      expect(response.body[3].user.name).to.be.oneOf(["Test User", "Other"])
     });
   });
 

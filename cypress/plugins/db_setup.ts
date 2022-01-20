@@ -30,7 +30,6 @@ export default async () => {
         name: "Very Hard Course",
         code: "2H03",
         term: "Winter",
-        year: 2022,
         deptId: TEST_DEPARTMENT_UUID
       }      
     })
