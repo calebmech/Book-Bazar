@@ -398,7 +398,7 @@ components:
       properties:
         name:
           type: string
-        imageFile:
+        image:
           type: string
           format: binary
     Book:

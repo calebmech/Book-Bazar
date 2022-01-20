@@ -1,6 +1,5 @@
 {
   "baseUrl": "https://localhost:4000",
   "video": false,
-  "experimentalSessionSupport": true,
   "defaultCommandTimeout": 30000
 }
