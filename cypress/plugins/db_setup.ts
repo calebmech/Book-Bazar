@@ -1,7 +1,11 @@
 import { PrismaClient, User } from "@prisma/client";
 import {
   TEST_BOOK_UUID,
+  TEST_COURSE_UUID,
+  TEST_DEPARTMENT_UUID,
   TEST_OTHER_PERSON_POST_UUID,
+  TEST_POST_1_UUID,
+  TEST_POST_2_UUID,
   TEST_POST_UUID,
   TEST_USER,
   TEST_USER_UUID,
@@ -13,8 +17,30 @@ export default async () => {
     await prisma.user.create({
       data: TEST_USER as User,
     });
+    await prisma.dept.create({
+      data: {
+        id: TEST_DEPARTMENT_UUID,
+        name: "Software Engineering",
+        abbreviation: "SFWR"
+      }
+    })
+    await prisma.course.create({
+      data: {
+        id: TEST_COURSE_UUID,
+        name: "Very Hard Course",
+        code: "2H03",
+        term: "Winter",
+        year: 2022,
+        deptId: TEST_DEPARTMENT_UUID
+      }      
+    })
     await prisma.book.create({
       data: {
+        courses: {
+          connect: { 
+            id: TEST_COURSE_UUID 
+          },
+        },
         isbn: "9780321573513",
         name: "Algorithms",
         isCampusStoreBook: true,
@@ -63,6 +89,45 @@ export default async () => {
         id: TEST_OTHER_PERSON_POST_UUID,
       },
     });
+
+    await prisma.post.create({
+      data: {
+        book: {
+          connect: {
+            id: TEST_BOOK_UUID,
+          },
+        },
+        user: {
+          connect: {
+            id: TEST_USER_UUID,
+          },
+        },
+        description: "This is my book :O",
+        price: 21,
+        imageUrl: "https://localhost:1000/image.jpg",
+        id: TEST_POST_1_UUID,
+      },
+    });
+
+    await prisma.post.create({
+      data: {
+        book: {
+          connect: {
+            id: TEST_BOOK_UUID,
+          },
+        },
+        user: {
+          connect: {
+            id: TEST_USER_UUID,
+          },
+        },
+        description: "Wow another one",
+        price: 51,
+        imageUrl: "https://localhost:1000/image.jpg",
+        id: TEST_POST_2_UUID,
+      },
+    });
+
     return null;
   } catch (e) {
     console.log(e);
