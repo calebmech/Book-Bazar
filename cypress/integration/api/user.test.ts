@@ -35,6 +35,28 @@ describe("User API", () => {
     });
   });
 
+  it("should not be able to get current user if not signed in", () => {
+    cy.request({
+      method: HttpMethod.GET,
+      url: "/api/user",
+      failOnStatusCode: false,
+    }).then((response) => {
+      expect(response.status).to.equal(StatusCodes.NO_CONTENT);
+      expect(response.body).to.be.empty;
+    });
+  });
+
+  it("should not be able to get a user if not signed in", () => {
+    cy.request({
+      method: HttpMethod.GET,
+      url: "/api/user/" + TEST_USER.id,
+      failOnStatusCode: false,
+    }).then((response) => {
+      expect(response.status).to.equal(StatusCodes.UNAUTHORIZED);
+      expect(response.body).to.be.empty;
+    });
+  });
+
   it("should be able to get other users if logged in", () => {
     const userToGetMacID = "userToGetMacID";
     cy.login(userToGetMacID);
@@ -108,6 +130,7 @@ describe("User API", () => {
       failOnStatusCode: false,
     }).then((response) => {
       expect(response.status).to.equal(StatusCodes.UNAUTHORIZED);
+      expect(response.body).to.be.empty;
     });
 
     cy.login();
@@ -134,6 +157,7 @@ describe("User API", () => {
       failOnStatusCode: false,
     }).then((response) => {
       expect(response.status).to.equal(StatusCodes.FORBIDDEN);
+      expect(response.body).to.be.empty;
     });
 
     cy.login();
@@ -163,6 +187,7 @@ describe("User API", () => {
         failOnStatusCode: false,
       }).then((response) => {
         expect(response.status).to.equal(StatusCodes.NOT_FOUND);
+        expect(response.body).to.be.empty;
       });
     });
   });
@@ -176,6 +201,7 @@ describe("User API", () => {
       failOnStatusCode: false,
     }).then((response) => {
       expect(response.status).to.equal(StatusCodes.FORBIDDEN);
+      expect(response.body).to.be.empty;
     });
 
     cy.request({
@@ -194,6 +220,7 @@ describe("User API", () => {
       failOnStatusCode: false,
     }).then((response) => {
       expect(response.status).to.equal(StatusCodes.UNAUTHORIZED);
+      expect(response.body).to.be.empty;
     });
 
     cy.login();
