@@ -49,16 +49,14 @@ declare global {
 }
 
 const login = (macID: string = "test") => {
-  cy.session(macID, () => {
-    cy.request(HttpMethod.POST, "/api/auth/magic", { macID }).then(() => {
-      cy.readMockData().then((data) => {
-        const magicLink = JSON.stringify(data.email.content).match(
-          /"(https.+magic.+)\\/
-        )?.[1];
-        if (magicLink) {
-          cy.visit(magicLink);
-        }
-      });
+  cy.request(HttpMethod.POST, "/api/auth/magic", { macID }).then(() => {
+    cy.readMockData().then((data) => {
+      const magicLink = JSON.stringify(data.email.content).match(
+        /"(https.+magic.+)\\/
+      )?.[1];
+      if (magicLink) {
+        cy.visit(magicLink);
+      }
     });
   });
 };

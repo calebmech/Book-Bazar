@@ -52,7 +52,7 @@ model Post {
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   status      PostStatus @default(ACTIVE)
-  user        User       @relation(fields: [userId], references: [id])
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
   book        Book       @relation(fields: [bookId], references: [id])
   bookId      String
@@ -77,7 +77,7 @@ model User {
 model Session {
   id             String   @id @default(uuid())
   createdAt      DateTime @default(now())
-  user           User     @relation(fields: [userId], references: [id])
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         String
   hashedToken    String   @unique
   expirationDate DateTime
