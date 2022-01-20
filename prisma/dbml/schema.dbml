@@ -85,7 +85,7 @@ Enum PostStatus {
 
 Ref: Course.deptId > Dept.id
 
-Ref: Post.userId > User.id
+Ref: Post.userId > User.id [delete: Cascade]
 
 Ref: Post.bookId > Book.id
 
