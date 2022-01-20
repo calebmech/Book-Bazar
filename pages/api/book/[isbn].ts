@@ -1,32 +1,47 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiRequest, NextApiResponse } from "next";
 import { HttpMethod } from "@lib/http-method";
 import { StatusCodes } from "http-status-codes";
-import { getBookWithPosts } from "../../../lib/services/book";
-import { isValidISBN } from "../../../lib/helpers/backend/valid-isbn";
+import { getPopulatedBook } from "../../../lib/services/book";
+import { isAuthenticated } from "@lib/helpers/backend/user-helpers";
+import { PopulatedBook } from "../../../lib/services/book";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method as HttpMethod) {
     case HttpMethod.GET:
-      return getBookWithPostsHandler(req, res);
+      return getPopulatedBookHandler(req, res);
     default:
       return res.status(StatusCodes.METHOD_NOT_ALLOWED).end();
   }
 }
 
-async function getBookWithPostsHandler(req: NextApiRequest, res: NextApiResponse) {
-  const { isbn } = req.query;
-  const bookISBN = isbn as string;
+async function getPopulatedBookHandler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const { isbn, length, page } = req.query;
 
-  if (!isValidISBN(bookISBN)){
+  // Confirm that path isbn and queried data are strings
+  if (Array.isArray(isbn) || Array.isArray(length) || Array.isArray(page)) {
     return res.status(StatusCodes.BAD_REQUEST).end();
   }
 
-  const book = await getBookWithPosts(bookISBN);
-  if (book) {
-    res.status(StatusCodes.OK).json(book);
-  }
-  else {
-    res.status(StatusCodes.NOT_FOUND).json(null);
-  }
+  // Store the results of the query
+  const lengthInt: number = parseInt(length) || 20;
+  const pageInt: number = parseInt(page) || 0;
+  const includeUser: boolean = await isAuthenticated(req, res);
 
+  // Get relevant book from the database
+  const populatedBook: PopulatedBook | null = await getPopulatedBook(
+    isbn,
+    includeUser,
+    lengthInt,
+    pageInt
+  );
+
+  // Return response to user
+  if (populatedBook) {
+    res.status(StatusCodes.OK).json(populatedBook);
+  } else {
+    res.status(StatusCodes.NOT_FOUND).end();
+  }
 }
