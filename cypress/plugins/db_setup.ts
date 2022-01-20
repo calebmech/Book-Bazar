@@ -10,10 +10,8 @@ import {
 export default async () => {
   let prisma = new PrismaClient();
   try {
-    await prisma.user.upsert({
-      where: { id: TEST_USER_UUID },
-      create: TEST_USER as User,
-      update: {},
+    await prisma.user.create({
+      data: TEST_USER as User,
     });
     await prisma.book.create({
       data: {
@@ -41,15 +39,11 @@ export default async () => {
         id: TEST_POST_UUID,
       },
     });
-    const otherUser = await prisma.user.upsert({
-      where: {
-        email: "other@mcmaster.ca",
-      },
-      create: {
+    const otherUser = await prisma.user.create({
+      data: {
         email: "other@mcmaster.ca",
         name: "Other",
       },
-      update: {},
     });
     await prisma.post.create({
       data: {

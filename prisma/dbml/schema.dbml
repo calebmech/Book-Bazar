@@ -89,4 +89,4 @@ Ref: Post.userId > User.id
 
 Ref: Post.bookId > Book.id
 
-Ref: Session.userId > User.id
+Ref: Session.userId > User.id [delete: Cascade]
