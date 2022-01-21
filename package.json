@@ -24,6 +24,9 @@
     "index": "ts-node ./bookstore-scrapper/indexTextbooks.ts",
     "index:dev": "dotenv -c development run-s index"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "dependencies": {
     "@prisma/client": "^3.5.0",
     "@sendgrid/mail": "^7.6.0",
