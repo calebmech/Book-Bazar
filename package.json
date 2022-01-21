@@ -24,6 +24,9 @@
     "index": "ts-node ./bookstore-scrapper/indexTextbooks.ts",
     "index:dev": "dotenv -c development run-s index"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "dependencies": {
     "@chakra-ui/react": "^1.7.4",
     "@emotion/react": "^11.7.1",
