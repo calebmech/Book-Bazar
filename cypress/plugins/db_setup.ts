@@ -1,8 +1,8 @@
 import { PrismaClient, User } from "@prisma/client";
 import {
   TEST_BOOK_UUID,
-  TEST_BOOK_ISBN_1,
-  TEST_BOOK_ISBN_2,
+  TEST_BOOK_1_ISBN,
+  TEST_BOOK_2_ISBN,
   TEST_COURSE_UUID,
   TEST_DEPARTMENT_UUID,
   TEST_OTHER_PERSON_POST_UUID,
@@ -43,7 +43,7 @@ export default async () => {
           },
         },
         id: TEST_BOOK_UUID,
-        isbn: TEST_BOOK_ISBN_1,
+        isbn: TEST_BOOK_1_ISBN,
         name: "Algorithms",
         imageUrl: "https://localhost:1000/image.jpg",
         googleBooksId: "MTpsAQAAQBAJ",
@@ -53,12 +53,8 @@ export default async () => {
     });
     await prisma.book.create({
       data: {
-        id: "62894ade-c7d8-42f0-a1f4-13313b59e72a",
-        isbn: TEST_BOOK_ISBN_2,
+        isbn: TEST_BOOK_2_ISBN,
         name: "GLF 108 GOLF COURSE TOPOGRAPHIC BASE PLAN MAP 27",
-        imageUrl: null,
-        googleBooksId: null,
-        campusStorePrice: null,
         isCampusStoreBook: true,
       },
     });

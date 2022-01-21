@@ -16,5 +16,5 @@ export const TEST_DEPARTMENT_UUID = "40237be4-cfee-4648-8420-d90e1ed3e6eb";
 export const TEST_POST_1_UUID = "60f8de7d-9362-42fe-a9c9-fc9e4af28aae";
 export const TEST_POST_2_UUID = "68b94647-b3d3-4ed7-90a3-e25c1abe8a07";
 
-export const TEST_BOOK_ISBN_1 = "9780321573513";
-export const TEST_BOOK_ISBN_2 = "281000000877B";
+export const TEST_BOOK_1_ISBN = "9780321573513";
+export const TEST_BOOK_2_ISBN = "281000000877B";
