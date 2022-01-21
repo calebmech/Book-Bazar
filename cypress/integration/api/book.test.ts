@@ -84,10 +84,10 @@ describe("test book api", () => {
     });
   });
 
-  it("should give a 404 when trying to GET a book with an isbn that does not exist", () => {
+  it("should give a 404 when trying to GET a book with an isbn that does not exist or is invalid", () => {
     cy.request({
       method: HttpMethod.GET,
-      url: `/api/book/123456789123`,
+      url: `/api/book/1234567891234`,
       failOnStatusCode: false,
     }).then((response) => {
       expect(response.status).equal(StatusCodes.NOT_FOUND);
