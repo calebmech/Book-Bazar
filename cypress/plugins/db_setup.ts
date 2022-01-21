@@ -1,6 +1,8 @@
 import { PrismaClient, User } from "@prisma/client";
 import {
   TEST_BOOK_UUID,
+  TEST_BOOK_ISBN_1,
+  TEST_BOOK_ISBN_2,
   TEST_COURSE_UUID,
   TEST_DEPARTMENT_UUID,
   TEST_OTHER_PERSON_POST_UUID,
@@ -21,29 +23,43 @@ export default async () => {
       data: {
         id: TEST_DEPARTMENT_UUID,
         name: "Software Engineering",
-        abbreviation: "SFWR"
-      }
-    })
+        abbreviation: "SFWR",
+      },
+    });
     await prisma.course.create({
       data: {
         id: TEST_COURSE_UUID,
         name: "Very Hard Course",
         code: "2H03",
         term: "Winter",
-        deptId: TEST_DEPARTMENT_UUID
-      }      
-    })
+        deptId: TEST_DEPARTMENT_UUID,
+      },
+    });
     await prisma.book.create({
       data: {
         courses: {
-          connect: { 
-            id: TEST_COURSE_UUID 
+          connect: {
+            id: TEST_COURSE_UUID,
           },
         },
-        isbn: "9780321573513",
-        name: "Algorithms",
-        isCampusStoreBook: true,
         id: TEST_BOOK_UUID,
+        isbn: TEST_BOOK_ISBN_1,
+        name: "Algorithms",
+        imageUrl: "https://localhost:1000/image.jpg",
+        googleBooksId: "MTpsAQAAQBAJ",
+        campusStorePrice: 4000,
+        isCampusStoreBook: true,
+      },
+    });
+    await prisma.book.create({
+      data: {
+        id: "62894ade-c7d8-42f0-a1f4-13313b59e72a",
+        isbn: TEST_BOOK_ISBN_2,
+        name: "GLF 108 GOLF COURSE TOPOGRAPHIC BASE PLAN MAP 27",
+        imageUrl: null,
+        googleBooksId: null,
+        campusStorePrice: null,
+        isCampusStoreBook: true,
       },
     });
     await prisma.post.create({
