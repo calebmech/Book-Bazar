@@ -1,6 +1,13 @@
 import { FormEvent } from "react";
 import useRandomMacID from "@lib/hooks/useRandomMacID";
 import { useSendMagicLinkMutation } from "@lib/hooks/user";
+import {
+  Button,
+  Flex,
+  Input,
+  InputGroup,
+  InputRightAddon,
+} from "@chakra-ui/react";
 
 export default function Login() {
   const macIDPlaceholder = useRandomMacID();
@@ -25,17 +32,22 @@ export default function Login() {
     case "idle":
       return (
         <form onSubmit={handleSubmit}>
-          <p>
-            <input
-              type="text"
-              name="macID"
-              aria-label="macID"
-              required
-              placeholder={macIDPlaceholder}
-            />
-            @mcmaster.ca
-          </p>
-          <input type="submit" value="Login" />
+          <Flex as="fieldset" gap={2}>
+            <InputGroup>
+              <Input
+                variant="filled"
+                type="text"
+                name="macID"
+                aria-label="macID"
+                required
+                placeholder={macIDPlaceholder}
+              />
+              <InputRightAddon>@mcmaster.ca</InputRightAddon>
+            </InputGroup>
+            <Button variant="solid" type="submit">
+              Login
+            </Button>
+          </Flex>
         </form>
       );
   }
