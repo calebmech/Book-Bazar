@@ -30,6 +30,16 @@ export async function getCourseWithBooks(id: string)  {
  * @returns an array of posts from the course with the given id that is paginated, or null if the course with the given id cannot be found
  */
 export async function getPostsForCourse(id : string, length: number, page: number, includeUser: boolean) {
+  const course = await prisma.course.findUnique({ 
+    where: { 
+      id: id 
+    }
+  })
+
+  if (!course) {
+    return null;
+  }
+  
   return prisma.post.findMany({
     skip: page * length,
     take: length,
