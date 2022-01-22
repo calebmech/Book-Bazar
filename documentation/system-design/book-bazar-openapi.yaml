@@ -144,7 +144,6 @@ paths:
           required: true
           schema:
             type: string
-            format: uuid
         - name: length
           in: query
           description: Maximum number of posts to return
