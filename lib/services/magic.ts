@@ -48,9 +48,14 @@ export async function consumeMagicLink(
   verificationToken: string
 ): Promise<TokenWithExpiration | null> {
   // Only allow verification email to be used once
-  const verificationEmail = await prisma.verificationEmail.delete({
-    where: { hashedToken: hashToken(verificationToken) },
-  });
+  let verificationEmail = null;
+  try {
+    verificationEmail = await prisma.verificationEmail.delete({
+      where: { hashedToken: hashToken(verificationToken) },
+    });
+  } catch (error) {
+    console.warn(error);
+  }
 
   if (!verificationEmail || verificationEmail.expirationDate < new Date()) {
     return null;
