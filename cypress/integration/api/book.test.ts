@@ -84,7 +84,7 @@ describe("test book api", () => {
     });
   });
 
-  it("should give a 404 when trying to GET a book with an isbn that does not exist or is invalid", () => {
+  it("should give a 404 when trying to GET a book with an isbn that does not exist", () => {
     cy.request({
       method: HttpMethod.GET,
       url: `/api/book/1234567891234`,
@@ -124,6 +124,28 @@ describe("test book api", () => {
       expect(response.status).to.equal(StatusCodes.OK);
 
       expect(response.body.posts.length).to.equal(0);
+    });
+  });
+
+  it("should return a default result of 4 posts for an invalid length input", () => {
+    cy.request({
+      method: HttpMethod.GET,
+      url: `/api/book/${TEST_BOOK_1_ISBN}/?length=-1&page=0`,
+    }).then((response) => {
+      expect(response.status).to.equal(StatusCodes.OK);
+
+      expect(response.body.posts.length).to.equal(4);
+    });
+  });
+
+  it("should return a default result of 4 posts for an invalid page input", () => {
+    cy.request({
+      method: HttpMethod.GET,
+      url: `/api/book/${TEST_BOOK_1_ISBN}/?length=1&page=a`,
+    }).then((response) => {
+      expect(response.status).to.equal(StatusCodes.OK);
+
+      expect(response.body.posts.length).to.equal(4);
     });
   });
 });
