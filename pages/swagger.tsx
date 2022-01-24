@@ -1,3 +1,4 @@
+import { useColorMode } from "@chakra-ui/react";
 import { readFile } from "fs/promises";
 import { GetStaticProps, NextPage } from "next";
 import { join } from "path";
@@ -9,9 +10,11 @@ interface SwaggerPageProps {
   spec: object;
 }
 
-const Swagger: NextPage<SwaggerPageProps> = ({ spec }) => (
-  <SwaggerUI spec={spec} deepLinking />
-);
+const Swagger: NextPage<SwaggerPageProps> = ({ spec }) => {
+  useColorMode().setColorMode("light");
+
+  return <SwaggerUI spec={spec} deepLinking />;
+};
 
 export const getStaticProps: GetStaticProps<SwaggerPageProps> = async () => {
   const specFile = join(
