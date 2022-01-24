@@ -1,0 +1,21 @@
+name: 📚 Index Textbooks
+on:
+  workflow_dispatch: # Allow manual indexing
+  schedule:
+    - cron: "0 0 * * 0" # Every Sunday at midnight
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+          cache: "npm"
+      - run: npm install
+      - run: npm run index
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          ALGOLIA_APP_ID: ${{ secrets.ALGOLIA_APP_ID }}
+          ALGOLIA_API_KEY: ${{ secrets.ALGOLIA_API_KEY }}
+          ALGOLIA_INDEX_NAME: ${{ secrets.ALGOLIA_INDEX_NAME }}
