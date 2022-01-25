@@ -11,6 +11,12 @@ export interface CampusStoreEntry {
 const sameBook = (book1: Book, book2: Book): boolean =>
   book1.isbn === book2.isbn;
 
+const sameCourse = (course1: Course, course2: Course): boolean =>
+  course1.deptId === course2.deptId &&
+  course1.code === course2.code &&
+  course1.term === course2.term &&
+  course1.name === course2.name;
+
 const updateDepartments = async (
   campusStoreData: CampusStoreEntry[]
 ): Promise<CampusStoreEntry[]> => {
@@ -59,7 +65,7 @@ const updateCourses = async (campusStoreData: CampusStoreEntry[]) => {
   const coursesToUpsert = lodash.differenceWith(
     campusStoreCourses,
     currentDbCourses,
-    lodash.isEqual
+    sameCourse
   );
 
   // Update or create required courses
@@ -83,7 +89,7 @@ const updateCourses = async (campusStoreData: CampusStoreEntry[]) => {
   const coursesToDelete = lodash.differenceWith(
     currentDbCourses,
     campusStoreCourses,
-    lodash.isEqual
+    sameCourse
   );
 
   for (const course of coursesToDelete) {

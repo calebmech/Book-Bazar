@@ -115,7 +115,6 @@ export const getTextbookInformation = async (
       dept: deptData,
     };
 
-    console.log(campusStoreEntry);
     campusStoreEntries.push(campusStoreEntry);
   }
   return campusStoreEntries;
