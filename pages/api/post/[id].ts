@@ -2,6 +2,7 @@ import {
   getCurrentUser,
   isAuthenticated,
 } from "@lib/helpers/backend/user-helpers";
+import { getIntStringPriceAsNumber } from "@lib/helpers/priceHelpers";
 import {
   deletePost,
   getPost,
@@ -10,7 +11,7 @@ import {
   UpdatablePost,
   updatePost,
 } from "@lib/services/post";
-import { Post, PostStatus, User } from "@prisma/client";
+import { Post, PostStatus } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
 import multer from "multer";
 import type { NextApiRequest, NextApiResponse } from "next";
@@ -54,7 +55,10 @@ async function getHandler(
   }
 
   const includeUser: boolean = await isAuthenticated(req, res);
-  const post: PostWithBook | PostWithBookWithUser | null = await getPost(postId, includeUser);
+  const post: PostWithBook | PostWithBookWithUser | null = await getPost(
+    postId,
+    includeUser
+  );
   if (post) {
     res //
       .status(StatusCodes.OK) //
@@ -178,11 +182,8 @@ function getUpdatablePostFromRequest(
 
   let parsedPrice: any = undefined;
   if (price !== undefined) {
-    if (typeof price !== "string") {
-      return null;
-    }
-    const parsedPrice = Number.parseInt(price);
-    if (Number.isNaN(parsedPrice) || parsedPrice < 0) {
+    parsedPrice = getIntStringPriceAsNumber(price);
+    if (parsedPrice === null) {
       return null;
     }
   }

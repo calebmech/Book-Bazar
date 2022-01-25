@@ -6,7 +6,7 @@ export function useBookQuery(bookIsbn: string | string[] | undefined): UseQueryR
   return useQuery("book-" + bookIsbn, () =>
     axios.get<PopulatedBook>(`/api/book/${bookIsbn}/`).then((res) => res.data),
     {
-      enabled: !(bookIsbn == undefined || Array.isArray(bookIsbn)),
+      enabled: !!bookIsbn && !Array.isArray(bookIsbn),
     }
   );
 }

@@ -1,4 +1,5 @@
 import { getCurrentUser } from "@lib/helpers/backend/user-helpers";
+import { getIntStringPriceAsNumber } from "@lib/helpers/priceHelpers";
 import { CreatablePost, createPost } from "@lib/services/post";
 import { Post, User } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
@@ -55,7 +56,6 @@ async function getCreatablePostFromRequest(
   user: User,
   req: NextApiRequestWithFile
 ): Promise<CreatablePost | null> {
-
   if (!req.body || typeof req.body !== "object") {
     return null;
   }
@@ -66,15 +66,12 @@ async function getCreatablePostFromRequest(
     return null;
   }
 
-  let parsedPrice: any = undefined;
-  if (price !== undefined) {
-    if (typeof price !== "string") {
-      return null;
-    }
-    parsedPrice = Number.parseInt(price);
-    if (Number.isNaN(parsedPrice) || parsedPrice < 0) {
-      return null;
-    }
+  if (typeof price !== "string") {
+    return null;
+  }
+  const parsedPrice = getIntStringPriceAsNumber(price);
+  if (parsedPrice === null) {
+    return null;
   }
 
   if (!bookId || typeof bookId !== "string" || !validate(bookId)) {

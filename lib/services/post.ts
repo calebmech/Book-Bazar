@@ -84,6 +84,10 @@ export async function createPost(creatablePost: CreatablePost): Promise<Post> {
           },
         },
       },
+      include: {
+        book: true,
+        user: true,
+      },
     });
   } catch (e) {
     if (!!imageUrl) {

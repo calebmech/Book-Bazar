@@ -56,7 +56,7 @@ const Header: React.FC<HeaderProps> = ({ hideSearch = false, children }) => {
           )}
           <Box gridArea="account" textAlign="right">
             <HStack align="baseline">
-              <Link href="/post" passHref>
+              <Link href="/create-post" passHref>
                 <Button
                   as="a"
                   colorScheme="teal"

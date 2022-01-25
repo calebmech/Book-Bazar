@@ -3,6 +3,7 @@ import { extendTheme, ThemeOverride } from "@chakra-ui/react";
 const config: ThemeOverride = {
   config: {
     useSystemColorMode: true,
+    initialColorMode: "dark"
   },
   semanticTokens: {
     colors: {
@@ -30,10 +31,18 @@ const config: ThemeOverride = {
         default: "gray.400",
         _dark: "gray.500",
       },
+      fieldDecoration: {
+        default: "gray.300",
+        _dark: "gray.600"
+      },
       accent: {
         default: "teal.500",
         _dark: "teal.200",
       },
+      accentHover: {
+        default: "teal.600",
+        _dark: "teal.300",
+      }
     },
     fonts: {
       title: "Lora, Georgia, serif",
