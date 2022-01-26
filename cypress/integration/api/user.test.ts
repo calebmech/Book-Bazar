@@ -46,17 +46,6 @@ describe("User API", () => {
     });
   });
 
-  it("should not be able to get a user if not signed in", () => {
-    cy.request({
-      method: HttpMethod.GET,
-      url: "/api/user/" + TEST_USER.id,
-      failOnStatusCode: false,
-    }).then((response) => {
-      expect(response.status).to.equal(StatusCodes.UNAUTHORIZED);
-      expect(response.body).to.be.empty;
-    });
-  });
-
   it("should be able to get other users if logged in", () => {
     const userToGetMacID = "userToGetMacID";
     cy.login(userToGetMacID);
@@ -89,7 +78,18 @@ describe("User API", () => {
     });
   });
 
-  it("should be able to update a user", () => {
+  it("should not be able to get a user if not signed in", () => {
+    cy.request({
+      method: HttpMethod.GET,
+      url: "/api/user/" + TEST_USER.id,
+      failOnStatusCode: false,
+    }).then((response) => {
+      expect(response.status).to.equal(StatusCodes.UNAUTHORIZED);
+      expect(response.body).to.be.empty;
+    });
+  });
+
+  it("should be able to update current user", () => {
     const userToUpdateMacID = "userToUpdateMacID";
     cy.login(userToUpdateMacID);
 
@@ -171,7 +171,7 @@ describe("User API", () => {
     });
   });
 
-  it("should be able to delete user", () => {
+  it("should be able to delete current user", () => {
     cy.login("to-delete");
 
     cy.request(HttpMethod.GET, "/api/user").then((response) => {

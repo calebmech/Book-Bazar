@@ -45,7 +45,11 @@ export enum FR {
   FR11 = "FR11",
   FR12 = "FR12",
   FR13 = "FR13",
-  FR14 = "FR14",
+  FR15 = "FR15",
+  FR16 = "FR16",
+  FR17 = "FR17",
+  FR18 = "FR18",
+  FR19 = "FR19",
 }
 
 // Imported modules
@@ -133,17 +137,17 @@ const GoogleBooksSearchModule: Module = {
           in: {
             isbn: "string",
           },
-          out: ["GoogleBook" , "null"],
+          out: ["GoogleBook", "null"],
           semantics: [
             "Gets Google Books data using a book's ISBN",
             "Makes a call to the \\href{https://www.npmjs.com/package/googleapis}{Google Books API}",
             "Returns a \\href{https://github.com/googleapis/google-api-nodejs-client/blob/01bf480d3e35354cc3fdc7d7aa2559611d459b50/src/apis/books/v1.ts#L1049}{GoogleBooks object} if the response contains relevant data",
-            "Returns null if the response does not contain relevant data"
+            "Returns null if the response does not contain relevant data",
           ],
-        }
+        },
       ],
     },
-    semantics: {}
+    semantics: {},
   },
 };
 
@@ -331,7 +335,7 @@ const PostServiceModule: Module = {
   implementedBy: Implementer.BOOK_BAZAR,
   type: ModuleType.BEHAVIOUR_HIDING,
   uses: [PrismaClientModule, ImageServiceModule],
-  associatedRequirements: [FR.FR1, FR.FR2, FR.FR3],
+  associatedRequirements: [FR.FR1, FR.FR2, FR.FR3, FR.FR19],
   contents: {
     syntax: {
       exportedTypes: [PostWithUserType, CreatablePostType, UpdatablePostType],
@@ -356,7 +360,9 @@ const PostServiceModule: Module = {
           out: [PostType],
           semantics: [
             "Create a new post in the database",
-            `Uploads the textbook picture using ${moduleReference(ImageServiceModule)} if one is provided`,
+            `Uploads the textbook picture using ${moduleReference(
+              ImageServiceModule
+            )} if one is provided`,
           ],
         },
         {
@@ -368,8 +374,12 @@ const PostServiceModule: Module = {
           out: [PostType],
           semantics: [
             "Updates a post in the database",
-            `Uploads the new textbook picture using ${moduleReference(ImageServiceModule)} if a new one is provided`,
-            `Deletes the old textbook picture using ${moduleReference(ImageServiceModule)} if a new one is provided`,
+            `Uploads the new textbook picture using ${moduleReference(
+              ImageServiceModule
+            )} if a new one is provided`,
+            `Deletes the old textbook picture using ${moduleReference(
+              ImageServiceModule
+            )} if a new one is provided`,
           ],
         },
         {
@@ -455,10 +465,7 @@ const CourseServiceModule: Module = {
         {
           name: "getCourseWithBooks",
           in: { id: "string" },
-          out: [
-            CourseWithBooksType,
-            "null",
-          ],
+          out: [CourseWithBooksType, "null"],
           semantics: [
             "Gets a course by ID and populates the books for that course",
           ],
@@ -538,7 +545,7 @@ const UserServiceModule: Module = {
   implementedBy: Implementer.BOOK_BAZAR,
   type: ModuleType.BEHAVIOUR_HIDING,
   uses: [PrismaClientModule, ImageServiceModule],
-  associatedRequirements: [FR.FR9, FR.FR11, FR.FR12],
+  associatedRequirements: [FR.FR9, FR.FR11, FR.FR12, FR.FR17],
   contents: {
     syntax: {
       exportedTypes: [ModifiableUserType, UserWithPostsType],
@@ -658,7 +665,7 @@ const MagicLinkServiceModule: Module = {
     TokensModule,
     EnvironmentModule,
   ],
-  associatedRequirements: [FR.FR11],
+  associatedRequirements: [FR.FR11, FR.FR15],
   contents: {
     syntax: {
       exportedTypes: [TokenWithExpirationType],
@@ -759,7 +766,7 @@ const PostHttpHandlerModule: Module = {
   implementedBy: Implementer.BOOK_BAZAR,
   type: ModuleType.BEHAVIOUR_HIDING,
   uses: [PostServiceModule, ImageServiceModule, UserHelpersModule],
-  associatedRequirements: [FR.FR1, FR.FR2, FR.FR3, FR.FR9],
+  associatedRequirements: [FR.FR1, FR.FR2, FR.FR3, FR.FR9, FR.FR19],
   contents: {
     syntax: {
       exportedAccessPrograms: [
@@ -850,7 +857,7 @@ const AuthHttpHandlerModule: Module = {
   implementedBy: Implementer.BOOK_BAZAR,
   type: ModuleType.BEHAVIOUR_HIDING,
   uses: [MagicLinkServiceModule, SessionServiceModule, UserHelpersModule],
-  associatedRequirements: [FR.FR9, FR.FR11],
+  associatedRequirements: [FR.FR11, FR.FR15, FR.FR16],
   contents: {
     syntax: {
       exportedAccessPrograms: [
@@ -879,7 +886,7 @@ const UserHttpHandlerModule: Module = {
   implementedBy: Implementer.BOOK_BAZAR,
   type: ModuleType.BEHAVIOUR_HIDING,
   uses: [UserServiceModule, ImageServiceModule, UserHelpersModule],
-  associatedRequirements: [FR.FR9, FR.FR8, FR.FR12, FR.FR14],
+  associatedRequirements: [FR.FR9, FR.FR12, FR.FR17, FR.FR18],
   contents: {
     syntax: {
       exportedAccessPrograms: [
@@ -923,7 +930,10 @@ const UserInterfaceModule: Module = {
     FR.FR11,
     FR.FR12,
     FR.FR13,
-    FR.FR14,
+    FR.FR15,
+    FR.FR16,
+    FR.FR17,
+    FR.FR18,
   ],
   contents: [
     "\\subsection*{Syntax \\& Semantics}",
