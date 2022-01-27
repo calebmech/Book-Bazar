@@ -111,6 +111,8 @@
 \hline
 5 & 19.10.2021 & Harsh Mahajan & Edited Use-Case Diagram to match TA's feedback.\\
 \hline
+6 & 25.02.2022 & Caleb Mech & Edited user and authentication requirements to match system design.\\
+\hline
 \end{tabular}
 \caption{Table of Revisions}
 
@@ -246,9 +248,12 @@ FR1 &The system shall allow sellers to post books by manually inputting book inf
 \hline
 FR2&The system shall allow sellers to post books by scanning a -UPC barcode and filling out the remaining information. & This will allow users to easily post books without manually filling out its details.\\
 \hline
-FR3 & System shall allow sellers to remove posting.& The seller may no longer be interested in selling the book.\\
+FR3 & System shall allow sellers to delete their posting.& The seller may no longer be interested in selling the book.\\
 \hline
 FR4 &  The system shall allow sellers to view the price the book is currently being sold for at the Campus Store. & Sellers may be interested in selling their book for a percentage of the price they originally paid while taking the Campus Store price into account.\\
+\hline
+FR19 & System shall allow sellers to edit their posting.& The seller may want to change the price or edit their posting.\\
+\hline
 \hline
 \end{tabular}
 \caption{Requirements for Posting Book}
@@ -281,6 +286,7 @@ FR10 & The system shall allow buyers to find books at the campus store. &The sel
 \caption{Requirements for Buying Book}
 \end{table}
 
+\newpage
 \subsection{Authentication System}
 \begin{table}[h!]
 \flushleft
@@ -289,33 +295,22 @@ FR10 & The system shall allow buyers to find books at the campus store. &The sel
  \rowcolor{lightgray} 
 \textbf{Requirement} & \textbf{Description} & \textbf{Rationale} \\
 \hline
-FR11 &The system shall allow users to create an account.& Users will need an account in order to use the website as verified users.\\
+FR11 &The system shall allow new users to create an account.& Users will need an account in order to use the website as verified users.\\
 \hline
 FR12&The system shall allow users to delete their account. & Users may wish to no longer have their information on the website.\\
 \hline
 FR13 & The system shall provide tips regarding safe interaction between buyers and sellers. & -\\
 \hline
+FR15 &The system shall allow existing users to login.& -\\
+\hline
+FR16 &The system shall allow authenticated users to logout.& -\\
+\hline
+FR17 &The system shall allow authenticated users to update their user information.& Users may wish to modify their account information such as name or profile image\\
+\hline
+FR18 &The system shall prevent users modifying user information that is not their own.& -\\
+\hline
 \end{tabular}
 \caption{Requirements for the Authentication System}
-\end{table}
-
-\newpage
-\subsection{Miscellaneous Requirements}
-\begin{table}[h!]
-\flushleft
-\begin{tabular}{|c|p{6cm}|p{6cm}|}
-\hline
- \rowcolor{lightgray} 
-\textbf{Requirement} & \textbf{Description} & \textbf{Rationale} \\
-\hline
-% FR15&Import from library & Information regarding courses and their textbooks should be obtained from Campus Store to create a library.\\
-% \hline
-FR14& The application shall allow an administrator to erase all stored data related to a user of the application at the user's request. & Users may request for their data to be deleted, and it should be simple to accomplish this.\\
-\hline
-
-%Omitted the post-scondary requirement as we're moving it to a stretch goal.
-\end{tabular}
-\caption{Other Miscellaneous Requirements}
 \end{table}
 
 \section{Functional Requirements Likelihood of Change}
