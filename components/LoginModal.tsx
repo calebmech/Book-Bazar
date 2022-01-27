@@ -19,7 +19,6 @@ import {
 import { UserIcon } from "@heroicons/react/outline";
 import { useSendMagicLinkMutation } from "@lib/hooks/user";
 import useRandomMacID from "@lib/hooks/useRandomMacID";
-import { useColor, Colors } from "@styles/colors";
 import { FormEvent, useState } from "react";
 
 export interface LoginModalProps {
@@ -48,8 +47,6 @@ export default function LoginModal({
     event.preventDefault();
   };
 
-  const secondaryTextColor = useColor(Colors.secondaryText);
-
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg">
       <ModalOverlay />
@@ -73,7 +70,7 @@ export default function LoginModal({
                 <Heading as="h1" size="md" fontWeight="medium">
                   Login
                 </Heading>
-                <Text color={secondaryTextColor}>
+                <Text color="secondaryTextColor">
                   {(mutation.isIdle || mutation.isLoading) && message}
                   {mutation.isError &&
                     `Something went wrong, please try again.`}

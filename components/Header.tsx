@@ -8,7 +8,6 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useLogout, useUserQuery } from "@lib/hooks/user";
-import { Colors, useColor } from "@styles/colors";
 import { useState } from "react";
 import { v4 as uuid } from "uuid";
 import LoginModal from "./LoginModal";
@@ -27,7 +26,7 @@ export default function Header() {
   const logout = useLogout();
 
   return (
-    <Box as="header" backgroundColor={useColor(Colors.secondaryBackground)}>
+    <Box as="header" backgroundColor="secondaryBackground">
       <Container py={5} maxWidth="container.md">
         <Flex alignItems="baseline" justifyContent="space-between">
           <Heading as="h1" size="md">
