@@ -26,8 +26,13 @@ async function getPopulatedBookHandler(
   }
 
   // Store the results of the query
-  const lengthInt: number = parseInt(length) || 20;
-  const pageInt: number = parseInt(page) || 0;
+  let lengthInt: number = parseInt(length);
+  let pageInt: number = parseInt(page);
+  if (!(lengthInt >= 0 && pageInt >= 0)) {
+    lengthInt = 20;
+    pageInt = 0;
+  }
+
   const includeUser: boolean = await isAuthenticated(req, res);
 
   // Get relevant book from the database
