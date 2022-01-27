@@ -48,12 +48,14 @@ declare global {
   }
 }
 
+export const getMagicLink = (data: any) => {
+  return JSON.stringify(data.email.content).match(/"(https.+magic.+)\\/)?.[1];
+};
+
 const login = (macID: string = "test") => {
   cy.request(HttpMethod.POST, "/api/auth/magic", { macID }).then(() => {
     cy.readMockData().then((data) => {
-      const magicLink = JSON.stringify(data.email.content).match(
-        /"(https.+magic.+)\\/
-      )?.[1];
+      const magicLink = getMagicLink(data);
       if (magicLink) {
         cy.visit(magicLink);
       }
