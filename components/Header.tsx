@@ -4,13 +4,14 @@ import {
   Container,
   Flex,
   Heading,
+  Spacer,
   useDisclosure,
 } from "@chakra-ui/react";
 import { useLogout, useUserQuery } from "@lib/hooks/user";
 import { Colors, useColor } from "@styles/colors";
 import { useState } from "react";
 import { v4 as uuid } from "uuid";
-import Login from "./Login";
+import LoginModal from "./LoginModal";
 
 export default function Header() {
   const { isAuthenticated } = useUserQuery();
@@ -32,20 +33,25 @@ export default function Header() {
           <Heading as="h1" size="md">
             Book Bazar
           </Heading>
-          <div />
+          <Spacer />
           {!isAuthenticated ? (
-            <Button variant="link" onClick={handleLoginClick}>
+            <Button variant="outline" onClick={handleLoginClick}>
               Login
             </Button>
           ) : (
-            <Button variant="link" onClick={() => logout()}>
+            <Button variant="outline" onClick={() => logout()}>
               Logout
             </Button>
           )}
         </Flex>
       </Container>
 
-      <Login key={loginModalKey} isOpen={isOpen} onClose={onClose} />
+      <LoginModal
+        key={loginModalKey}
+        isOpen={isOpen}
+        onClose={onClose}
+        message="To sell your textbooks or contact sellers please login with your MacID below."
+      />
     </Box>
   );
 }

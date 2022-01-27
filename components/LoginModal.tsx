@@ -25,11 +25,16 @@ import { FormEvent, useState } from "react";
 export interface LoginModalProps {
   isOpen: boolean;
   onClose: VoidFunction;
+  message: string;
 }
 
 const EMAIL_SUFFIX = "@mcmaster.ca";
 
-export default function Login({ isOpen, onClose }: LoginModalProps) {
+export default function LoginModal({
+  isOpen,
+  onClose,
+  message,
+}: LoginModalProps) {
   const [macID, setMacID] = useState("");
   const macIDPlaceholder = useRandomMacID();
   const mutation = useSendMagicLinkMutation();
@@ -69,8 +74,7 @@ export default function Login({ isOpen, onClose }: LoginModalProps) {
                   Login
                 </Heading>
                 <Text color={secondaryTextColor}>
-                  {(mutation.isIdle || mutation.isLoading) &&
-                    `To create a post you must sign in. Please enter your MacID below.`}
+                  {(mutation.isIdle || mutation.isLoading) && message}
                   {mutation.isError &&
                     `Something went wrong, please try again.`}
                   {mutation.isSuccess &&
