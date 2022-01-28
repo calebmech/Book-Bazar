@@ -34,7 +34,6 @@ export default function BookCard(props: BookCardProps) {
     >
       
       <Image 
-        p='1'
         w='100%'
         h='200px'
         objectFit='contain'

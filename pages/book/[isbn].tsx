@@ -1,19 +1,21 @@
-import { Badge, Box, Flex, HStack, Image, List, Spacer, Text } from "@chakra-ui/react";
+import { Badge, Box, Button, Flex, HStack, Image, List, Spacer, Text } from "@chakra-ui/react";
 import CardList, { CardListType } from "@components/CardList";
 import Layout from "@components/Layout";
 import { useBookQuery } from "@lib/hooks/book";
+import { isArray } from "lodash";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import { arrayBuffer } from "stream/consumers";
 
 const BookPage: NextPage = () => {
   const router = useRouter();
-  const { id } = router.query;
-  const { data: book } = useBookQuery(id);
+  const { isbn } = router.query;
+  const { data: book } = useBookQuery(isbn);
 
   if (!book) {
     return null;
   }
-  const { name, isbn, googleBook } = book;
+  const { name, googleBook } = book;
 
   const updatedPosts = book.posts.map((post) => {
     return {
@@ -36,18 +38,17 @@ const BookPage: NextPage = () => {
         alt='tst' 
         src={book.imageUrl || ''}
         w='190px'
+        shadow={'xl'}
         />
 
-        <Flex direction='column' ml='4' w='500px'>
+        <Flex direction='column' ml='4' w='500px' justify='space-between'>
           <Text
-            mt='1'
             fontSize='2xl'
             fontWeight='bold'
           >
             {name}
           </Text>
           <Text
-            mt='1'
             fontSize='lg'
             fontWeight='semibold'
             color='gray.500'
@@ -73,16 +74,19 @@ const BookPage: NextPage = () => {
           <BookInfoRow 
             firstTitle='ISBN'
             secondTitle='Page Count'
-            firstInfo={isbn} 
+            firstInfo={isbn && !Array.isArray(isbn) ? isbn  : ''} 
             secondInfo={googleBook?.pageCount?.toString()}          
           />        
 
+          {googleBook && <Button onClick={() => window.open(googleBook.infoLink)}>
+            View On Google Books
+          </Button>}
         </Flex>
       </Flex>
       <CardList 
-      type={CardListType.PostCardList} 
-      books={undefined} 
-      posts={updatedPosts}
+        type={CardListType.PostCardList} 
+        books={undefined} 
+        posts={updatedPosts}
       />
     </Layout>
   );
@@ -97,8 +101,7 @@ type BookInfoRowProps = {
 
 const BookInfoRow = ({firstTitle, secondTitle, firstInfo, secondInfo}: BookInfoRowProps) => {
   return (
-    <>
-    <Spacer mt='2'/>
+    <Box>
       <HStack justify='space-between' color='gray.500'>
         <Text>
           {firstTitle}
@@ -115,7 +118,7 @@ const BookInfoRow = ({firstTitle, secondTitle, firstInfo, secondInfo}: BookInfoR
           {secondInfo ? secondInfo : '-'}
         </Text>
       </HStack>
-    </>
+    </Box>
   )
 }
 
