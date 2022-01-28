@@ -29,9 +29,10 @@ export async function getCourseWithBooks(id: string)  {
     const googleBookData: GoogleBook | null = await getGoogleBooksData(
       book.isbn
     );
+    const authorString = googleBookData && googleBookData.authors ? googleBookData.authors.join(', ') : null;
     return {
       ...book,
-      author: googleBookData?.authors?.join(', ') 
+      author: authorString
     };
   }))
 
@@ -47,7 +48,7 @@ export async function getCourseWithBooks(id: string)  {
 export type PostsWithBooksWithAuthorWithUser = Prisma.PromiseReturnType<typeof getPostsForCourse>;
 
 export interface BookWithAuthor {
-  author: string | undefined;
+  author: string | null;
   id: string;
   isbn: string;
   name: string;
@@ -99,10 +100,12 @@ export async function getPostsForCourse(id : string, length: number, page: numbe
     const googleBookData: GoogleBook | null = await getGoogleBooksData(
       post.book.isbn
     );
+
+    const authorString = googleBookData && googleBookData.authors ? googleBookData.authors.join(', ') : null;
     
     const book: BookWithAuthor = {
       ...post.book,
-      author: googleBookData?.authors?.join(', ') 
+      author: authorString 
     };
     
     const newPost = {

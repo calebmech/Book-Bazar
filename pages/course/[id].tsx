@@ -1,11 +1,9 @@
-import { Box, Image, Text } from "@chakra-ui/react";
-import Layout from "@components/Layout";
-import BookList from "@components/BookList";
-import { useCoursePostsQuery, useCourseQuery } from "@lib/hooks/course";
-import { Book } from "@prisma/client";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import PostList from "@components/PostList";
+import { useCoursePostsQuery, useCourseQuery } from "@lib/hooks/course";
+import { Text } from "@chakra-ui/react";
+import Layout from "@components/Layout";
+import CardList, { ListType } from "@components/CardList";
 
 const CoursePage: NextPage = () => {
   const router = useRouter();
@@ -15,17 +13,23 @@ const CoursePage: NextPage = () => {
   
   return (
     <Layout>
-      <Box display='flex' flexDir='column'>
-        <Text
-          mt='1'
-          fontSize='4xl'
-          fontWeight='semibold'
-        >
-          {course?.name} {course?.code}
-        </Text>
-      </Box>
-      <BookList books={course?.books}/>
-      <PostList posts={posts}/>
+      <Text
+        mt='1'
+        fontSize='4xl'
+        fontWeight='semibold'
+      >
+        {course?.name} {course?.code}
+      </Text>
+      <CardList 
+        type={ListType.BookCardList} 
+        books={course?.books} 
+        posts={undefined} 
+      />
+      <CardList 
+        type={ListType.PostCardList} 
+        posts={posts ? posts : undefined} 
+        books={undefined} 
+      />
     </Layout>
   );
 };
