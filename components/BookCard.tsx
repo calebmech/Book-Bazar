@@ -3,18 +3,18 @@ import { useRouter } from "next/router";
 
 export interface BookCardProps {
   name: string, 
-  id: string, 
+  isbn: string, 
   imageUrl: string | null,
   author: string | null,
 }
 
 export default function BookCard(props: BookCardProps) {
-  const { name, imageUrl, id, author } = props;
+  const { name, imageUrl, isbn, author } = props;
   const router = useRouter();
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
-    router.push("/book/" + id)
+    router.push("/book/" + isbn)
   }
 
   return (
