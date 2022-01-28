@@ -1,5 +1,7 @@
-import type { Prisma } from "@prisma/client";
+import type { Book, Post, Prisma, User } from "@prisma/client";
 import { prisma } from "@lib/services/db";
+import { GoogleBook, getGoogleBooksData } from "./googleBooksSearch";
+import { PopulatedBook } from "./book";
 
 export type CourseWithBooks = Prisma.PromiseReturnType<typeof getCourseWithBooks>;
 
@@ -10,7 +12,7 @@ export type CourseWithBooks = Prisma.PromiseReturnType<typeof getCourseWithBooks
  * @returns the course with the given id, or null if the course with the given id cannot be found
  */
 export async function getCourseWithBooks(id: string)  {
-  return prisma.course.findUnique({
+  const course = await prisma.course.findUnique({
     where: {
       id: id,
     },
@@ -18,6 +20,41 @@ export async function getCourseWithBooks(id: string)  {
       books: true,
     }
   });
+
+  if (!course) {
+    return null;
+  }
+
+  const BooksWithAuthors = await Promise.all(course.books.map(async book => {
+    const googleBookData: GoogleBook | null = await getGoogleBooksData(
+      book.isbn
+    );
+    return {
+      ...book,
+      author: googleBookData?.authors?.join(', ') 
+    };
+  }))
+
+  const newCourse = {
+    ...course,
+    books: BooksWithAuthors,
+  }
+
+  return newCourse;
+}
+
+
+export type PostsWithBooksWithAuthorWithUser = Prisma.PromiseReturnType<typeof getPostsForCourse>;
+
+export interface BookWithAuthor {
+  author: string | undefined;
+  id: string;
+  isbn: string;
+  name: string;
+  imageUrl: string | null;
+  googleBooksId: string | null;
+  isCampusStoreBook: boolean;
+  campusStorePrice: number | null;
 }
 
 /**
@@ -40,7 +77,7 @@ export async function getPostsForCourse(id : string, length: number, page: numbe
     return null;
   }
   
-  return prisma.post.findMany({
+  const posts = await prisma.post.findMany({
     skip: page * length,
     take: length,
     include: {
@@ -57,4 +94,22 @@ export async function getPostsForCourse(id : string, length: number, page: numbe
       },
     },
   });
+  
+  return Promise.all(posts.map(async post => {
+    const googleBookData: GoogleBook | null = await getGoogleBooksData(
+      post.book.isbn
+    );
+    
+    const book: BookWithAuthor = {
+      ...post.book,
+      author: googleBookData?.authors?.join(', ') 
+    };
+    
+    const newPost = {
+      ...post,
+      book: book,
+    }
+
+    return newPost
+  })) 
 } 
