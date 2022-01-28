@@ -1,21 +1,27 @@
 import { Box, Heading, Image, Text } from "@chakra-ui/react";
+import { useBookQuery } from "@lib/hooks/book";
+import { Book } from "@prisma/client";
 import { useRouter } from "next/router";
 
-export interface BookCardProps {
-  name: string, 
-  isbn: string, 
-  imageUrl: string | null,
-  author: string | null,
-}
-
-export default function BookCard(props: BookCardProps) {
-  const { name, imageUrl, isbn, author } = props;
+export default function BookCard({ name, imageUrl, isbn }: Book) {
+  const { isLoading, data: populatedBook } = useBookQuery(isbn);
   const router = useRouter();
+
+  const authors = (): string => {
+    if (isLoading) {
+      return "Loading Authors..."
+    }
+    if (populatedBook?.googleBook?.authors) {
+      return populatedBook.googleBook.authors.join(', ')
+    }
+    return "No Authors"
+  }
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     router.push("/book/" + isbn)
   }
+  
 
   return (
     <Box
@@ -55,7 +61,7 @@ export default function BookCard(props: BookCardProps) {
         </Heading>
 
         <Text color='gray.500' isTruncated>
-          {author}
+          {authors()}
         </Text>
       </Box>
     </Box>

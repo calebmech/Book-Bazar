@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useCoursePostsQuery, useCourseQuery } from "@lib/hooks/course";
 import { Text } from "@chakra-ui/react";
 import Layout from "@components/Layout";
-import CardList, { CardListType as CardListType } from "@components/CardList";
+import { BookCardList, PostCardList } from "@components/CardList";
 
 const CoursePage: NextPage = () => {
   const router = useRouter();
@@ -20,16 +20,8 @@ const CoursePage: NextPage = () => {
       >
         {course?.name} {course?.code}
       </Text>
-      <CardList 
-        type={CardListType.BookCardList} 
-        books={course?.books} 
-        posts={undefined} 
-      />
-      <CardList 
-        type={CardListType.PostCardList} 
-        posts={posts ? posts : undefined} 
-        books={undefined} 
-      />
+      <BookCardList books={course?.books} />
+      <PostCardList posts={posts ? posts : undefined} />
     </Layout>
   );
 };

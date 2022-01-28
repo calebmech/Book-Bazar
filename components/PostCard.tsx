@@ -1,20 +1,12 @@
-import { HStack, Box, Image, Text, Flex } from "@chakra-ui/react";
-import { BookWithAuthor } from "@lib/services/course";
-import { User } from "@prisma/client";
+import {  Box, Image, Text, Flex } from "@chakra-ui/react";
+import { useBookQuery } from "@lib/hooks/book";
+import { PostWithUser } from "@lib/services/post";
 import { useRouter } from "next/router";
+import SmallUserAvatar from "./SmallUserAvatar";
 
-export interface PostCardProps {
-  book: BookWithAuthor;
-  id: string;
-  price: number;
-  description: string;
-  imageUrl: string | null;
-  userId: string;
-  user: User | null;
-}
-
-export default function PostCard(props: PostCardProps) {
-  const { id, price, description, book, user, imageUrl } = props;
+export default function PostCard(post: PostWithUser) {
+  const { id, price, description, user, bookId, imageUrl } = post;
+  const { data: book } = useBookQuery(bookId);
   const router = useRouter();
 
   const handleClick = (e: React.MouseEvent<HTMLElement>) => {
@@ -22,37 +14,14 @@ export default function PostCard(props: PostCardProps) {
     router.push("/post/" + id)
   }
 
-  const UserLine = () => {
-    if (user) {
-      return (
-        <HStack>
-          <Image 
-            src={user.imageUrl || 'https://st3.depositphotos.com/6672868/13701/v/600/depositphotos_137014128-stock-illustration-user-profile-icon.jpg'} 
-            alt="profilepic"
-            h="30px"
-            w="30px"
-            borderRadius='30px'
-          />
-
-          <Text color='gray.500' fontSize='sm' isTruncated>
-            {user.name}
-          </Text>
-        </HStack>
-      )
-    }
-    else {
-      return null;
-    }
-  }
-
   const Details = () => {
     return (
       <Box >
         <Text fontWeight='semibold'>
-          {book.name}
+          {book?.name}
         </Text>
         <Text color='gray.500' isTruncated>
-          {book.author}
+          {book?.googleBook?.authors?.join(',')}
         </Text>
         <Text fontWeight='bold' fontSize='xl'>
           ${price}
@@ -97,7 +66,7 @@ export default function PostCard(props: PostCardProps) {
         p='2'
       >
         <Details />
-        <UserLine />
+        <SmallUserAvatar user={user} />
       </Flex>
     </Flex>
   )

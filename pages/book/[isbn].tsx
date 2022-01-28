@@ -1,11 +1,9 @@
 import { Badge, Box, Button, Flex, HStack, Image, List, Spacer, Text } from "@chakra-ui/react";
-import CardList, { CardListType } from "@components/CardList";
+import { PostCardList } from "@components/CardList";
 import Layout from "@components/Layout";
 import { useBookQuery } from "@lib/hooks/book";
-import { isArray } from "lodash";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
-import { arrayBuffer } from "stream/consumers";
 
 const BookPage: NextPage = () => {
   const router = useRouter();
@@ -15,19 +13,7 @@ const BookPage: NextPage = () => {
   if (!book) {
     return null;
   }
-  const { name, googleBook } = book;
-
-  const updatedPosts = book.posts.map((post) => {
-    return {
-      ...post,
-      book: {
-        author: googleBook && googleBook.authors ? googleBook.authors.join(',') : '',
-        ...book
-      },
-    }
-  })
-
-  
+  const { name, googleBook, posts } = book;
 
   return (
     <Layout>
@@ -83,11 +69,7 @@ const BookPage: NextPage = () => {
           </Button>}
         </Flex>
       </Flex>
-      <CardList 
-        type={CardListType.PostCardList} 
-        books={undefined} 
-        posts={updatedPosts}
-      />
+      <PostCardList posts={posts} />
     </Layout>
   );
 };

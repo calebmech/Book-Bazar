@@ -1,4 +1,4 @@
-import { CourseWithBooks, PostsWithBooksWithAuthorWithUser } from "@lib/services/course";
+import { CourseWithBooks, PostsWithBookWithUser } from "@lib/services/course";
 import axios from "axios";
 import { UseQueryResult, useQuery } from "react-query";
 
@@ -14,9 +14,9 @@ export function useCourseQuery(courseId: string | string[] | undefined): UseQuer
   );
 }
 
-export function useCoursePostsQuery(courseId: string | string[] | undefined): UseQueryResult<PostsWithBooksWithAuthorWithUser> {
+export function useCoursePostsQuery(courseId: string | string[] | undefined): UseQueryResult<PostsWithBookWithUser> {
   return useQuery("coursePosts", () =>
-    axios.get<PostsWithBooksWithAuthorWithUser[]>(`/api/course/${courseId}/posts/`).then((res) => res.data),
+    axios.get<PostsWithBookWithUser[]>(`/api/course/${courseId}/posts/`).then((res) => res.data),
     {
       enabled: !(courseId == undefined || Array.isArray(courseId)),
     }

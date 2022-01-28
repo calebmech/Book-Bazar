@@ -1,69 +1,56 @@
-import { Box, Text, HStack, Flex } from "@chakra-ui/react";
+import { Box, Text, HStack, Flex, Wrap } from "@chakra-ui/react";
 import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
-import BookCard, { BookCardProps } from "./BookCard";
-import PostCard, { PostCardProps } from "./PostCard";
+import { PostWithUser } from "@lib/services/post";
+import { Book } from "@prisma/client";
+import BookCard from "./BookCard";
+import PostCard from "./PostCard";
 
-export enum CardListType {
-  BookCardList,
-  PostCardList
+interface PostCardListProps {
+  posts: PostWithUser[] | undefined;
+}
+export function PostCardList({posts}: PostCardListProps) {
+  const items = posts?.map((post, i) => <PostCard key={i} {...post} />);
+  return <CardList items={items} itemName='Active Listing' />
+}
+
+interface BookCardListProps {
+  books: Book[] | undefined;
+}
+export function BookCardList({books}: BookCardListProps) {
+  const items = books?.map((book, i) => <BookCard key={i} {...book} />);
+  return <CardList items={items} itemName='Book' />
 }
 
 type CardListProps = {
-  type: CardListType;
-  books: BookCardProps[] | undefined;
-  posts: PostCardProps[] | undefined;
+  itemName: string;
+  items: ReactJSXElement[] | undefined;
 }
-
-export default function CardList({type, books, posts}: CardListProps) {
-  var zeroItemString: string;
-  var itemString: string;
-  var length: number;
-  var childrenCards: ReactJSXElement[] | undefined;
-  var justifyContent: string;
-
-  if (type === CardListType.BookCardList) {
-    zeroItemString = "No books";
-    itemString = "Books";
-    length = books ? books.length : 0;
-    childrenCards = books && books.map((book, i) => <BookCard key={i} {...book} />);
-  }
-  else {
-    zeroItemString = "No active listings.";
-    itemString = "Active Listings";
-    length = posts ? posts.length : 0;
-    childrenCards = posts && posts.map((post, i) => <PostCard key={i} {...post} />);
-  }
-    
-  if (length === 0) {
+function CardList({ itemName, items }: CardListProps) {
+  if (!items || items.length === 0) {
     return (
       <Text 
+        mt="10"
         fontSize='2xl' 
         color='gray.500' 
-        mt="10"
       > 
-        { zeroItemString }
+        No { itemName }s found.
       </Text>
     );
-  }
+  };
 
   return (
     <Box mt="10">
       <HStack spacing='12px' fontSize='2xl'>
         <Text> 
-          { itemString }
+          { itemName }s
         </Text>
         <Text color='gray.500'> 
-          ({length} matching) 
+          ({ items.length } matching) 
         </Text>
       </HStack>
-
-      <Flex 
-        mt='2'
-        direction='row' 
-        wrap='wrap'
-      >
-        {childrenCards}
-      </Flex>
+      <Wrap mt='2' >
+        { items }
+      </Wrap>
     </Box>
   );
 }
