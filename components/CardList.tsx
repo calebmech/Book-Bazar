@@ -3,34 +3,35 @@ import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
 import BookCard, { BookCardProps } from "./BookCard";
 import PostCard, { PostCardProps } from "./PostCard";
 
-export enum ListType {
+export enum CardListType {
   BookCardList,
   PostCardList
 }
 
-type ListProps = {
-  type: ListType;
+type CardListProps = {
+  type: CardListType;
   books: BookCardProps[] | undefined;
   posts: PostCardProps[] | undefined;
 }
 
-export default function CardList({type, books, posts}: ListProps) {
+export default function CardList({type, books, posts}: CardListProps) {
   var zeroItemString: string;
   var itemString: string;
   var length: number;
   var childrenCards: ReactJSXElement[] | undefined;
+  var justifyContent: string;
 
-  if (type === ListType.BookCardList) {
-    zeroItemString = "No books found for this course."
+  if (type === CardListType.BookCardList) {
+    zeroItemString = "No books";
     itemString = "Books";
     length = books ? books.length : 0;
-    childrenCards = books && books.map((book, i) => <BookCard key={i} {...book} />)
+    childrenCards = books && books.map((book, i) => <BookCard key={i} {...book} />);
   }
   else {
-    zeroItemString = "There are no active listings for the books used in this course."
+    zeroItemString = "No active listings.";
     itemString = "Active Listings";
     length = posts ? posts.length : 0;
-    childrenCards = posts && posts.map((post, i) => <PostCard key={i} {...post} />)
+    childrenCards = posts && posts.map((post, i) => <PostCard key={i} {...post} />);
   }
     
   if (length === 0) {
@@ -57,6 +58,7 @@ export default function CardList({type, books, posts}: ListProps) {
       </HStack>
 
       <Flex 
+        mt='2'
         direction='row' 
         wrap='wrap'
       >

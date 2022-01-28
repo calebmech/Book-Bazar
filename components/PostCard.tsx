@@ -10,7 +10,7 @@ export interface PostCardProps {
   description: string;
   imageUrl: string | null;
   userId: string;
-  user: User;
+  user: User | null;
 }
 
 export default function PostCard(props: PostCardProps) {
@@ -88,18 +88,17 @@ export default function PostCard(props: PostCardProps) {
         borderLeftRadius="lg"
       />
 
-      <Box 
+      <Flex 
         w='200px'
-        display='flex' 
-        flexDir='column' 
+        direction='column' 
+        justify='space-between'
         fontSize='sm'
-        justifyContent='space-between'
         ml='1'
         p='2'
       >
         <Details />
         <UserLine />
-      </Box>
+      </Flex>
     </Flex>
   )
 }
