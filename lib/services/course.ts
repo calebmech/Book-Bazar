@@ -20,9 +20,6 @@ export async function getCourseWithBooks(id: string)  {
   });
 }
 
-
-export type PostsWithBookWithUser = Prisma.PromiseReturnType<typeof getPostsForCourse>;
-
 export interface BookWithAuthor {
   author: string | null;
   id: string;

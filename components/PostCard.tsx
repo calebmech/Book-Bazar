@@ -2,7 +2,7 @@ import {  Box, Image, Text, Flex } from "@chakra-ui/react";
 import { useBookQuery } from "@lib/hooks/book";
 import { PostWithUser } from "@lib/services/post";
 import { useRouter } from "next/router";
-import SmallUserAvatar from "./SmallUserAvatar";
+import UserWithAvatar from "./UserWithAvatar";
 
 export default function PostCard(post: PostWithUser) {
   const { id, price, description, user, bookId, imageUrl } = post;
@@ -66,7 +66,7 @@ export default function PostCard(post: PostWithUser) {
         p='2'
       >
         <Details />
-        <SmallUserAvatar user={user} />
+        <UserWithAvatar user={user} />
       </Flex>
     </Flex>
   )
