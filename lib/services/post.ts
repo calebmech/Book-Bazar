@@ -1,4 +1,4 @@
-import { Book, Post, PostStatus, User } from "@prisma/client";
+import { Post, PostStatus, User } from "@prisma/client";
 import { prisma } from "./db";
 import { deleteImage, uploadImage } from "./image";
 
@@ -8,11 +8,6 @@ export type PostWithBook = Post & {
 
 export type PostWithBookWithUser = PostWithBook & {
   user: User;
-};
-
-export type PostWithUserWithBook = Post & {
-  user: User;
-  book: Book;
 };
 
 export type CreatablePost = {
