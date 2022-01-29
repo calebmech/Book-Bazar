@@ -1,4 +1,4 @@
-import { Post, PostStatus, User } from "@prisma/client";
+import { Book, Post, PostStatus, User } from "@prisma/client";
 import { prisma } from "./db";
 import { deleteImage, uploadImage } from "./image";
 
@@ -28,6 +28,11 @@ type UpdatablePostResolved = {
   status?: PostStatus;
 };
 
+export type PostWithUserWithBook = Post & {
+  user: User;
+  book: Book;
+};
+
 /**
  * Returns the post with the given id.
  *
@@ -38,13 +43,14 @@ type UpdatablePostResolved = {
 export async function getPost(
   id: string,
   includeUser: boolean
-): Promise<Post | PostWithUser | null> {
+) : Promise<PostWithUserWithBook | null> {
   return prisma.post.findUnique({
     where: {
       id: id,
     },
     include: {
       user: includeUser,
+      book: true
     },
   });
 }
