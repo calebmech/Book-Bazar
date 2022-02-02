@@ -1,4 +1,3 @@
-import { SearchIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
@@ -7,14 +6,21 @@ import {
   Grid,
   Heading,
   HStack,
+  Icon,
   Input,
   InputGroup,
   InputRightElement,
+  Spacer,
 } from "@chakra-ui/react";
+import { CreditCardIcon, SearchIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import HeaderUserInfo from "./HeaderUserInfo";
 
-const Header: React.FC = ({ children }) => {
+export interface HeaderProps {
+  hideSearch?: boolean;
+}
+
+const Header: React.FC<HeaderProps> = ({ hideSearch = false, children }) => {
   return (
     <Box as="header" backgroundColor="secondaryBackground" boxShadow="md">
       <Container py={{ base: 5, md: 8 }} maxWidth="container.lg">
@@ -30,11 +36,11 @@ const Header: React.FC = ({ children }) => {
           }}
           justifyContent="space-between"
           alignItems={{
-            base: "flex-start",
+            base: "baseline",
             md: "center",
           }}
-          columnGap="12"
-          rowGap="2"
+          columnGap={{ base: "4", lg: "12" }}
+          rowGap="3"
         >
           <Heading
             gridArea="logo"
@@ -46,31 +52,47 @@ const Header: React.FC = ({ children }) => {
           >
             <Link href="/">Book Bazar</Link>
           </Heading>
-          {/* Placeholder search input */}
-          <FormControl gridArea="search" zIndex={0}>
-            <HStack>
-              <InputGroup>
-                <Input
-                  type="search"
-                  variant="filled"
-                  // Could make this cycle through a list of placeholders
-                  placeholder="Algorithms 4th Edition"
-                />
-                <InputRightElement width="auto" pr="1">
-                  <Button
-                    colorScheme="teal"
-                    size="sm"
-                    px={5}
-                    rightIcon={<SearchIcon height={3} />}
-                  >
-                    Search
-                  </Button>
-                </InputRightElement>
-              </InputGroup>
-            </HStack>
-          </FormControl>
+          {hideSearch ? (
+            <Spacer gridArea="search" />
+          ) : (
+            // Placeholder search input
+            <FormControl gridArea="search" zIndex={0}>
+              <HStack>
+                <InputGroup>
+                  <Input
+                    type="search"
+                    variant="filled"
+                    // Could make this cycle through a list of placeholders
+                    placeholder="Algorithms 4th Edition"
+                  />
+                  <InputRightElement width="auto" pr="1">
+                    <Button
+                      colorScheme="teal"
+                      size="sm"
+                      px={5}
+                      rightIcon={<Icon as={SearchIcon} />}
+                    >
+                      Search
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+              </HStack>
+            </FormControl>
+          )}
           <Box gridArea="account" textAlign="right">
-            <HeaderUserInfo />
+            <HStack>
+              <Link href="/post" passHref>
+                <Button
+                  as="a"
+                  colorScheme="teal"
+                  variant="ghost"
+                  rightIcon={<Icon as={CreditCardIcon} />}
+                >
+                  Sell book
+                </Button>
+              </Link>
+              <HeaderUserInfo />
+            </HStack>
           </Box>
         </Grid>
         {children && <Box mt="8">{children}</Box>}

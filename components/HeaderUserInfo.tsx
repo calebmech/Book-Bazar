@@ -36,7 +36,7 @@ export default function HeaderUserInfo() {
       <>
         <Button variant="link" onClick={handleLoginClick}>
           <HStack spacing="0">
-            <Text fontWeight="500" mr="4">
+            <Text fontWeight="semibold" color="tertiaryText" mr="3">
               Login
             </Text>
             <Avatar size="sm" />
@@ -57,16 +57,15 @@ export default function HeaderUserInfo() {
       <Menu placement="bottom-end">
         <MenuButton aria-label="Account menu">
           <HStack spacing="0">
-            {user.name && (
-              <Text
-                display={{ base: "none", sm: "initial" }}
-                fontWeight="500"
-                whiteSpace="nowrap"
-                mr="4"
-              >
-                {user.name}
-              </Text>
-            )}
+            <Text
+              display={{ base: "none", sm: "initial" }}
+              fontWeight="semibold"
+              color="tertiaryText"
+              whiteSpace="nowrap"
+              mr="3"
+            >
+              {user.name?.split(" ")[0] ?? user.email.split("@")[0]}
+            </Text>
             {user?.imageUrl ? (
               <Box borderRadius="full" overflow="hidden" width="8" height="8">
                 <Image
