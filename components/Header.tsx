@@ -1,56 +1,82 @@
+import { SearchIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
   Container,
-  Flex,
+  FormControl,
+  Grid,
   Heading,
-  Spacer,
-  useDisclosure,
+  HStack,
+  Input,
+  InputGroup,
+  InputRightElement,
 } from "@chakra-ui/react";
-import { useLogout, useUserQuery } from "@lib/hooks/user";
-import { useState } from "react";
-import { v4 as uuid } from "uuid";
-import LoginModal from "./LoginModal";
+import Link from "next/link";
+import HeaderUserInfo from "./HeaderUserInfo";
 
-export default function Header() {
-  const { isAuthenticated } = useUserQuery();
-  const { isOpen, onClose, onOpen } = useDisclosure();
-
-  const [loginModalKey, setLoginModalKey] = useState("");
-  const handleLoginClick = () => {
-    // Reset login modal each time it is opened
-    setLoginModalKey(uuid());
-    onOpen();
-  };
-
-  const logout = useLogout();
-
+const Header: React.FC = ({ children }) => {
   return (
-    <Box as="header" backgroundColor="secondaryBackground">
-      <Container py={5} maxWidth="container.md">
-        <Flex alignItems="baseline" justifyContent="space-between">
-          <Heading as="h1" size="md">
-            Book Bazar
+    <Box as="header" backgroundColor="secondaryBackground" boxShadow="md">
+      <Container py={{ base: 5, md: 8 }} maxWidth="container.lg">
+        <Grid
+          templateRows={{ base: "1fr 1fr", md: "1fr" }}
+          templateColumns={{
+            base: "auto auto",
+            md: "1fr minmax(auto, 575px) 1fr",
+          }}
+          templateAreas={{
+            base: `'logo account' 'search search'`,
+            md: `'logo search account'`,
+          }}
+          justifyContent="space-between"
+          alignItems={{
+            base: "flex-start",
+            md: "center",
+          }}
+          columnGap="12"
+          rowGap="2"
+        >
+          <Heading
+            gridArea="logo"
+            as="h1"
+            size="lg"
+            fontFamily="Lora"
+            fontWeight="500"
+            whiteSpace="nowrap"
+          >
+            <Link href="/">Book Bazar</Link>
           </Heading>
-          <Spacer />
-          {!isAuthenticated ? (
-            <Button variant="outline" onClick={handleLoginClick}>
-              Login
-            </Button>
-          ) : (
-            <Button variant="outline" onClick={() => logout()}>
-              Logout
-            </Button>
-          )}
-        </Flex>
+          {/* Placeholder search input */}
+          <FormControl gridArea="search" zIndex={0}>
+            <HStack>
+              <InputGroup>
+                <Input
+                  type="search"
+                  variant="filled"
+                  // Could make this cycle through a list of placeholders
+                  placeholder="Algorithms 4th Edition"
+                />
+                <InputRightElement width="auto" pr="1">
+                  <Button
+                    colorScheme="teal"
+                    size="sm"
+                    px={5}
+                    rightIcon={<SearchIcon height={3} />}
+                  >
+                    Search
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+            </HStack>
+          </FormControl>
+          <Box gridArea="account" textAlign="right">
+            <HeaderUserInfo />
+          </Box>
+        </Grid>
+        {children && <Box mt="8">{children}</Box>}
       </Container>
-
-      <LoginModal
-        key={loginModalKey}
-        isOpen={isOpen}
-        onClose={onClose}
-        message="To sell your textbooks or contact sellers please login with your MacID below."
-      />
     </Box>
   );
-}
+};
+
+export default Header;
