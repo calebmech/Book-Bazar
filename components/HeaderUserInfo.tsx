@@ -55,7 +55,7 @@ export default function HeaderUserInfo() {
   return (
     <>
       <Menu placement="bottom-end">
-        <MenuButton>
+        <MenuButton aria-label="Account menu">
           <HStack spacing="0">
             {user.name && (
               <Text
