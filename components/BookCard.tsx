@@ -17,7 +17,7 @@ export default function BookCard({ book, isLinkActive }: BookCardProps) {
     authorString = populatedBook.googleBook.authors.join(', ');
   }
 
-
+  
   const card = (
     <Box
       overflow='hidden'
@@ -45,7 +45,7 @@ export default function BookCard({ book, isLinkActive }: BookCardProps) {
           fontWeight='semibold' 
           isTruncated
         >
-          {name}
+          {name ? name : "Book Name Unavailable"}
         </Heading>
 
         <Text color='gray.500' isTruncated>

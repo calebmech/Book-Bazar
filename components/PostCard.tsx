@@ -42,23 +42,26 @@ export default function PostCard({ post, isLinkActive}: PostCardProps) {
         direction='column' 
         justify='space-between'
         fontSize='sm'
-        ml='1'
         p='2'
       >
         <Box >
           <Skeleton isLoaded={!isBookLoading}>
-            <Text fontWeight='semibold'>
+            <Text fontWeight='semibold' isTruncated>
               {bookName}
             </Text>
-            <Text color='secondaryText' isTruncated>
+          </Skeleton>     
+          <Skeleton isLoaded={!isBookLoading}>
+            <Text mt='1' color='secondaryText' isTruncated>
               {authors}
-            </Text>
-          </Skeleton>          
+            </Text>   
+          </Skeleton>    
+
+           
           
           <Text fontWeight='bold' fontSize='xl'>
             ${price}
           </Text>
-          <Text color='secondaryText'>
+          <Text color='secondaryText' noOfLines={3}>
             {description}
           </Text>
         </Box>
