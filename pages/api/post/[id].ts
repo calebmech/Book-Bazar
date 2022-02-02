@@ -5,7 +5,8 @@ import {
 import {
   deletePost,
   getPost,
-  PostWithUser,
+  PostWithBook,
+  PostWithBookWithUser,
   UpdatablePost,
   updatePost,
 } from "@lib/services/post";
@@ -53,7 +54,7 @@ async function getHandler(
   }
 
   const includeUser: boolean = await isAuthenticated(req, res);
-  const post: Post | PostWithUser | null = await getPost(postId, includeUser);
+  const post: PostWithBook | PostWithBookWithUser | null = await getPost(postId, includeUser);
   if (post) {
     res //
       .status(StatusCodes.OK) //

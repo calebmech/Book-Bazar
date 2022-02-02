@@ -80,7 +80,7 @@ const Header: React.FC<HeaderProps> = ({ hideSearch = false, children }) => {
             </FormControl>
           )}
           <Box gridArea="account" textAlign="right">
-            <HStack>
+            <HStack align="baseline">
               <Link href="/post" passHref>
                 <Button
                   as="a"

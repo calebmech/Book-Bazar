@@ -1,8 +1,12 @@
-import { Post, PostStatus, User } from "@prisma/client";
+import { Book, Post, PostStatus, User } from "@prisma/client";
 import { prisma } from "./db";
 import { deleteImage, uploadImage } from "./image";
 
-export type PostWithUser = Post & {
+export type PostWithBook = Post & {
+  book: Book;
+};
+
+export type PostWithBookWithUser = PostWithBook & {
   user: User;
 };
 
@@ -38,13 +42,14 @@ type UpdatablePostResolved = {
 export async function getPost(
   id: string,
   includeUser: boolean
-): Promise<Post | PostWithUser | null> {
+): Promise<PostWithBook | PostWithBookWithUser | null> {
   return prisma.post.findUnique({
     where: {
       id: id,
     },
     include: {
       user: includeUser,
+      book: true,
     },
   });
 }
