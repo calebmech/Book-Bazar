@@ -28,6 +28,8 @@ describe("test post api", () => {
       expect(response.status).equal(StatusCodes.OK);
       expect(response.body.price).equal(42);
       expect(response.body.user).equal(undefined);
+      expect(response.body.book.name).equal("Algorithms");
+      expect(response.body.book.campusStorePrice).equal(4000);
     });
   });
 
