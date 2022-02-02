@@ -1,3 +1,3 @@
-export default function pageTile(page?: string) {
+export default function pageTitle(page?: string) {
   return (page ? page + " | " : "") + "Book Bazar";
 }

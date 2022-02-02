@@ -89,14 +89,13 @@ export function useSendMagicLinkMutation() {
 }
 
 export function useLogout() {
-  const router = useRouter();
   const mutation = useMutation(() => axios.post("/api/auth/logout"));
 
   useEffect(() => {
     if (mutation.isSuccess) {
-      router.reload();
+      location.assign("/");
     }
-  }, [router, mutation.isSuccess]);
+  }, [mutation.isSuccess]);
 
   return mutation.mutate;
 }
