@@ -46,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({ hideSearch = false, children }) => {
             gridArea="logo"
             as="h1"
             size="lg"
-            fontFamily="Lora"
+            fontFamily="title"
             fontWeight="500"
             whiteSpace="nowrap"
           >

@@ -22,6 +22,13 @@ const config: ThemeOverride = {
         default: "gray.500",
         _dark: "gray.300",
       },
+      captionText: {
+        default: "gray.400",
+        _dark: "gray.500",
+      },
+    },
+    fonts: {
+      title: "Lora, Georgia, serif",
     },
   },
   styles: {

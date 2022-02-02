@@ -69,7 +69,7 @@
     "@types/yamljs": "^0.2.31",
     "algoliasearch": "^4.12.0",
     "cross-env": "^7.0.3",
-    "cypress": "^9.1.0",
+    "cypress": "^9.4.1",
     "dotenv-cli": "^4.1.0",
     "eslint": "7.32.0",
     "eslint-config-next": "12.0.4",

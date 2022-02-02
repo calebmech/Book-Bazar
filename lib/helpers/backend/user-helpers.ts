@@ -1,11 +1,12 @@
 import { getSessionWithUser } from "@lib/services/session";
 import { User } from "@prisma/client";
-import { NextApiRequest, NextApiResponse } from "next";
-import { SESSION_TOKEN_COOKIE, createSessionCookie } from "./session-cookie";
+import { ServerResponse } from "http";
+import { NextApiRequestCookies } from "next/dist/server/api-utils";
+import { createSessionCookie, SESSION_TOKEN_COOKIE } from "./session-cookie";
 
 export async function isAuthenticated(
-  req: NextApiRequest,
-  res: NextApiResponse
+  req: { cookies: NextApiRequestCookies },
+  res: ServerResponse
 ): Promise<boolean> {
   const user = await getCurrentUser(req, res);
 
@@ -13,8 +14,8 @@ export async function isAuthenticated(
 }
 
 export async function getCurrentUser(
-  req: NextApiRequest,
-  res: NextApiResponse
+  req: { cookies: NextApiRequestCookies },
+  res: ServerResponse
 ): Promise<User | null> {
   const sessionToken = req.cookies[SESSION_TOKEN_COOKIE];
 
