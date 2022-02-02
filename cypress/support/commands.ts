@@ -49,7 +49,7 @@ declare global {
 }
 
 export const getMagicLink = (data: any) => {
-  return JSON.stringify(data.email.content).match(/"(https.+magic.+)\\/)?.[1];
+  return data.email.personalizations[0].dynamic_template_data.magicLink;
 };
 
 const login = (macID: string = "test") => {

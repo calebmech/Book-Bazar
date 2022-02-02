@@ -15,6 +15,11 @@ if (!process.env.SENDGRID_EMAIL_FROM) {
 }
 export const SENDGRID_EMAIL_FROM = process.env.SENDGRID_EMAIL_FROM;
 
+if (!process.env.SENDGRID_TEMPLATE_ID) {
+  throw new Error("process.env.SENDGRID_TEMPLATE_ID must be set.");
+}
+export const SENDGRID_TEMPLATE_ID = process.env.SENDGRID_TEMPLATE_ID;
+
 if (!process.env.AWS_ACCESS_KEY_ID_BOOKBAZAR) {
   throw new Error("process.env.AWS_ACCESS_KEY_ID_BOOKBAZAR must be set.");
 }
