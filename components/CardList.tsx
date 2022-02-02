@@ -1,32 +1,38 @@
-import { Box, Text, HStack, Flex, Wrap } from "@chakra-ui/react";
-import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
+import { Box, Text, HStack, Wrap } from "@chakra-ui/react";
 import { PostWithUser } from "@lib/services/post";
 import { Book } from "@prisma/client";
+import { ReactNode } from "react";
 import BookCard from "./BookCard";
 import PostCard from "./PostCard";
 
 interface PostCardListProps {
-  posts: PostWithUser[] | undefined;
+  posts: PostWithUser[];
+  isLinkActive: boolean;
 }
-export function PostCardList({posts}: PostCardListProps) {
-  const items = posts?.map((post, i) => <PostCard key={i} {...post} />);
-  return <CardList items={items} itemName='Active Listing' />
+export function PostCardList({ posts, isLinkActive }: PostCardListProps) {
+  const items = posts.map((post, i) => {
+    return <PostCard key={i} post={post} isLinkActive={isLinkActive} />;
+  });
+  return <CardList items={items} itemName='Active Listing' />;
 }
 
 interface BookCardListProps {
-  books: Book[] | undefined;
+  books: Book[];
+  isLinkActive: boolean;
 }
-export function BookCardList({books}: BookCardListProps) {
-  const items = books?.map((book, i) => <BookCard key={i} {...book} />);
-  return <CardList items={items} itemName='Book' />
+export function BookCardList({ books, isLinkActive }: BookCardListProps) {
+  const items = books.map((book, i) => {
+    return <BookCard key={i} book={book} isLinkActive={isLinkActive} />;
+  });
+  return <CardList items={items} itemName='Book' />;
 }
 
 type CardListProps = {
   itemName: string;
-  items: ReactJSXElement[] | undefined;
+  items: ReactNode[];
 }
 function CardList({ itemName, items }: CardListProps) {
-  if (!items || items.length === 0) {
+  if (items.length === 0) {
     return (
       <Text 
         mt="10"

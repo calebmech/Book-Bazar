@@ -1,29 +1,24 @@
-import { Box, Heading, Image, Text } from "@chakra-ui/react";
+import { Box, Heading, Text, Skeleton, Flex } from "@chakra-ui/react";
+import Image from 'next/image'
 import { useBookQuery } from "@lib/hooks/book";
 import { Book } from "@prisma/client";
-import { useRouter } from "next/router";
+import Link from "next/link";
 
-export default function BookCard({ name, imageUrl, isbn }: Book) {
+type BookCardProps = {
+  book: Book;
+  isLinkActive: boolean;
+}
+
+export default function BookCard({ book, isLinkActive }: BookCardProps) {
+  const { name, imageUrl, isbn } = book;
   const { isLoading, data: populatedBook } = useBookQuery(isbn);
-  const router = useRouter();
-
-  const authors = (): string => {
-    if (isLoading) {
-      return "Loading Authors..."
-    }
-    if (populatedBook?.googleBook?.authors) {
-      return populatedBook.googleBook.authors.join(', ')
-    }
-    return "No Authors"
+  let authorString: string = "-";
+  if (populatedBook?.googleBook?.authors) {
+    authorString = populatedBook.googleBook.authors.join(', ');
   }
 
-  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    router.push("/book/" + isbn)
-  }
-  
 
-  return (
+  const card = (
     <Box
       overflow='hidden'
       maxW='170px'
@@ -31,27 +26,20 @@ export default function BookCard({ name, imageUrl, isbn }: Book) {
       mr='3'
       shadow='md'
       borderRadius='lg' 
-      background='white'
+      background='secondaryBackground'
       fontSize='xs'
       _hover={{ shadow: 'xl' }}
       transition='0.3s'
-      cursor='pointer'
-      onClick={handleClick}
+      cursor={isLinkActive ? 'pointer' : 'cursor'}
     >
-      
       <Image 
-        w='100%'
-        h='200px'
-        objectFit='contain'
+        width='170px'
+        height='230px'
         src={imageUrl || ''} 
         alt='book-image'
       />
 
-      <Box 
-        p='3' 
-        display='flex' 
-        flexDir='column'
-      >
+      <Flex p='3' flexDir='column'>
         <Heading 
           fontSize='xs' 
           fontWeight='semibold' 
@@ -61,9 +49,21 @@ export default function BookCard({ name, imageUrl, isbn }: Book) {
         </Heading>
 
         <Text color='gray.500' isTruncated>
-          {authors()}
+          <Skeleton isLoaded={!isLoading}>
+            {authorString}
+          </Skeleton>
         </Text>
-      </Box>
+      </Flex>
     </Box>
-  )
+  );
+
+  if (isLinkActive) {
+    return (
+      <Link href={"/book/" + isbn}>
+        {card}
+      </Link>
+    );
+  }
+
+  return card;
 }

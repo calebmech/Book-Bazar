@@ -1,23 +1,25 @@
-import {  Box, Image, Text, Flex } from "@chakra-ui/react";
+import {  Box, Text, Flex, Skeleton } from "@chakra-ui/react";
+import Image from 'next/image'
 import { useBookQuery } from "@lib/hooks/book";
 import { PostWithUser } from "@lib/services/post";
-import { useRouter } from "next/router";
 import UserWithAvatar from "./UserWithAvatar";
+import Link from "next/link";
 
-export default function PostCard(post: PostWithUser) {
+type PostCardProps = {
+  post: PostWithUser;
+  isLinkActive: boolean;
+}
+
+export default function PostCard({ post, isLinkActive}: PostCardProps) {
   const { id, price, description, user, bookId, imageUrl } = post;
-  const { data: book } = useBookQuery(bookId);
-  const router = useRouter();
+  const { isLoading: isBookLoading, data: book } = useBookQuery(bookId);
+  const bookName = book?.name || '-';
+  const authors = book?.googleBook?.authors?.join(',') || '-';
 
-  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    router.push("/post/" + id)
-  }
-
-  return (
+  const card = (
     <Flex
       w="350px"
-      background='white'
+      background='secondaryBackground'
       overflow='hidden'
       borderRadius='lg' 
       mb='3'
@@ -26,16 +28,13 @@ export default function PostCard(post: PostWithUser) {
       shadow='md'
       _hover={{ shadow: 'xl' }}
       transition='0.3s'
-      cursor='pointer'
-      onClick={handleClick}
+      cursor={isLinkActive ? 'pointer' : 'cursor'}
     >
       <Image 
-        maxH='200px'
-        objectFit='contain'
-        src={imageUrl || "https://via.placeholder.com/150"} 
-        fallbackSrc="https://via.placeholder.com/150"
+        height='200px'
+        width='150px'
+        src={imageUrl || book?.imageUrl || book?.googleBook?.imageLinks?.small || "https://via.placeholder.com/150"} 
         alt="book-image" 
-        borderLeftRadius="lg"
       />
 
       <Flex 
@@ -47,21 +46,33 @@ export default function PostCard(post: PostWithUser) {
         p='2'
       >
         <Box >
-          <Text fontWeight='semibold'>
-            {book?.name}
-          </Text>
-          <Text color='gray.500' isTruncated>
-            {book?.googleBook?.authors?.join(',')}
-          </Text>
+          <Skeleton isLoaded={!isBookLoading}>
+            <Text fontWeight='semibold'>
+              {bookName}
+            </Text>
+            <Text color='secondaryText' isTruncated>
+              {authors}
+            </Text>
+          </Skeleton>          
+          
           <Text fontWeight='bold' fontSize='xl'>
             ${price}
           </Text>
-          <Text color='gray.500'>
+          <Text color='secondaryText'>
             {description}
           </Text>
         </Box>
         <UserWithAvatar user={user} />
       </Flex>
     </Flex>
-  )
+  );
+
+  if (isLinkActive) {
+    return (
+      <Link href={'/post/' + id}>
+        {card}
+      </Link>
+    );
+  } 
+  return card;
 }
