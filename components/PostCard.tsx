@@ -1,12 +1,12 @@
 import {  Box, Text, Flex, Skeleton } from "@chakra-ui/react";
 import Image from 'next/image'
 import { useBookQuery } from "@lib/hooks/book";
-import { PostWithUser } from "@lib/services/post";
+import { PostWithBookWithUser } from "@lib/services/post";
 import UserWithAvatar from "./UserWithAvatar";
 import Link from "next/link";
 
 type PostCardProps = {
-  post: PostWithUser;
+  post: PostWithBookWithUser;
   isLinkActive: boolean;
 }
 

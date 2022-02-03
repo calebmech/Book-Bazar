@@ -1,12 +1,12 @@
 import { Box, Text, HStack, Wrap } from "@chakra-ui/react";
-import { PostWithUser } from "@lib/services/post";
+import { PostWithBookWithUser } from "@lib/services/post";
 import { Book } from "@prisma/client";
 import { ReactNode } from "react";
 import BookCard from "./BookCard";
 import PostCard from "./PostCard";
 
 interface PostCardListProps {
-  posts: PostWithUser[];
+  posts: PostWithBookWithUser[];
   isLinkActive: boolean;
 }
 export function PostCardList({ posts, isLinkActive }: PostCardListProps) {

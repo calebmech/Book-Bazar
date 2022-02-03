@@ -10,11 +10,6 @@ export type PostWithBookWithUser = PostWithBook & {
   user: User;
 };
 
-export type PostWithUserWithBook = Post & {
-  user: User;
-  book: Book;
-};
-
 export type CreatablePost = {
   price: number;
   description: string;
