@@ -2,7 +2,7 @@ import {  Box, Text, Flex, Skeleton } from "@chakra-ui/react";
 import Image from 'next/image'
 import { useBookQuery } from "@lib/hooks/book";
 import { PostWithBookWithUser } from "@lib/services/post";
-import UserWithAvatar from "./UserWithAvatar";
+import UserWithAvatar from "../UserWithAvatar";
 import Link from "next/link";
 
 type PostCardProps = {
@@ -18,7 +18,7 @@ export default function PostCard({ post, isLinkActive}: PostCardProps) {
 
   const card = (
     <Flex
-      w="350px"
+      w="490px"
       background='secondaryBackground'
       overflow='hidden'
       borderRadius='lg' 
@@ -31,18 +31,18 @@ export default function PostCard({ post, isLinkActive}: PostCardProps) {
       cursor={isLinkActive ? 'pointer' : 'cursor'}
     >
       <Image 
-        height='200px'
-        width='150px'
+        height='220px'
+        width='160px'
         src={imageUrl || book?.imageUrl || book?.googleBook?.imageLinks?.small || "https://via.placeholder.com/150"} 
         alt="book-image" 
       />
 
       <Flex 
-        w='200px'
+        w='330px'
         direction='column' 
         justify='space-between'
         fontSize='sm'
-        p='2'
+        p='4'
       >
         <Box >
           <Skeleton isLoaded={!isBookLoading}>
@@ -55,9 +55,6 @@ export default function PostCard({ post, isLinkActive}: PostCardProps) {
               {authors}
             </Text>   
           </Skeleton>    
-
-           
-          
           <Text fontWeight='bold' fontSize='xl'>
             ${price}
           </Text>

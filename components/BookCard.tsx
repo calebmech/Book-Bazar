@@ -21,7 +21,7 @@ export default function BookCard({ book, isLinkActive }: BookCardProps) {
   const card = (
     <Box
       overflow='hidden'
-      maxW='170px'
+      maxW='140px'
       mb='3'
       mr='3'
       shadow='md'
@@ -33,8 +33,8 @@ export default function BookCard({ book, isLinkActive }: BookCardProps) {
       cursor={isLinkActive ? 'pointer' : 'cursor'}
     >
       <Image 
-        width='170px'
-        height='230px'
+        width='140px'
+        height='190px'
         src={imageUrl || ''} 
         alt='book-image'
       />
