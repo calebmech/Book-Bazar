@@ -4,7 +4,7 @@ export const TEST_USER_UUID = "e8b7ad6d-7086-4d8d-b831-079d5be7caa8";
 export const TEST_USER: Partial<User> = {
   email: "test@mcmaster.ca",
   name: "Test User",
-  imageUrl: "https://example.com",
+  imageUrl: "https://book-bazar-images.s3.us-east-2.amazonaws.com",
   id: TEST_USER_UUID,
 };
 export const TEST_BOOK_UUID = "a176ef48-56cc-4fc5-bf9e-7b40e3e8e884";

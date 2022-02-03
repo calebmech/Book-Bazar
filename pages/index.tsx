@@ -18,7 +18,11 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout>
-        {user && <pre>{JSON.stringify(user, null, 2)}</pre>}
+        {user && (
+          <pre style={{ whiteSpace: "pre-wrap" }}>
+            {JSON.stringify(user, null, 2)}
+          </pre>
+        )}
         <Button
           mt="4"
           variant="link"
