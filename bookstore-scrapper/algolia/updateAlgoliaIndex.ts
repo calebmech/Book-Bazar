@@ -53,7 +53,7 @@ export const getAlgoliaObject = async (): Promise<AlgoliaEntry[]> => {
         /* Remove campus store entries that are not related to physical books
         or provide a note to users. */
         !(
-          book.isbn.endsWith(UNWANTED_ENTRY_KEYWORD.UNWANTED_ISBN_ENDING) ||
+          book.isbn.endsWith(UNWANTED_ENTRY_KEYWORD.ISBN_ENDING_WITH_B) ||
           book.name.startsWith(UNWANTED_ENTRY_KEYWORD.ETEXT) ||
           book.name.includes(UNWANTED_ENTRY_KEYWORD.LAB_MANUAL)
         )
