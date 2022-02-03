@@ -6,12 +6,7 @@ describe("Account page", () => {
     cy.login("to-delete");
     cy.visit("/account");
 
-    cy.findByLabelText(/user id/i).then((el) => {
-      cy.intercept(
-        HttpMethod.DELETE,
-        "/api/user/" + el.text().slice(1, el.text().length - 1)
-      ).as("deleteUser");
-    });
+    cy.intercept(HttpMethod.DELETE, "/api/user/*").as("deleteUser");
 
     cy.findByRole("button", { name: /delete/i }).click();
 
@@ -30,12 +25,7 @@ describe("Account page", () => {
     cy.login("to-update-name");
     cy.visit("/account");
 
-    cy.findByLabelText(/user id/i).then((el) => {
-      cy.intercept(
-        HttpMethod.PUT,
-        "/api/user/" + el.text().slice(1, el.text().length - 1)
-      ).as("updateUser");
-    });
+    cy.intercept(HttpMethod.PUT, "/api/user/*").as("updateUser");
 
     cy.findByRole("textbox", { name: /name/i }).type(
       "{selectAll}Gandalf{enter}"
@@ -54,12 +44,7 @@ describe("Account page", () => {
     cy.login("to-update-picture");
     cy.visit("/account");
 
-    cy.findByLabelText(/user id/i).then((el) => {
-      cy.intercept(
-        HttpMethod.PUT,
-        "/api/user/" + el.text().slice(1, el.text().length - 1)
-      ).as("updateUser");
-    });
+    cy.intercept(HttpMethod.PUT, "/api/user/*").as("updateUser");
 
     cy.findByRole("button", { name: /edit image/i }).click();
 

@@ -1,4 +1,4 @@
-import { Flex, Heading, Spacer, Text, VStack } from "@chakra-ui/react";
+import { Divider, Flex, Heading, Spacer, Text, VStack } from "@chakra-ui/react";
 import DeleteAccountForm from "@components/account-page/DeleteAccountForm";
 import EditImageWidget from "@components/account-page/EditImageWidget";
 import UpdateNameForm from "@components/account-page/UpdateNameForm";
@@ -51,16 +51,8 @@ const AccountPage: NextPage<AccountPageProps> = ({ initialUser }) => {
         </Heading>
         <Text color="tertiaryText" fontWeight="semibold">
           {user.email}
-          <Text
-            as="span"
-            display="block"
-            fontSize="xs"
-            color="captionText"
-            aria-label="User ID"
-          >
-            ({user.id})
-          </Text>
         </Text>
+        <Divider pt="2" />
 
         <EditImageWidget user={user} display={{ md: "none" }} pt="4" />
 
