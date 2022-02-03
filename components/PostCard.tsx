@@ -2,7 +2,7 @@ import {  Box, Text, Flex, Skeleton } from "@chakra-ui/react";
 import Image from 'next/image'
 import { useBookQuery } from "@lib/hooks/book";
 import { PostWithBookWithUser } from "@lib/services/post";
-import UserWithAvatar from "../UserWithAvatar";
+import UserWithAvatar from "./UserWithAvatar";
 import Link from "next/link";
 
 type PostCardProps = {
