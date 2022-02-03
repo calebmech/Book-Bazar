@@ -1,4 +1,3 @@
-import { RepeatIcon } from "@chakra-ui/icons";
 import {
   Button,
   Flex,
@@ -14,7 +13,11 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
-import { PhotographIcon, UploadIcon } from "@heroicons/react/solid";
+import {
+  PhotographIcon,
+  RefreshIcon,
+  UploadIcon,
+} from "@heroicons/react/solid";
 import { ChangeEvent, DragEvent, useCallback, useState } from "react";
 import ImageCrop from "./ImageCrop";
 
@@ -142,7 +145,7 @@ export default function ImageUploadModal({
             <Button
               colorScheme="teal"
               onClick={handleUploadImage}
-              rightIcon={<RepeatIcon />}
+              rightIcon={<Icon as={RefreshIcon} />}
             >
               Try again
             </Button>
