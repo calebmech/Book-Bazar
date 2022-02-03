@@ -34,7 +34,11 @@ export default function HeaderUserInfo() {
   if (!user) {
     return (
       <>
-        <Button variant="link" onClick={handleLoginClick}>
+        <Button
+          variant="link"
+          onClick={handleLoginClick}
+          alignSelf={{ base: "center", sm: "initial" }}
+        >
           <HStack spacing="0">
             <Text fontWeight="semibold" color="tertiaryText" mr="3">
               Login
@@ -55,7 +59,10 @@ export default function HeaderUserInfo() {
   return (
     <>
       <Menu placement="bottom-end">
-        <MenuButton aria-label="Account menu">
+        <MenuButton
+          aria-label="Account menu"
+          alignSelf={{ base: "center", sm: "initial" }}
+        >
           <HStack spacing="0">
             <Text
               display={{ base: "none", sm: "initial" }}

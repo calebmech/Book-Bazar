@@ -12,6 +12,12 @@ interface AlgoliaEntry {
   entry: Book | Course;
 }
 
+enum UNWANTED_ENTRY_KEYWORD {
+  ISBN_ENDING_WITH_B = "B",
+  ETEXT = "ETEXT",
+  LAB_MANUAL = "LAB MANUAL",
+}
+
 const searchableAttributes: string[] = [
   "entry.dept.abbreviation",
   "entry.dept.name",
@@ -20,7 +26,17 @@ const searchableAttributes: string[] = [
   "entry.isbn",
 ];
 
-const rankings: string[] = ["exact", "words", "proximity"];
+const rankings: string[] = [
+  "asc(entry.code)",
+  "asc(entry.dept.abbreviation)",
+  "asc(entry.dept.name)",
+  "attribute",
+  "typo",
+  "words",
+  "proximity",
+  "exact",
+  "custom",
+];
 
 export const getAlgoliaObject = async (): Promise<AlgoliaEntry[]> => {
   const dbBooks: Book[] = await prisma.book.findMany();
@@ -31,13 +47,25 @@ export const getAlgoliaObject = async (): Promise<AlgoliaEntry[]> => {
     },
   });
 
-  const algoliaBookEntries: AlgoliaEntry[] = dbBooks.map((book: Book) => {
-    const algoliaBookEntry: AlgoliaEntry = {
-      type: EntryType.BOOK,
-      entry: book,
-    };
-    return algoliaBookEntry;
-  });
+  const algoliaBookEntries: AlgoliaEntry[] = dbBooks
+    .filter((book) => {
+      return (
+        /* Remove campus store entries that are not related to physical books
+        or provide a note to users. */
+        !(
+          book.isbn.endsWith(UNWANTED_ENTRY_KEYWORD.UNWANTED_ISBN_ENDING) ||
+          book.name.startsWith(UNWANTED_ENTRY_KEYWORD.ETEXT) ||
+          book.name.includes(UNWANTED_ENTRY_KEYWORD.LAB_MANUAL)
+        )
+      );
+    })
+    .map((book: Book) => {
+      const algoliaBookEntry: AlgoliaEntry = {
+        type: EntryType.BOOK,
+        entry: book,
+      };
+      return algoliaBookEntry;
+    });
 
   const algoliaCourseEntries: AlgoliaEntry[] = dbCourses.map(
     (course: Course) => {
