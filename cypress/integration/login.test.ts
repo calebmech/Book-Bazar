@@ -18,9 +18,8 @@ describe("Login flow", () => {
 
       cy.visit(magicLink);
 
-      cy.get("header")
-        .findByRole("button", { name: /logout/i })
-        .should("exist");
+      cy.findByRole("button", { name: /account menu/i }).click();
+      cy.findByRole("menuitem", { name: /logout/i }).should("exist");
     });
   });
 
@@ -28,7 +27,8 @@ describe("Login flow", () => {
     cy.login();
     cy.visit("/");
 
-    cy.findByRole("button", { name: /logout/i }).click();
+    cy.findByRole("button", { name: /account menu/i }).click();
+    cy.findByRole("menuitem", { name: /logout/i }).click();
 
     cy.findByRole("button", { name: /login/i }).should("exist");
   });

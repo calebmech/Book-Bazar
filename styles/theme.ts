@@ -18,6 +18,10 @@ const config: ThemeOverride = {
         default: "gray.600",
         _dark: "gray.200",
       },
+      tertiaryText: {
+        default: "gray.500",
+        _dark: "gray.300",
+      },
     },
   },
   styles: {
