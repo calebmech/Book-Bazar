@@ -14,7 +14,7 @@ export type User = GetCurrentUserResponse;
 export function useUserQuery(initialData?: User) {
   const query = useQuery(
     USER_KEY,
-    () => axios.get<User>("api/user").then((res) => res.data),
+    () => axios.get<User>("/api/user").then((res) => res.data),
     { initialData }
   );
 

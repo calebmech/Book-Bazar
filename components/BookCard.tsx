@@ -13,15 +13,11 @@ export default function BookCard({ book, isLinkActive }: BookCardProps) {
   const { name, imageUrl, isbn } = book;
   const { isLoading, data: populatedBook } = useBookQuery(isbn);
   let authorString: string = "-";
-  if (!isLoading) {
-    console.log(populatedBook)
-  }
   
   if (populatedBook?.googleBook?.authors) {
     authorString = populatedBook.googleBook.authors.join(', ');
   }
 
-  
   const card = (
     <Box
       overflow='hidden'
@@ -49,14 +45,14 @@ export default function BookCard({ book, isLinkActive }: BookCardProps) {
           fontWeight='semibold' 
           isTruncated
         >
-          {name ? name : "Book Name Unavailable"}
+          {name ?? "Book Name Unavailable"}
         </Heading>
 
-        <Text color='secondaryText' isTruncated>
-          <Skeleton isLoaded={!isLoading}>
-            {authorString}
-          </Skeleton>
-        </Text>
+        <Skeleton isLoaded={!isLoading}>
+          <Text color='secondaryText' isTruncated>
+              {authorString}
+          </Text>
+        </Skeleton>
       </Flex>
     </Box>
   );
