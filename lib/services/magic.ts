@@ -2,7 +2,9 @@ import {
   BASE_URL,
   SENDGRID_API_KEY,
   SENDGRID_EMAIL_FROM,
+  SENDGRID_TEMPLATE_ID,
 } from "@lib/helpers/backend/env";
+import { IS_E2E } from "@lib/helpers/env";
 import sgMail from "@sendgrid/mail";
 import { createToken, hashToken } from "../helpers/backend/tokens";
 import { prisma } from "./db";
@@ -16,6 +18,8 @@ function getMagicLinkExpirationDate(): Date {
 export async function sendMagicLink(email: string): Promise<void> {
   const token = createToken();
   const hashedToken = hashToken(token);
+
+  const isNewAccount = !(await prisma.user.findUnique({ where: { email } }));
 
   await prisma.verificationEmail.create({
     data: {
@@ -32,10 +36,21 @@ export async function sendMagicLink(email: string): Promise<void> {
   sgMail.setApiKey(SENDGRID_API_KEY);
 
   await sgMail.send({
-    from: SENDGRID_EMAIL_FROM,
+    from: {
+      name: "Book Bazar",
+      email: SENDGRID_EMAIL_FROM,
+    },
     to: email,
-    subject: "Login to Book Bazar",
-    html: `<a href="${magicLink}">Click here</a> to login`,
+    templateId: SENDGRID_TEMPLATE_ID,
+    dynamicTemplateData: {
+      magicLink,
+      newAccount: isNewAccount,
+    },
+    mailSettings: {
+      sandboxMode: {
+        enable: IS_E2E,
+      },
+    },
   });
 }
 
