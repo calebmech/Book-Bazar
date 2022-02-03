@@ -13,7 +13,7 @@ interface AlgoliaEntry {
 }
 
 enum UNWANTED_ENTRY_KEYWORD {
-  UNWANTED_ISBN_ENDING = "B",
+  ISBN_ENDING_WITH_B = "B",
   ETEXT = "ETEXT",
   LAB_MANUAL = "LAB MANUAL",
 }
