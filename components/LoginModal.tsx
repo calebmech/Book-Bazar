@@ -1,4 +1,3 @@
-import { ArrowForwardIcon, RepeatIcon } from "@chakra-ui/icons";
 import {
   Button,
   Heading,
@@ -16,14 +15,14 @@ import {
   useBreakpointValue,
   VStack,
 } from "@chakra-ui/react";
-import { UserIcon } from "@heroicons/react/outline";
+import { ArrowRightIcon, RefreshIcon, UserIcon } from "@heroicons/react/solid";
 import { useSendMagicLinkMutation } from "@lib/hooks/user";
 import useRandomMacID from "@lib/hooks/useRandomMacID";
 import { FormEvent, useState } from "react";
 
 export interface LoginModalProps {
   isOpen: boolean;
-  onClose: VoidFunction;
+  onClose?: VoidFunction;
   message: string;
 }
 
@@ -48,7 +47,7 @@ export default function LoginModal({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="lg">
+    <Modal isOpen={isOpen} onClose={onClose ?? (() => {})} size="lg">
       <ModalOverlay />
       <ModalContent pt={5} pb={4}>
         <form onSubmit={handleSubmit}>
@@ -104,25 +103,29 @@ export default function LoginModal({
             </HStack>
           </ModalBody>
           <ModalFooter>
-            <Button variant="outline" mr={3} onClick={onClose}>
-              Close
-            </Button>
-            {(mutation.isIdle || mutation.isLoading) && (
-              <Button
-                type="submit"
-                colorScheme="teal"
-                disabled={macID.length === 0}
-                isLoading={mutation.isLoading}
-                rightIcon={<ArrowForwardIcon />}
-              >
-                Login
+            {onClose && (
+              <Button variant="outline" mr={3} onClick={onClose}>
+                Close
               </Button>
+            )}
+            {(mutation.isIdle || mutation.isLoading) && (
+              <>
+                <Button
+                  type="submit"
+                  colorScheme="teal"
+                  disabled={macID.length === 0}
+                  isLoading={mutation.isLoading}
+                  rightIcon={<Icon as={ArrowRightIcon} />}
+                >
+                  Login
+                </Button>
+              </>
             )}
             {mutation.isError && (
               <Button
                 colorScheme="teal"
                 onClick={() => mutation.reset()}
-                rightIcon={<RepeatIcon />}
+                rightIcon={<Icon as={RefreshIcon} />}
               >
                 Try again
               </Button>

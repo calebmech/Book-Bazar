@@ -32,7 +32,7 @@ export async function uploadImage(image: Buffer): Promise<string> {
   });
 }
 
-async function resizeImage(image: Buffer): Promise<Buffer> {
+export async function resizeImage(image: Buffer): Promise<Buffer> {
   return sharp(image).rotate().resize(IMAGE_UPLOAD_WIDTH).jpeg().toBuffer();
 }
 
