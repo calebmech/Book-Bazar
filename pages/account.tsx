@@ -39,7 +39,7 @@ const AccountPage: NextPage<AccountPageProps> = ({ initialUser }) => {
   const PageHeader = (
     <Flex
       direction={{ base: "column", md: "row" }}
-      mt="12"
+      mt={{ md: "12" }}
       mb="6"
       gap={{ base: "8", md: "16" }}
       align="start"
