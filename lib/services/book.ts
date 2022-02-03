@@ -1,14 +1,18 @@
 import { prisma } from "@lib/services/db";
 import { getGoogleBooksData, GoogleBook } from "./googleBooksSearch";
-import { Book, Post, Course, Dept } from "@prisma/client";
+import { Book, Post, Course, Dept, User } from "@prisma/client";
 
 export type CourseWithDept = Course & {
   dept: Dept;
 };
 
+export type PostWithUser = Post & {
+  user: User;
+};
+
 export type BookWithPostWithUserWithCourseWithDept = Book & {
   courses: CourseWithDept[];
-  posts: Post[];
+  posts: PostWithUser[];
 };
 
 export type PopulatedBook = BookWithPostWithUserWithCourseWithDept & {
