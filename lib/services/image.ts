@@ -6,11 +6,12 @@ import {
   AWS_REGION_BOOKBAZAR,
 } from "@lib/helpers/backend/env";
 import { IMAGE_UPLOAD_WIDTH } from "@lib/helpers/constants";
+import { PutObjectRequest } from "aws-sdk/clients/s3";
 
 export async function uploadImage(image: Buffer): Promise<string> {
   const buffer = await resizeImage(image);
   const key = v4();
-  const params = {
+  const params: PutObjectRequest = {
     Body: buffer,
     Bucket: AWS_BUCKET_NAME_BOOKBAZAR,
     Key: key,
@@ -18,6 +19,7 @@ export async function uploadImage(image: Buffer): Promise<string> {
     StorageClass: "STANDARD_IA",
     ContentEncoding: "base64",
     ContentType: "image/jpeg",
+    CacheControl: "public, max-age=31536000, immutable",
   };
 
   return new Promise(function (resolve, reject) {
