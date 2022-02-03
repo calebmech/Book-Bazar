@@ -13,6 +13,10 @@ export default function BookCard({ book, isLinkActive }: BookCardProps) {
   const { name, imageUrl, isbn } = book;
   const { isLoading, data: populatedBook } = useBookQuery(isbn);
   let authorString: string = "-";
+  if (!isLoading) {
+    console.log(populatedBook)
+  }
+  
   if (populatedBook?.googleBook?.authors) {
     authorString = populatedBook.googleBook.authors.join(', ');
   }
@@ -48,7 +52,7 @@ export default function BookCard({ book, isLinkActive }: BookCardProps) {
           {name ? name : "Book Name Unavailable"}
         </Heading>
 
-        <Text color='gray.500' isTruncated>
+        <Text color='secondaryText' isTruncated>
           <Skeleton isLoaded={!isLoading}>
             {authorString}
           </Skeleton>

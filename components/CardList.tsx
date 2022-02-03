@@ -37,7 +37,7 @@ function CardList({ itemName, items }: CardListProps) {
       <Text 
         mt="10"
         fontSize='2xl' 
-        color='gray.500' 
+        color='secondaryText' 
       > 
         No { itemName }s found.
       </Text>
@@ -50,7 +50,7 @@ function CardList({ itemName, items }: CardListProps) {
         <Text> 
           { itemName }s
         </Text>
-        <Text color='gray.500'> 
+        <Text color='secondaryText'> 
           ({ items.length } matching) 
         </Text>
       </HStack>
