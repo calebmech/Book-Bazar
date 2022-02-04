@@ -50,7 +50,7 @@ export default function LoginModal({
     <Modal isOpen={isOpen} onClose={onClose ?? (() => {})} size="lg">
       <ModalOverlay />
       <ModalContent pt={5} pb={4}>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="login-modal-form">
           <ModalBody>
             <HStack align="flex-start" spacing={5}>
               {showUserIcon && (
