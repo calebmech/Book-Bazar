@@ -7,7 +7,7 @@ import { UseQueryResult, useQuery } from "react-query";
 // to wait for the router before sending a request
 
 export function useCourseQuery(courseId: string | string[] | undefined): UseQueryResult<CourseWithBooks> {
-  return useQuery("course", () =>
+  return useQuery("course-" + courseId, () =>
     axios.get<CourseWithBooks>(`/api/course/${courseId}/`).then((res) => res.data),
     {
       enabled: !(courseId == undefined || Array.isArray(courseId)),
@@ -16,7 +16,7 @@ export function useCourseQuery(courseId: string | string[] | undefined): UseQuer
 }
 
 export function useCoursePostsQuery(courseId: string | string[] | undefined): UseQueryResult<PostWithBookWithUser[]> {
-  return useQuery("coursePosts", () =>
+  return useQuery("coursePosts-" + courseId, () =>
     axios.get<PostWithBookWithUser[]>(`/api/course/${courseId}/posts/`).then((res) => res.data),
     {
       enabled: !(courseId == undefined || Array.isArray(courseId)),
