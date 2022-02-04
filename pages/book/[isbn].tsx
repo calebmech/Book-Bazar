@@ -1,4 +1,4 @@
-import { Badge, Box, Button, Flex, Grid, HStack, Text, Wrap } from "@chakra-ui/react";
+import { Badge, Box, Button, Flex, Grid, HStack, Spacer, Text, Wrap } from "@chakra-ui/react";
 import Image from 'next/image'
 import { PostCardList } from "@components/CardList";
 import Layout from "@components/Layout";
@@ -6,6 +6,7 @@ import { useBookQuery } from "@lib/hooks/book";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { resolveImageUrl } from "@lib/helpers/frontend/resolve-image-url";
 
 const BookPage: NextPage = () => {
   const router = useRouter();
@@ -16,7 +17,7 @@ const BookPage: NextPage = () => {
   }
   const { name, googleBook, posts } = book;
 
-  const postsWithBook = posts.map(post => {
+  const postsWithBookIncluded = posts.map(post => {
     return {
       ...post,
       book: book,
@@ -34,14 +35,12 @@ const BookPage: NextPage = () => {
       ))}
     </Wrap>
   ) 
-  
 
-  return (
-    <Layout>
-      <Grid 
+  const bookInfo: React.ReactNode = (
+    <Grid 
       width='100%' 
       templateColumns={{
-        base: "200px 1fr",
+        base: "256px 1fr",
       }}
       templateRows={{
         base: '300px',
@@ -51,53 +50,64 @@ const BookPage: NextPage = () => {
         md: `'image info'`,
       }}
       gap={8}
-      >
-        <Flex gridArea='image' direction='row' justifyContent='center'>
-          <Box shadow='2xl' h='300px' w='200px'>
-            <Image 
-              alt='book-image' 
-              src={book.imageUrl ?? ''}
-              width='200px'
-              height='300px'
-            />  
-          </Box>
+    >
+      <Box gridArea='image'>
+        <Flex 
+          direction='row' 
+          h='100%' 
+          justifyContent='center' 
+          alignItems='center' 
+        >
+          <Image 
+            alt='book-image' 
+            src={resolveImageUrl(book)}
+            width='128px'
+            height='180px'
+          />  
         </Flex>
+      </Box>
 
-        <Flex gridArea='info' direction='column' justify='space-between'>
-          <Flex direction='column'>
-            <Text fontSize='2xl' fontWeight='bold' >
-              {name}
-            </Text>
-            <Text
-              fontSize='lg'
-              fontWeight='semibold'
-              color='secondaryText'
-            >
-              {googleBook?.authors?.join(', ')}
-            </Text>
+      <Flex gridArea='info' direction='column' justify='space-between'>
+        <Flex direction='column'>
+          <Text fontSize='2xl' fontWeight='bold' >
+            {name}
+          </Text>
+          <Text
+            fontSize='lg'
+            fontWeight='semibold'
+            color='secondaryText'
+          >
+            {googleBook?.authors?.join(', ')}
+          </Text>
 
-            {courseBadges}
+          {courseBadges}
 
+          <Box mt='2'>
             <BookInfoRow 
               firstTitle='Publisher'
               secondTitle='Published Date'
               firstInfo={googleBook?.publisher} 
               secondInfo={googleBook?.publishedDate}          
             />
-
             <BookInfoRow 
               firstTitle='ISBN'
               secondTitle='Page Count'
               firstInfo={isbn && !Array.isArray(isbn) ? isbn  : ''} 
               secondInfo={googleBook?.pageCount?.toString()}          
             />        
-          </Flex>
-          {googleBook && <Button onClick={() => window.open(googleBook.infoLink)}>
-            View On Google Books
-          </Button>}
+          </Box>
         </Flex>
-      </Grid>
-      <PostCardList posts={postsWithBook} isLinkActive={true} />
+        {googleBook && <Button onClick={() => window.open(googleBook.infoLink)}>
+          View On Google Books
+        </Button>}
+      </Flex>
+    </Grid>
+  )
+  
+
+  return (
+    <Layout extendedHeader={bookInfo}>
+      <PostCardList posts={postsWithBookIncluded} isLinkActive={true} />
     </Layout>
   );
 };
