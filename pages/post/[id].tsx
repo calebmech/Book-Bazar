@@ -3,8 +3,6 @@ import {
   Box,
   Button,
   Flex,
-  FormControl,
-  FormLabel,
   Grid,
   Heading,
   HStack,
@@ -12,12 +10,7 @@ import {
   Image,
   Text,
 } from "@chakra-ui/react";
-import {
-  PencilAltIcon,
-  TrashIcon,
-  MailIcon,
-  ChatIcon,
-} from "@heroicons/react/solid";
+import { PencilAltIcon, MailIcon, ChatIcon } from "@heroicons/react/solid";
 import Layout from "@components/Layout";
 import UserWithAvatar from "@components/UserWithAvatar";
 import { useBookQuery } from "@lib/hooks/book";
@@ -27,8 +20,8 @@ import { useRouter } from "next/router";
 import { PostCardList } from "@components/CardList";
 import { useUserQuery } from "@lib/hooks/user";
 import moment from "moment";
-import Link from "next/link";
 import DeletePostForm from "@components/post-page/DeletePostForm";
+import { resolveImageUrl } from "@lib/helpers/frontend/resolve-image-url";
 
 const PostPage: NextPage = () => {
   const router = useRouter();
@@ -64,7 +57,7 @@ const PostPage: NextPage = () => {
         <Button
           leftIcon={<Icon as={MailIcon} />}
           colorScheme="messenger"
-          onClick={() => window.open("mailto:" + post.user?.email)}
+          onClick={() => window.open("mailto:" + post.user.email)}
         >
           Email
         </Button>
@@ -73,7 +66,7 @@ const PostPage: NextPage = () => {
           colorScheme="teal"
           onClick={() =>
             window.open(
-              "https://teams.microsoft.com/l/chat/0/0?users=" + post.user?.email
+              "https://teams.microsoft.com/l/chat/0/0?users=" + post.user.email
             )
           }
         >
@@ -110,7 +103,7 @@ const PostPage: NextPage = () => {
         >
           <Image
             alt="book-image"
-            src={post.imageUrl ?? 'test'}
+            src={post.imageUrl ?? resolveImageUrl(book)}
             width="300px"
             height="400px"
           />
