@@ -42,4 +42,19 @@ if (!process.env.AWS_BUCKET_NAME_BOOKBAZAR) {
 }
 export const AWS_BUCKET_NAME_BOOKBAZAR = process.env.AWS_BUCKET_NAME_BOOKBAZAR;
 
+if (!process.env.ALGOLIA_APP_ID) {
+  throw new Error("process.env.ALGOLIA_APP_ID must be set.");
+}
+export const ALGOLIA_APP_ID = process.env.ALGOLIA_APP_ID;
+
+if (!process.env.ALGOLIA_API_KEY) {
+  throw new Error("process.env.ALGOLIA_API_KEY must be set.");
+}
+export const ALGOLIA_API_KEY = process.env.ALGOLIA_API_KEY;
+
+if (!process.env.ALGOLIA_INDEX_NAME) {
+  throw new Error("process.env.ALGOLIA_INDEX_NAME must be set.");
+}
+export const ALGOLIA_INDEX_NAME = process.env.ALGOLIA_INDEX_NAME;
+
 export const IS_E2E: boolean = process.env.IS_E2E === "true";

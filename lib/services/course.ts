@@ -1,7 +1,13 @@
-import type { Prisma } from "@prisma/client";
+import type { Course, Dept, Prisma } from "@prisma/client";
 import { prisma } from "@lib/services/db";
 
-export type CourseWithBooks = Prisma.PromiseReturnType<typeof getCourseWithBooks>;
+export type CourseWithBooks = Prisma.PromiseReturnType<
+  typeof getCourseWithBooks
+>;
+
+export type CourseWithDept = Course & {
+  dept: Dept;
+};
 
 /**
  * Returns the course with the given id.
@@ -9,14 +15,14 @@ export type CourseWithBooks = Prisma.PromiseReturnType<typeof getCourseWithBooks
  * @param id the id of the course
  * @returns the course with the given id, or null if the course with the given id cannot be found
  */
-export async function getCourseWithBooks(id: string)  {
+export async function getCourseWithBooks(id: string) {
   return prisma.course.findUnique({
     where: {
       id: id,
     },
     include: {
       books: true,
-    }
+    },
   });
 }
 
@@ -29,17 +35,22 @@ export async function getCourseWithBooks(id: string)  {
  * @param includeUser whether or not the user associated with the post should be returned in the data
  * @returns an array of posts from the course with the given id that is paginated, or null if the course with the given id cannot be found
  */
-export async function getPostsForCourse(id : string, length: number, page: number, includeUser: boolean) {
-  const course = await prisma.course.findUnique({ 
-    where: { 
-      id: id 
-    }
-  })
+export async function getPostsForCourse(
+  id: string,
+  length: number,
+  page: number,
+  includeUser: boolean
+) {
+  const course = await prisma.course.findUnique({
+    where: {
+      id: id,
+    },
+  });
 
   if (!course) {
     return null;
   }
-  
+
   return prisma.post.findMany({
     skip: page * length,
     take: length,
@@ -57,4 +68,4 @@ export async function getPostsForCourse(id : string, length: number, page: numbe
       },
     },
   });
-} 
+}
