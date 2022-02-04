@@ -4,6 +4,7 @@ import { useBookQuery } from "@lib/hooks/book";
 import { PostWithBookWithUser } from "@lib/services/post";
 import UserWithAvatar from "./UserWithAvatar";
 import Link from "next/link";
+import { resolveImageUrl } from "@lib/helpers/frontend/resolve-image-url";
 
 type PostCardProps = {
   post: PostWithBookWithUser;
@@ -32,7 +33,7 @@ export default function PostCard({ post, isLinkActive}: PostCardProps) {
       <Image 
         height='220px'
         width='160px'
-        src={imageUrl || populatedBook?.imageUrl || populatedBook?.googleBook?.imageLinks?.small || "https://via.placeholder.com/150"} 
+        src={imageUrl || resolveImageUrl(populatedBook)} 
         alt="book-image" 
       />
 
