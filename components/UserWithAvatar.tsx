@@ -22,13 +22,12 @@ export default function UserWithAvatar({ user, isYou }: UserWithAvatarProps) {
           <Avatar size="sm" />
         )}
 
-        <Text color='secondaryText' fontSize='sm' fontWeight={'bold'} isTruncated>
-          {isYou ? 'You' : user.name}
+        <Text color="secondaryText" fontWeight={"bold"} isTruncated>
+          {isYou ? "You" : user.name}
         </Text>
       </HStack>
-    )
-  }
-  else {
+    );
+  } else {
     return null;
   }
 }
