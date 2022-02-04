@@ -3,15 +3,18 @@ import { SearchResponse } from "@algolia/client-search";
 import { Book, Course } from "@prisma/client";
 
 import {
-  ALGOLIA_APP_ID,
-  ALGOLIA_API_KEY,
-  ALGOLIA_INDEX_NAME,
-} from "@lib/helpers/backend/env";
+  NEXT_PUBLIC_ALGOLIA_APP_ID,
+  NEXT_PUBLIC_ALGOLIA_API_KEY,
+  NEXT_PUBLIC_ALGOLIA_INDEX_NAME,
+} from "@lib/helpers/env";
 
-export const searchClient = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY);
-export const indexName = ALGOLIA_INDEX_NAME;
+export const searchClient = algoliasearch(
+  NEXT_PUBLIC_ALGOLIA_APP_ID,
+  NEXT_PUBLIC_ALGOLIA_API_KEY
+);
+export const indexName = NEXT_PUBLIC_ALGOLIA_INDEX_NAME;
 
-const index = searchClient.initIndex(ALGOLIA_INDEX_NAME);
+const index = searchClient.initIndex(NEXT_PUBLIC_ALGOLIA_INDEX_NAME);
 
 export async function queryAlgolia(query: string): Promise<
   SearchResponse<{
