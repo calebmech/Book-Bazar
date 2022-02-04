@@ -9,5 +9,5 @@ export function useAlgolia(search: string): UseQueryResult<
     entry: Book | Course;
   }>
 > {
-  return useQuery(search, () => queryAlgolia(search));
+  return useQuery(`${search} search`, () => queryAlgolia(search));
 }

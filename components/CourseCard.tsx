@@ -1,3 +1,7 @@
+/*
+ * This file returns the course card displayed in the search page.
+ */
+
 import { Text, Box, Heading, Link } from "@chakra-ui/react";
 import React from "react";
 import { useRouter } from "next/router";

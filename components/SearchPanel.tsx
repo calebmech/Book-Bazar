@@ -1,5 +1,8 @@
 /* This file is configured based on the following Algolia demo:
   https://codesandbox.io/s/exciting-gwen-jr5kj?file=/src/Autocomplete.tsx
+
+  The search panel is used to display autocomplete options to the user. It uses
+  the SuggestionCard to display books and courses relevant to the user's search.
 */
 
 import { AutocompleteApi, AutocompleteState } from "@algolia/autocomplete-core";
@@ -25,6 +28,11 @@ export function getItemUrlPath(item: AutocompleteItem): string {
   return `/book/${(item.entry as Book).isbn}`;
 }
 
+/* The search input component takes the autocomplete hook and it's current state
+   to display the results to users and to keep track of keyboard navigation
+   respectively. It also takes an overlay boolean to decide if the panel
+   should appear over other components (ex. in the header).
+*/
 export const SearchPanel = ({
   autocomplete,
   autocompleteState,
@@ -39,6 +47,7 @@ export const SearchPanel = ({
         rounded="md"
         boxShadow={"md"}
         position={overlay ? "absolute" : "relative"}
+        marginY={1}
       >
         <div key={"search-panel-key"}>
           {autocompleteState.isOpen && (

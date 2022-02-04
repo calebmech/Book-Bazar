@@ -1,5 +1,10 @@
 /* This file is configured based on the following Algolia demo:
   https://codesandbox.io/s/exciting-gwen-jr5kj?file=/src/Autocomplete.tsx
+
+  The file groups all search bar components with one another. The search bar
+  consists of the SearchInput where users write their query, the SearchPanel
+  which displays the autocomplete options, and the autocomplete hook which makes
+  algolia queries.
 */
 
 import { useState } from "react";
@@ -29,6 +34,7 @@ const initialAutocompleteState: AutocompleteState<AutocompleteItem> = {
   status: "idle",
 };
 
+// Returns the search bar displayed in the header and the home page
 export function SearchBar(
   props: Partial<AutocompleteOptions<AutocompleteItem>> & { overlay: boolean }
 ) {
@@ -36,8 +42,10 @@ export function SearchBar(
     AutocompleteState<AutocompleteItem>
   >(initialAutocompleteState);
 
+  // Autocomplete hook used to retreive data from Algolia while searching
   const autocomplete = useAutocomplete(props, setAutocompleteState);
 
+  // Props for the search panel (containing)
   const searchPanelProps: SearchPanelProps = {
     autocomplete,
     autocompleteState,

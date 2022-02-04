@@ -1,3 +1,8 @@
+/*
+  The suggestion card is used as part of the SearchPanel. It displays
+  the autocomplete inputs.
+*/
+
 import {
   Text,
   Container,

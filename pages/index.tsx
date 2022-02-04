@@ -28,7 +28,7 @@ const Home: NextPage = () => {
               width={60}
               height={60}
             />
-            <Text fontSize="6xl" color="teal" fontFamily="title">
+            <Text fontSize="6xl" color="#017185" fontFamily="title">
               Book Bazar
             </Text>
           </HStack>

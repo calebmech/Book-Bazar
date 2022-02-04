@@ -1,5 +1,7 @@
 /* This file is configured based on the following Algolia demo:
   https://codesandbox.io/s/exciting-gwen-jr5kj?file=/src/Autocomplete.tsx
+
+  The file returns the search input used to retrieve user queries.
 */
 
 import { useRef } from "react";
@@ -15,6 +17,9 @@ import { SearchIcon } from "@heroicons/react/solid";
 import { AutocompleteApi } from "@algolia/autocomplete-core";
 import { AutocompleteItem } from "@lib/hooks/autocomplete";
 
+/* The search input component takes the autocomplete hook as input to update
+   the state of the search.
+*/
 export const SearchInput = (
   autocomplete: AutocompleteApi<
     AutocompleteItem,

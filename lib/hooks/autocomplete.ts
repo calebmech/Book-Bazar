@@ -1,3 +1,10 @@
+/* This file is configured based on the following Algolia demo:
+  https://codesandbox.io/s/exciting-gwen-jr5kj?file=/src/Autocomplete.tsx
+
+  The autocomplete hook takes user input, queries algolia, and controls
+  the SearchPanel containing auto complete options.
+*/
+
 import React from "react";
 import {
   AutocompleteApi,
@@ -12,7 +19,7 @@ import { Book } from "@prisma/client";
 import { CourseWithDept } from "@lib/services/course";
 import { getItemUrlPath } from "@components/SearchPanel";
 
-const sourceId = "campus-store-data";
+const sourceId = "campus-store-data-source-id";
 const hitsPerPage = 5;
 
 export type AutocompleteItem = Hit<{

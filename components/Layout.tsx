@@ -18,12 +18,7 @@ const Layout: React.FC<LayoutProps> = ({
   marginY = "8",
 }) => {
   return (
-    <Flex
-      direction="column"
-      justifyContent="space-between"
-      minHeight="100vh"
-      bg="white"
-    >
+    <Flex direction="column" justifyContent="space-between" minHeight="100vh">
       <div>
         <Header hideSearch={hideHeaderSearch}>{extendedHeader}</Header>
         <Container as="main" marginY={marginY} maxWidth="container.lg">
