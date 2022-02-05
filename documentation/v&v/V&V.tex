@@ -99,7 +99,10 @@
 \hline
 3 & 31.01.2022 & Ahmed Al Koasmh & Tests added in Section 8\\
 \hline
-4& 03.02.2022& All team members & Worked on feedback from TA. Section 6.1 Testing Tools added and elaborated on load testing in Section 6.2.
+4& 03.02.2022& All team members & Worked on feedback from TA. Section 6.1 Testing Tools added and elaborated on load testing in Section 6.2.\\
+\hline
+5& 04.02.2022& Harsh Mahajan & Edited document on request of Ahmed's peer review.\\
+\hline
 \end{tabular}
 \caption{Table of Revisions}
 
@@ -490,23 +493,23 @@ M3T9 & HTTP GET request to /api/book/:isbn/?length=1\&page=a &  HTTP OK response
 \textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
 M4T1 & HTTP GET request to /api/course/id/:id & HTTP OK response & HTTP OK response & Pass \\
 \hline
-M4T2 & Unauthenticated HTTP GET request to /api/course/id/:id/posts & HTTP OK response containing 4 post objects without users included & HTTP OK response containing 4 post objects without users included & Pass\\
+M4T2 & Unauthenticated HTTP GET request to /api/course/id/:id/posts & HTTP OK response containing 4 post objects without users included & Same as expected & Pass\\
 \hline
-M4T3 & Authenticated HTTP GET request to /api/course/id/:id/posts & HTTP OK response containing 4 post objects with users included & HTTP OK response containing 4 post objects with users included & Pass\\
+M4T3 & Authenticated HTTP GET request to /api/course/id/:id/posts & HTTP OK response containing 4 post objects with users included & Same as expected & Pass\\
 \hline
-M4T4 & HTTP GET request to /api/course/id/:id/posts?length=3 \&page=0 & HTTP OK response containing 3 post objects & HTTP OK response containing 3 post objects & Pass\\
+M4T4 & HTTP GET request to /api/course/id/:id/posts?length=3 \&page=0 & HTTP OK response containing 3 post objects & Same as expected & Pass\\
 \hline
-M4T5 & HTTP GET request to /api/course/id/:id/posts?length=3 \&page=1 & HTTP OK response containing 1 post object & HTTP OK response containing 1 post object & Pass\\
+M4T5 & HTTP GET request to /api/course/id/:id/posts?length=3 \&page=1 & HTTP OK response containing 1 post object & Same as expected & Pass\\
 \hline
-M4T6 & HTTP GET request to /api/course/id/:id/posts?length=3 \&page=2 & HTTP OK response containing 0 post objects & HTTP OK response containing 0 post objects & Pass\\
+M4T6 & HTTP GET request to /api/course/id/:id/posts?length=3 \&page=2 & HTTP OK response containing 0 post objects & Same as expected & Pass\\
 \hline
-M4T7 & HTTP GET request to /api/course/id/hello & HTTP Bad Request response  & HTTP Bad Request response & Pass\\
+M4T7 & HTTP GET request to /api/course/id/hello & HTTP Bad Request response  & Same as expected & Pass\\
 \hline
-M4T8 & HTTP GET request to /api/course/id/hello/posts & HTTP Bad Request response  & HTTP Bad Request response & Pass\\
+M4T8 & HTTP GET request to /api/course/id/hello/posts & HTTP Bad Request response  & Same as expected& Pass\\
 \hline
-M4T9 & HTTP GET request to /api/course/id/\{random uuid\} & HTTP Not Found response  & HTTP Not Found response & Pass\\
+M4T9 & HTTP GET request to /api/course/id/\{random uuid\} & HTTP Not Found response  & Same as expected & Pass\\
 \hline
-M4T10 & HTTP GET request to /api/course/id/\{random uuid\}/posts & HTTP Not Found response  & HTTP Not Found response & Pass\\
+M4T10 & HTTP GET request to /api/course/id/\{random uuid\}/posts & HTTP Not Found response  & Same as expected & Pass\\
 \hline
 
 
@@ -521,11 +524,11 @@ M4T10 & HTTP GET request to /api/course/id/\{random uuid\}/posts & HTTP Not Foun
  \rowcolor{lightgray} 
 \textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
 \hline
-M5T1 & HTTP POST request to /api/auth/magic containing new MacID & HTTP OK response & HTTP OK response & Pass \\
+M5T1 & HTTP POST request to /api/auth/magic containing new MacID & HTTP OK response & Same as expected & Pass \\
 \hline
-M5T2 & HTTP POST request to /api/auth/magic containing existing MacID & HTTP OK response & HTTP OK response & Pass \\
+M5T2 & HTTP POST request to /api/auth/magic containing existing MacID & HTTP OK response & Same as expected & Pass \\
 \hline
-M5T3 & HTTP POST request to /api/auth/logout & HTTP OK response & HTTP OK response & Pass \\
+M5T3 & HTTP POST request to /api/auth/logout & HTTP OK response & Same as expected & Pass \\
 \hline
 \end{tabular}
 \end{table}
@@ -538,25 +541,25 @@ M5T3 & HTTP POST request to /api/auth/logout & HTTP OK response & HTTP OK respon
  \rowcolor{lightgray} 
 \textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
 \hline
-M6T1 & Authenticated HTTP GET request to /api/user & HTTP OK response containing current user object & HTTP OK response containing current user object & Pass \\
+M6T1 & Authenticated HTTP GET request to /api/user & HTTP OK response containing current user object & Same as expected & Pass \\
 \hline
-M6T2 & Unauthenticated HTTP GET request to /api/user & HTTP NO\_CONTENT response & HTTP NO\_CONTENT response & Pass \\
+M6T2 & Unauthenticated HTTP GET request to /api/user & HTTP NO\_CONTENT response &Same as expected& Pass \\
 \hline
-M6T3 & Authenticated HTTP GET request to /api/user/:id & HTTP OK response containing matching user object & HTTP OK response containing matching user object & Pass \\
+M6T3 & Authenticated HTTP GET request to /api/user/:id & HTTP OK response containing matching user object & Same as expected & Pass \\
 \hline
-M6T4 & Unauthenticated HTTP GET request to /api/user/:id & HTTP UNAUTHORIZED response & HTTP UNAUTHORIZED response & Pass \\
+M6T4 & Unauthenticated HTTP GET request to /api/user/:id & HTTP UNAUTHORIZED response & Same as expected & Pass \\
 \hline
-M6T5 & Authenticated HTTP PUT request to /api/user/:currentUserId containing user update & HTTP OK response containing updated user & HTTP OK response containing updated user & Pass \\
+M6T5 & Authenticated HTTP PUT request to /api/user/:currentUserId containing user update & HTTP OK response containing updated user & Same as expected & Pass \\
 \hline
-M6T6 & Unauthenticated HTTP PUT request to /api/user/:id containing user update & HTTP UNAUTHORIZED response & HTTP UNAUTHORIZED response & Pass \\
+M6T6 & Unauthenticated HTTP PUT request to /api/user/:id containing user update & HTTP UNAUTHORIZED response & Same as expected & Pass \\
 \hline
-M6T7 & Authenticated HTTP PUT request to /api/user/:id containing other user update & HTTP FORBIDDEN response & HTTP FORBIDDEN response & Pass \\
+M6T7 & Authenticated HTTP PUT request to /api/user/:id containing other user update & HTTP FORBIDDEN response & Same as expected & Pass \\
 \hline
-M6T8 & Authenticated HTTP DELETE request to /api/user/:currentUserId & HTTP OK response & HTTP OK response & Pass \\
+M6T8 & Authenticated HTTP DELETE request to /api/user/:currentUserId & HTTP OK response & Same as expected & Pass \\
 \hline
-M6T9 & Authenticated HTTP DELETE request to /api/user/:id & HTTP FORBIDDEN response & HTTP FORBIDDEN response & Pass \\
+M6T9 & Authenticated HTTP DELETE request to /api/user/:id & HTTP FORBIDDEN response & Same as expected & Pass \\
 \hline
-M6T10 & Unauthenticated HTTP DELETE request to /api/user/:id & HTTP UNAUTHORIZED response & HTTP UNAUTHORIZED response & Pass \\
+M6T10 & Unauthenticated HTTP DELETE request to /api/user/:id & HTTP UNAUTHORIZED response & Same as expected & Pass \\
 \hline
 \end{tabular}
 \end{table}
