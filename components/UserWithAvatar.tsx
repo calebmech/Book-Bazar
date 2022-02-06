@@ -3,9 +3,8 @@ import { User } from "@prisma/client";
 
 interface UserWithAvatarProps {
   user: User | null;
-  isYou?: boolean;
 }
-export default function UserWithAvatar({ user, isYou }: UserWithAvatarProps) {
+export default function UserWithAvatar({ user }: UserWithAvatarProps) {
   if (user) {
     return (
       <HStack>
@@ -23,7 +22,7 @@ export default function UserWithAvatar({ user, isYou }: UserWithAvatarProps) {
         )}
 
         <Text color="secondaryText" fontWeight={"bold"} isTruncated>
-          {isYou ? "You" : user.name}
+          {user.name}
         </Text>
       </HStack>
     );

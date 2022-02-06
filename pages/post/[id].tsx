@@ -41,7 +41,7 @@ const PostPage: NextPage = () => {
   var buttonText: string;
   var buttonFragment: React.ReactNode;
   if (isPostOwnedByUser) {
-    buttonText = "";
+    buttonText = "Post Options";
     buttonFragment = (
       <>
         <Button leftIcon={<Icon as={PencilAltIcon} />} colorScheme="teal">
@@ -51,7 +51,7 @@ const PostPage: NextPage = () => {
       </>
     );
   } else if (user) {
-    buttonText = "Post Options";
+    buttonText = "Contact Seller";
     buttonFragment = (
       <>
         <Button
@@ -123,9 +123,9 @@ const PostPage: NextPage = () => {
           </HStack>
 
           <HStack>
-            <UserWithAvatar user={post.user} isYou={isPostOwnedByUser} />
+            <UserWithAvatar user={post.user} />
             <Text>Posted {time.fromNow()}</Text>
-            {moment().diff(time, "minutes") < 30 && (
+            {moment().diff(time, "hours") < 24 && (
               <Badge colorScheme="teal">New</Badge>
             )}
           </HStack>
