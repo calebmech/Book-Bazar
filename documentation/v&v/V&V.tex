@@ -140,10 +140,10 @@ The project, Book Bazar is a website that addresses these issues. McMaster commu
 Using the milestones, listed in Section 6 of the Development Process document, the team aims to have Book Bazar completed by the week of March 6, a week prior to the team's f\textbf{}inal presentation.
 
 \section{Testing Plan}
-Integration testing was used for all top-level modules which transitively tests all bottom level modules. This style of testing was chosen because it effectively tests how users will interact with the system instead of implementation details. Unit tests were not used as in practice they are often burdensome to write and maintain while providing minimal benefit in many cases due to much of the system being mocked out.
+Integration testing was used for all top-level modules which transitively tests all bottom level modules. This style of testing was chosen because it effectively tests how users will interact with the system instead of implementation details. Few unit tests were written because, in practice, they are often burdensome to write and maintain while providing minimal benefit in many cases due to much of the system being mocked out.
 
 \subsection{Testing Tools}
-The team will be use the following tools for implementing tests:\\
+The team will use the following tools for implementing tests:\\
 \bi
     \item Cypress -- used to run all integration tests (API and UI).
     \item Jest -- used for writing unit tests.
@@ -156,19 +156,19 @@ A serverless architecture was used for API execution which means that horizontal
 
 
 \subsection{UI Tests}
-UI tests have been created for each way a user can interact with a page.
+The team is testing with the assumption that the user uses the UI in ``right'' way and that there will not be any system errors. With this in mine, the team will be writing one UI test, per use case.
 
 
 \subsection{PASS/FAIL Criterion}
-The criterion used to determine PASS/FAIL of the the test cases id given below:
+The criterion used to determine PASS/FAIL of the the test cases is given below:
 \begin{center}
     {$actual\_output == expected\_output$}
 \end{center}
 
-
+\newpage
 
 \section{Traceability Matrix}
-Below tables go over the coverage of our test plan. Modules were tested multiple times and ensured that the Function Requirements implemented are correct. 
+Below modules were tested multiple times to build confidence that the implementation matches the functional requirements.
 \subsection{UserInterface Module (M1)}
 \begin{table}[H]
 \flushleft
@@ -189,7 +189,7 @@ M1T5 & should allow a user to change their profile picture & FR17 \\
 \hline
 M1T6 & should allow a user to delete their posting from account page & FR2 \\
 \hline
-M1T7 & should allow a user to edit their posting from account page & FR19 \\
+M1T7 & should allow a user to edit their posting from account page & (Pending changes to functional requirements) \\
 \hline
 \end{tabular}
 \end{table}
@@ -574,7 +574,7 @@ History of all peer-reviewed merge results can be found \href{https://github.com
 Static analysis was performed using eslint. Common JavaScript and React pitfalls were avoided using eslint and code styling was enforced by the Prettier code formatting tool. We run eslint as a part of our continuous integration testing to ensure that new code being added to the main repository adheres to the code style. Furthermore, type safety at the static analysis level was added by using TypeScript over vanilla JavaScript.
 
 \section{Supporting Material}
-Please refer to prior design documents submitted.
+For the descriptions of modules and functional requriements mentioned in the tables above along with other details of our requirements, design and hazard analysis, please refer to the prior submitted documents.
 \begin{comment}
 \begin{thebibliography}{9}
 \bibitem{website}
