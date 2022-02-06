@@ -1,5 +1,6 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
+import ErrorPage from 'next/error'
 import { useCoursePostsQuery, useCourseQuery } from "@lib/hooks/course";
 import { Skeleton, Text } from "@chakra-ui/react";
 import Layout from "@components/Layout";
@@ -7,9 +8,13 @@ import { BookCardList, PostCardList } from "@components/CardList";
 
 const CoursePage: NextPage = () => {
   const router = useRouter();
-  const { id } = router.query;
-  const { isLoading: isLoadingCourseData, data: courseData } = useCourseQuery(id);
-  const { data: postsData } = useCoursePostsQuery(id);
+  const { code } = router.query;
+  const { isLoading: isLoadingCourseData, data: courseData } = useCourseQuery(code);
+  const { data: postsData } = useCoursePostsQuery(code);
+
+  if (!courseData && !isLoadingCourseData) {
+    return <ErrorPage statusCode={404}/>;
+  }
 
   const courseName = courseData ? courseData.name + ' ' + courseData.code : '';
   const books = courseData ? courseData.books : [];
