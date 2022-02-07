@@ -1,0 +1,590 @@
+\documentclass[fullpage]{article}
+
+%\setlength {\topmargin} {-1in}
+
+%\setlength {\textheight} {8.6in}
+
+%\setlength{\parindent}{1cm}
+
+\usepackage{amsmath, amsfonts}
+\usepackage[margin=1in]{geometry}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage{verbatim}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{blindtext}
+\usepackage{cancel}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{graphicx}    %  in the preamble
+%\usepackage[acronym]{glossaries}
+
+\usepackage[table]{xcolor}
+% \setlength{\tabcolsep}{18pt}
+\renewcommand{\arraystretch}{1.5}
+\renewcommand{\labelenumi}{\theenumi.}
+\renewcommand{\labelenumii}{\theenumii.}
+\renewcommand{\labelenumiii}{\theenumiii.}
+\newcommand{\be}{\begin{enumerate}}
+\newcommand{\ee}{\end{enumerate}}
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand{\bv}{\begin{verbatim}}
+\newcommand{\ev}{\end{verbatim}}
+\newcommand{\ba}{\begin{align*}}
+\newcommand{\ea}{\end{align*}}
+\newcommand{\beq}{\begin{equation*}}
+\newcommand{\eeq}{\end{equation*}}
+\newcommand{\bs}{\begin{split}}
+\newcommand{\es}{\end{split}}
+\newcommand{\mname}[1]{\mbox{\sf #1}}
+\newcommand{\pnote}[1]{{\langle \text{#1} \rangle}}
+\renewcommand{\labelenumii}{\theenumii.}
+
+\begin{document}
+
+\vspace*{\fill}
+\begin{center}
+
+  {\Huge \textbf{Verification and Validation}}\\
+\hrulefill\\[2mm]
+  {\huge \textbf{Book Bazar}}\\[2mm]
+{\large \today}\\[15mm]
+{\large
+\underline{\textbf{Group 6}}\\
+\begin{tabular}{ c c }
+
+ Caleb Mech & mechc2\\ 
+ David Thompson & thompd10\\
+ Matthew Williams & willim36\\
+ Ahmed Al Koasmh & alkoasma\\
+ Harsh Mahajan	& mahajanh    
+\end{tabular}
+}
+
+\end{center}
+
+\vspace*{\fill}
+
+%-----------END OF TITLE PAGE-------------------------------------------------------------
+\newpage
+\begingroup
+\hypersetup{hidelinks}
+\tableofcontents
+
+\listoffigures
+\listoftables
+\endgroup
+\newpage
+
+\section{Table of Revisions}
+\begin{table}[h]
+\centering
+\begin{tabular}{| l | c | p{4cm}| p{5cm}|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Version} & \textbf{Date(dd.mm.yyy)} &\textbf{Author(s)} &\textbf{Description}\\
+\hline
+0 & 21.01.2022 & Harsh Mahajan & First draft assembled.\\
+\hline
+1 & 25.01.2022 & Caleb Mech & Tests added in Section 7 \& 8\\
+\hline
+2 & 26.01.2022 & Matthew Williams & Tests added in Section 7 \& 8\\
+\hline
+3 & 31.01.2022 & Ahmed Al Koasmh & Tests added in Section 8\\
+\hline
+4& 03.02.2022& All team members & Worked on feedback from TA. Section 6.1 Testing Tools added and elaborated on load testing in Section 6.2.\\
+\hline
+5& 04.02.2022& Harsh Mahajan & Edited document on request of Ahmed's peer review.\\
+\hline
+6& 06.02.2022& Harsh Mahajan& Corrected grammar and revised document based on David's peer review\\
+\hline
+\end{tabular}
+\caption{Table of Revisions}
+
+\end{table}
+
+\section{Purpose}
+The motivation for this project is to create an application that allows McMaster students to conveniently buy and sell textbooks in a secure marketplace. Currently, students use online websites like Facebook (\url{https://www.facebook.com/groups/macusedtexts}) or the campus store's buyback program \\ (\url{https://campusstore.mcmaster.ca/information/guaranteed-buyback.html}, suspended because of COVID) to sell their books. These current solutions are either disorganized or take a cut of the transaction. Book Bazaar aims to create an organized marketplace that allows users to sell books for a better price than at the campus store.
+
+The purpose of this Verification and Validation (V\&V) is to provide a complete overview of the process undertaken in-order to ensure that all the requirements have been covered and tested. 
+\newline
+\small{ \textbf{NOTE:} Book Bazar's website where all the books to be sold are listed, is referred to as \textit{marketplace} in certain parts of this document.}
+
+\section{Scope}
+The scope for the project covers the following application features:
+\be
+	\item An authentication and authorization platform that verifies McMaster students and allows them to log into and use the application.
+	\item A marketplace system that uses information from the campus store and allows users to:
+		\bi
+			\item Post about and categorize books that they would like to sell.
+			\item Search for books that they would like to purchase.
+		\ei
+	\item A system that allows buyers and sellers to privately contact each other, agree on a price, and choose where they would like to meet.
+	\item The application will be accessible from any device with a modern browser (phone, tablet, desktop, etc.) to provide the best experience.
+\ee
+
+
+
+\section{Background}
+\label{sec:background}
+University students often like to buy/sell used textbooks. Sometimes it's for the notes written in the margins, but often it's because new textbooks are quite expensive.\\
+Currently at McMaster University, students use online websites like Facebook (\url{https://www.facebook.com/groups/macusedtexts}) or the campus store's buyback program (\url{https://campusstore.mcmaster.ca/information/guaranteed-buyback.html}, suspended because of COVID) to sell their books. These current solutions are either disorganized or take a cut of the transaction. Book Bazaar aims to create an organized marketplace that allows users to sell books for a better price than at the campus store.\\
+The project, Book Bazar is a website that addresses these issues. McMaster community members may buy/sell textbooks with ease using Book Bazar.
+\section{Roadmap}
+\label{sec: roadmap}
+Using the milestones, listed in Section 6 of the Development Process document, the team aims to have Book Bazar completed by the week of March 6, a week prior to the team's f\textbf{}inal presentation.
+
+\section{Testing Plan}
+Integration testing was used for all top-level modules which transitively tests all bottom level modules. This style of testing was chosen because it effectively tests how users will interact with the system instead of implementation details. Few unit tests were written because, in practice, they are often burdensome to write and maintain while providing minimal benefit in many cases due to much of the system being mocked out.
+
+\subsection{Testing Tools}
+The team will use the following tools for implementing tests:\\
+\bi
+    \item Cypress -- used to run all integration tests (API and UI).
+    \item Jest -- used for writing unit tests.
+    \item Mock Service Workers -- used for mocking out external service APIs.
+\ei
+\subsection{API Tests}
+In the design specification the behaviour of HTTP handler modules was defined. This behaviour was used to define an expected output for a variety of inputs. This required creating tooling to build and teardown a testing database.
+
+A serverless architecture was used for API execution which means that horizontal scaling of the system is handled by \href{https://vercel.com}{Vercel}, the hosting provider. Therefore, \textbf{load testing} was not performed.
+
+
+\subsection{UI Tests}
+The team is testing with the assumption that the user uses the UI in the ``right'' way and that there will not be any system errors. With this in mind, the team will be writing one UI test, per use case.
+
+
+\subsection{PASS/FAIL Criterion}
+The criterion used to determine PASS/FAIL of the the test cases is given below:
+\begin{center}
+    {$actual\_output == expected\_output$}
+\end{center}
+
+\newpage
+
+\section{Traceability Matrix}
+Below modules were tested multiple times to build confidence that the implementation matches the functional requirements.
+\subsection{UserInterface Module (M1)}
+\begin{table}[H]
+\flushleft
+\begin{tabular}{|c|p{8.5cm}|c|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
+\hline
+M1T1 & should allow a user to login & FR11, FR15 \\
+\hline
+M1T2 & should allow a user to logout & FR16 \\
+\hline
+M1T3 & should allow a user to delete their account & FR12 \\
+\hline
+M1T4 & should allow a user to change their name & FR17 \\
+\hline
+M1T5 & should allow a user to change their profile picture & FR17 \\
+\hline
+M1T6 & should allow a user to delete their posting from account page & FR2 \\
+\hline
+M1T7 & should allow a user to edit their posting from account page & (Pending changes to functional requirements) \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\subsection{PostHttpHandler Module (M2)}
+\begin{table}[H]
+\flushleft
+\begin{tabular}{|c|p{8.5cm}|p{5cm}|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
+M2T1 & should give a 200 when GETting an existing post & FR9 \\
+\hline
+M2T2 & should have user when GETting an existing post while AuthN & FR9 \\
+\hline
+M2T3 & should give a 400 when trying to GET a post with an invalid uuid & FR9 \\
+\hline
+M2T4 & should give a 404 when trying to GET a post that doesn't exist & FR9 \\
+\hline
+M2T5 & should give a 401 when trying to PUT when unauthenticated & (Pending changes to functional requirements) \\
+\hline
+M2T6 & should give a 404 when PUTting to a post that doesn't exist (while AuthN) & (Pending changes to functional requirements) \\
+\hline
+M2T7 & should give a 400 when trying to set the price to a negative number using PUT while AuthN & (Pending changes to functional requirements) \\
+\hline
+M2T8 & should give a 400 when trying to set the price to a non-number value using PUT while AuthN & (Pending changes to functional requirements) \\
+\hline
+M2T9 & should give a 200 when PUTting while AuthN with correct syntax & (Pending changes to functional requirements) \\
+\hline
+M2T10 & should give a 401 when trying to DELETE when unauthenticated & FR3 \\
+\hline
+M2T11 & should give a 404 when trying to DELETE a post that does not exist & FR3 \\
+\hline
+M2T12 & should give a 403 when trying to DELETE someone else's post & FR3 \\
+\hline
+M2T13 & should give a 200 when DELETEing when authenticated & FR3 \\
+\hline
+M2T14 & should give 401 when attempting to create a post while not AuthN & FR1, FR2 \\
+\hline
+M2T15 & should give 200 when creating a post while AuthN & FR1, FR2 \\
+\hline
+M2T16 & should give 400 when attempting to create a post with bookId missing while AuthN & FR1, FR2 \\
+\hline
+M2T17 & should give 400 when attempting to create a post with price NaN while AuthN & FR1, FR2 \\
+\hline
+M2T18 & should give 400 when attempting to create a post with negative price while AuthN & FR1, FR2 \\
+\hline
+M2T19 & should give 400 when attempting to create a post with missing book while AuthN & FR1, FR2 \\
+\hline
+
+\end{tabular}
+\end{table}
+
+\subsection{BookHttpHandler Module (M3)}
+\begin{table}[H]
+\flushleft
+\begin{tabular}{|c|p{8.5cm}|c|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
+M3T1 & should give a 200 when GETting an existing book, it's 4 posts, and it's course & FR4, FR9, FR10 \\
+\hline
+M3T2 & should give users of posts when GETting an existing book and it's posts while AuthN & FR4, FR9, FR10 \\
+\hline
+M3T3 & should return null for the google book data of a book that does not exist on google books & FR4, FR9, FR10 \\
+\hline
+M3T4 & should give a 404 when trying to GET a book with an isbn that does not exist & FR4, FR9, FR10 \\
+\hline
+M3T5 & should include the first 3 of 4 posts when GETting a book and it's posts with a length of 3 & FR4, FR9, FR10 \\
+\hline
+M3T6 & should include the last post of 4 when GETting a book and it's posts with a length of 3 and page of 1 & FR4, FR9, FR10 \\
+\hline
+M3T7 & should include zero posts when GETting a book and it's posts with a length of 3 and page of 2 & FR4, FR9, FR10 \\
+\hline
+M3T8 & should return a default result of 4 posts for an invalid length input & FR4, FR9, FR10 \\
+\hline
+M3T9 & should return a default result of 4 posts for an invalid page input & FR4, FR9, FR10 \\
+
+
+\hline
+\end{tabular}
+\end{table}
+
+
+\subsection{CourseHttpHandler Module (M4)}
+\begin{table}[H]
+\flushleft
+\begin{tabular}{|c|p{8.5cm}|c|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
+M4T1 & should give a 200 when GETting an existing course & FR5 \\
+\hline 
+M4T2 & should give a 200 when GETting posts for an existing course & FR5 \\
+\hline
+M4T3 & should include user with posts when signed in when GETting an existing courses posts while AuthN & FR5 \\
+\hline
+M4T4 & should include first 3 of 4 posts when GETting posts for an existing course with a length of 3 & FR5 \\
+\hline
+M4T5 & should include last post of 4 when GETting posts for an existing course with a length of 3 and page of 1 & FR5 \\
+\hline
+M4T6 & should include zero posts when GETting posts for an existing course with a length of 3 and page of 2 & FR5 \\
+\hline
+M4T7 & should give a 400 when trying to GET a course with an invalid uuid & FR5 \\
+\hline
+M4T8 & should give a 400 when trying to GET posts for a course with an invalid uuid & FR5 \\
+\hline
+M4T9 & should give a 404 when trying to GET a course that doesn't exist & FR5 \\
+\hline
+M4T10 & should give a 404 when trying to GET posts for a course with an invalid uuid & FR5 \\
+\hline
+
+\end{tabular}
+\end{table}
+
+
+\subsection{AuthHttpHandler Module (M5)}
+\begin{table}[H]
+\flushleft
+\begin{tabular}{|c|p{8.5cm}|c|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
+\hline
+M5T1 & should be able to send a magic link to a new user & FR11 \\
+\hline
+M5T2 & should be able to send a magic link to an existing user & FR15 \\
+\hline
+M5T3 & should be able to logout & FR16 \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\subsection{UserHttpHandler Module (M6)}
+\begin{table}[H]
+\flushleft
+\begin{tabular}{|c|p{8.5cm}|c|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
+\hline
+M6T1 & should be able to get current user & FR9 \\
+\hline
+M6T2 & should not be able to get current user if not signed in & FR9 \\
+\hline
+M6T3 & should be able to get other users if logged in & FR9 \\
+\hline
+M6T4 & should not be able to get a user if not signed in & FR9 \\
+\hline
+M6T5 & should be able to update current user & FR17 \\
+\hline
+M6T6 & should not be able to update a user if not logged in & FR18 \\
+\hline
+M6T7 & should not be able to update a another user's account & FR18 \\
+\hline
+M6T8 & should be able to delete current user & FR12 \\
+\hline
+M6T9 & should not be able to delete other users & FR18 \\
+\hline
+M6T10 & should not be able to delete user if not logged in & FR18 \\
+\hline
+\end{tabular}
+\end{table}
+
+
+\section{Testing results}
+
+\subsection{UserInterface Module (M1)}
+\begin{table}[H]
+\flushleft
+\begin{tabular}{|c|p{4.5cm}|p{3.6cm}|p{3.6cm}|c|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
+\hline
+M1T1 & Login with MacID and visit login link & Magic link is sent and authenticates user & Magic link is sent and authenticates user & Pass \\
+\hline
+M1T2 & Click logout button & User is unauthenticated & User is unauthenticated & Pass \\
+\hline
+M1T3 & Visit account page and delete account & Account no longer exists & Unable to perform & Fail \\
+\hline
+M1T4 & Visit account page and edit name & User's name is updated as expected & Unable to perform & Fail \\
+\hline
+M1T5 & Visit account page and edit profile picture & User's profile picture is updated as expected & Unable to perform & Fail \\
+\hline
+M1T6 & Visit account page and delete a post & Post no longer exists & Unable to perform & Fail \\
+\hline
+M1T7 & Visit account page and edit a post & Post is updated as expected & Unable to perform & Fail \\
+\hline
+% \hline
+% M1T2 & should allow a user to logout & FR16 \\
+% \hline
+% M1T3 & should allow a user to delete their account & FR12 \\
+% \hline
+% M1T4 & should allow a user to change their name & FR17 \\
+% \hline
+% M1T5 & should allow a user to change their profile picture & FR17 \\
+% \hline
+% M1T6 & should allow a user to delete their posting & FR2 \\
+% \hline
+% M1T7 & should allow a user to edit their posting & FR19 \\
+\end{tabular}
+\end{table}
+\textbf{Note: }Some of the above tests were unable to perform because the team is yet to implement these tests.
+\subsection{PostHttpHandler Module (M2)}
+\begin{table}[H]
+\flushleft
+\begin{tabular}{|c|p{4.5cm}|p{3.6cm}|p{3.6cm}|c|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
+M2T1 & Unauthenticated HTTP GET request to /api/post/\{existing-post-uuid\} & HTTP OK response, along with the specified post, without user information & Same as expected & Pass\\
+\hline
+M2T2 & Authenticated HTTP GET request to /api/post/\{existing-post-uuid\} & HTTP OK response, along with the specified post and information on the user who created the post  & Same as expected & Pass \\
+\hline
+M2T3 & Unauthenticated HTTP GET request to /api/post/hello & HTTP BAD\_REQUEST response  & Same as expected & Pass \\
+\hline
+M2T4 & Unauthenticated HTTP GET request to /api/post/\{random-uuid\} & HTTP NOT\_FOUND response  & Same as expected & Pass \\
+\hline
+M2T5 & Unauthenticated HTTP PUT request to /api/post/\{existing-post-uuid\} & HTTP UNAUTHORIZED response & Same as expected & Pass \\
+\hline
+M2T6 & Authenticated HTTP PUT request to /api/post/\{random-uuid\} & HTTP NOT\_FOUND response & Same as expected & Pass \\
+\hline
+M2T7 & Authenticated HTTP PUT request to /api/post/\{existing-post-uuid\}, where the new asking price is negative & HTTP BAD\_REQUEST response & Same as expected & Pass \\
+\hline
+M2T8 & Authenticated HTTP PUT request to /api/post/\{existing-post-uuid\}, where the new asking price is ``salami'' & HTTP BAD\_REQUEST & Same as expected & Pass \\
+\hline
+M2T9 & Authenticated HTTP PUT request to /api/post/\{existing-post-uuid\}, where the new description is set to ``hi, mom!'' & HTTP OK response, along with a copy of the post where the description has been changed to ``hi, mom!'' & Same as expected & Pass \\
+\hline
+M2T10 & Unauthenticated HTTP DELETE request to /api/post/\{existing-post-uuid\} & HTTP UNAUTHORIZED response & Same as expected & Pass \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\flushleft
+\begin{tabular}{|c|p{4.5cm}|p{3.6cm}|p{3.6cm}|c|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
+M2T11 & Unauthenticated HTTP DELETE request to /api/post/\{random-uuid\} & HTTP NOT\_FOUND response & Same as expected &  Pass \\
+\hline
+M2T12 & Authenticated HTTP DELETE request to /api/post/\{another-persons-post-uuid\} (try to delete someone else's post) & HTTP FORBIDDEN response & Same as expected & Pass \\
+\hline
+M2T13 & Authenticated HTTP DELETE request to /api/post/\{existing-post-uuid\} & HTTP OK response & Same as expected & Pass \\
+\hline
+M2T14 & Unauthenticated HTTP POST request to /api/post & HTTP UNAUTHORIZED response & Same as expected & Pass \\
+\hline
+M2T15 & Authenticated HTTP POST request to /api/post, with all required params passed correctly & HTTP OK response & Same as expected & Pass \\
+\hline
+M2T16 & Authenticated HTTP POST request to /api/post, with the bookId parameter missing & HTTP BAD\_REQUEST response & Same as expected & Pass \\
+\hline
+M2T17 & Authenticated HTTP POST request to /api/post, with the listing price set to ``salami'' & HTTP BAD\_REQUEST response & Same as expected & Pass \\
+\hline
+M2T18 & Authenticated HTTP POST request to /api/post, with the listing price set to a negative number & HTTP BAD\_REQUEST response & Same as expected & Pass \\
+\hline
+M2T19 & Authenticated HTTP POST request to /api/post, with the bookId parameter set to a book that doesn't exist in the database & HTTP BAD\_REQUEST response & Same as expected & Pass \\
+\hline
+
+\end{tabular}
+\end{table}
+
+\subsection{BookHttpHandler Module (M3)}
+\begin{table}[H]
+\flushleft
+\begin{tabular}{|c|p{4.5cm}|p{3.6cm}|p{3.6cm}|c|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
+M3T1 & HTTP GET request to /api/book/:isbn & HTTP OK response containing 4 post objects, without users included, and including expected values & Same as expected & Pass\\
+\hline
+M3T2 & Authenticated HTTP GET request to /api/book/:isbn & HTTP OK response containing 4 post objects with users included & Same as expected & Pass\\
+\hline
+M3T3 & HTTP GET request to /api/book/:isbn where isbn has no googleBooks data & HTTP OK response with googleBooks field set to null & Same as expected & Pass\\
+\hline
+M3T4 & HTTP GET request /api/book/:isbn with invalid isbn & HTTP Not Found Response  & Same as expected & Pass\\
+\hline
+M3T5 & HTTP GET request to /api/book/:isbn/?length=3\&page=0 &  HTTP OK response containing 3 post objects & Same as expected & Pass\\
+\hline
+M3T6 & HTTP GET request to /api/book/:isbn/?length=3\&page=1 &  HTTP OK response containing 1 post object & Same as expected & Pass\\
+\hline
+M3T7 & HTTP GET request to /api/book/:isbn/?length=3\&page=2 &  HTTP OK response containing 0 post objects & Same as expected & Pass\\
+\hline
+M3T8 & HTTP GET request to /api/book/:isbn/?length=-1\&page=0 &  HTTP OK response containing default options with 4 post objects & Same as expected & Pass\\
+\hline
+M3T9 & HTTP GET request to /api/book/:isbn/?length=1\&page=a &  HTTP OK response containing default options with 4 post objects & Same as expected & Pass\\
+\hline
+
+
+\end{tabular}
+\end{table}
+
+\subsection{CourseHttpHandler Module (M4)}
+\begin{table}[H]
+\flushleft
+\begin{tabular}{|c|p{4.5cm}|p{3.6cm}|p{3.6cm}|c|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
+M4T1 & HTTP GET request to /api/course/id/:id & HTTP OK response & HTTP OK response & Pass \\
+\hline
+M4T2 & Unauthenticated HTTP GET request to /api/course/id/:id/posts & HTTP OK response containing 4 post objects without users included & Same as expected & Pass\\
+\hline
+M4T3 & Authenticated HTTP GET request to /api/course/id/:id/posts & HTTP OK response containing 4 post objects with users included & Same as expected & Pass\\
+\hline
+M4T4 & HTTP GET request to /api/course/id/:id/posts?length=3 \&page=0 & HTTP OK response containing 3 post objects & Same as expected & Pass\\
+\hline
+M4T5 & HTTP GET request to /api/course/id/:id/posts?length=3 \&page=1 & HTTP OK response containing 1 post object & Same as expected & Pass\\
+\hline
+M4T6 & HTTP GET request to /api/course/id/:id/posts?length=3 \&page=2 & HTTP OK response containing 0 post objects & Same as expected & Pass\\
+\hline
+M4T7 & HTTP GET request to /api/course/id/hello & HTTP Bad Request response  & Same as expected & Pass\\
+\hline
+M4T8 & HTTP GET request to /api/course/id/hello/posts & HTTP Bad Request response  & Same as expected& Pass\\
+\hline
+M4T9 & HTTP GET request to /api/course/id/\{random uuid\} & HTTP Not Found response  & Same as expected & Pass\\
+\hline
+M4T10 & HTTP GET request to /api/course/id/\{random uuid\}/posts & HTTP Not Found response  & Same as expected & Pass\\
+\hline
+
+
+\end{tabular}
+\end{table}
+
+\subsection{AuthHttpHandler Module (M5)}
+\begin{table}[H]
+\flushleft
+\begin{tabular}{|c|p{4.5cm}|p{3.6cm}|p{3.6cm}|c|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
+\hline
+M5T1 & HTTP POST request to /api/auth/magic containing new MacID & HTTP OK response & Same as expected & Pass \\
+\hline
+M5T2 & HTTP POST request to /api/auth/magic containing existing MacID & HTTP OK response & Same as expected & Pass \\
+\hline
+M5T3 & HTTP POST request to /api/auth/logout & HTTP OK response & Same as expected & Pass \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{UserHttpHandler Module (M6)}
+\begin{table}[H]
+\flushleft
+\begin{tabular}{|c|p{4.5cm}|p{3.6cm}|p{3.6cm}|c|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
+\hline
+M6T1 & Authenticated HTTP GET request to /api/user & HTTP OK response containing current user object & Same as expected & Pass \\
+\hline
+M6T2 & Unauthenticated HTTP GET request to /api/user & HTTP NO\_CONTENT response &Same as expected& Pass \\
+\hline
+M6T3 & Authenticated HTTP GET request to /api/user/:id & HTTP OK response containing matching user object & Same as expected & Pass \\
+\hline
+M6T4 & Unauthenticated HTTP GET request to /api/user/:id & HTTP UNAUTHORIZED response & Same as expected & Pass \\
+\hline
+M6T5 & Authenticated HTTP PUT request to /api/user/:currentUserId containing user update & HTTP OK response containing updated user & Same as expected & Pass \\
+\hline
+M6T6 & Unauthenticated HTTP PUT request to /api/user/:id containing user update & HTTP UNAUTHORIZED response & Same as expected & Pass \\
+\hline
+M6T7 & Authenticated HTTP PUT request to /api/user/:id containing other user update & HTTP FORBIDDEN response & Same as expected & Pass \\
+\hline
+M6T8 & Authenticated HTTP DELETE request to /api/user/:currentUserId & HTTP OK response & Same as expected & Pass \\
+\hline
+M6T9 & Authenticated HTTP DELETE request to /api/user/:id & HTTP FORBIDDEN response & Same as expected & Pass \\
+\hline
+M6T10 & Unauthenticated HTTP DELETE request to /api/user/:id & HTTP UNAUTHORIZED response & Same as expected & Pass \\
+\hline
+\end{tabular}
+\end{table}
+
+\section{More Than the Tests}
+\subsection{Code Reviews}
+
+All code pushed to the Git repository was peer-reviewed by other members of the team. New code had to be reviewed and approved by at least one other member before merging into the main branch.\\
+History of all peer-reviewed merge results can be found \href{https://github.com/calebmech/Book-Bazar/pulls?q=is\%3Apr+is\%3Amerged}{on GitHub}.
+
+\subsection{Static Analysis}
+Static analysis was performed using eslint. Common JavaScript and React pitfalls were avoided using eslint and code styling was enforced by the Prettier code formatting tool. We run eslint as a part of our continuous integration testing to ensure that new code being added to the main repository adheres to the code style. Furthermore, type safety at the static analysis level was added by using TypeScript over vanilla JavaScript.
+
+\section{Supporting Material}
+For the descriptions of modules and functional requriements mentioned in the tables above along with other details of our requirements, design and hazard analysis, please refer to the prior submitted documents.
+\begin{comment}
+\begin{thebibliography}{9}
+\bibitem{website}
+S. Liu, “Canada most popular desktop browsers 2021,” Statista, 04-Oct-2021. [Online]. Available: https://www.statista.com/statistics/499462/most-popular-desktop-browsers-in-canada-by-market-share/. [Accessed: 17-Oct-2021]. 
+\end{thebibliography}
+\end{comment}
+%\printglossary[type=\acronymtype]
+
+\end{document}
+
+
