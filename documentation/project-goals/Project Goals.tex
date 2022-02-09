@@ -14,6 +14,7 @@
 \usepackage{verbatim}
 \usepackage{listings}
 \usepackage{color}
+\usepackage[normalem]{ulem}
 \usepackage{hyperref}
 \usepackage{cancel}
 \usepackage{graphicx}    %  in the preamble
@@ -48,7 +49,7 @@
 \vspace*{\fill}
 \begin{center}
 
-  {\Huge \textbf{Project Goals}}\\
+  {\Huge \textbf{Project Goals Rev1}}\\
 \hrulefill\\[2mm]
   {\huge \textbf{Book Bazar}}\\[2mm]
 {\large \today}\\[15mm]
@@ -94,7 +95,7 @@ Help buyers and sellers interact with each other easily. & Our platform should p
 \hline
 Allow sellers to easily fill in textbook details. & Reduce the amount of manual input required to create a textbook listing compared to existing platforms. & Saves users time and effort when they are listing their textbooks.\\
 \hline
- Scalable to any number of post-secondary institutions. & The application needs to be scalable to different educational institutions and their students’ needs. & Future expansion of the service should take minimal effort.\\
+\sout{Scalable to any number of post-secondary institutions.} & \sout{The application needs to be scalable to different educational institutions and their students’ needs.} & \sout{Future expansion of the service should take minimal effort.}\\
 \hline
 Authenticate and verify users of the platform. & Verify that users utilizing the app attend the post-secondary institution they are registered within. & This builds a stronger buyer/seller trust relationship by limiting the pool of users and ensuring that they are registered students.\\
 \hline
@@ -104,29 +105,12 @@ Accessible from any device. & The user should be able to use all the features of
 \end{tabular}
 \ec
 
+\section{Revisions made in Rev1}
+\be
 
-\section{Stretch Goals}
-\bc
-
-\begin{tabular}{| p{4cm}| p{4cm}| p{4cm}|}
-
-\hline
- \rowcolor{lightgray} 
-\textbf{Goals} & \textbf{Explanations} &\textbf{Reasoning}\\
-\hline
-Provide tools to moderate misconduct on the platform. & Provide tools to report users and content that does not adhere to the code of conduct. & This can create a safer environment for users of the app.\\
-\hline
-Warn users about old textbook editions. &Inform buyers if the book being sold is an older edition than the one prescribed by the course. & Give users confidence that the textbook they are buying meets their needs.\\
-\hline
-Allow a user to create a post using information gathered from an image of the textbook. & Automatically fills out the name, author, edition, and other information about a textbook given its image. & This will simplify the process of creating a post. In turn, this may result in more sellers using the platform.\\
-\hline
-Facilitate bidding on textbooks. & Allow sellers to auction their books to the buyers with the most competitive price. &This will simplify the price negotiation process between buyers and sellers and ensure that the best price is found given the supply and demand.\\
-\hline
-Have a ``Favourites List''. & Allow users to shortlist books/post they find desirable. & This will allow users to accumulate all their books in one place as opposed to having to search for each book separately.\\
-\hline
-\end{tabular}
-\ec
-
+	\item Stretch goals were removed as the team does not believe that it has the resources to achieve them.
+	\item One of the goals regarding scalability of the project was striken out because, while being feasible, it was a goal that would necessitate a lot of the team's resources. This goal wasn't on the team's contract and so, was dropped by the team.
+\ee
 \end{document}
 
 
