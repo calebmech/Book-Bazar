@@ -25,7 +25,7 @@ async function getCourseWithBooksHandler(req: NextApiRequest, res: NextApiRespon
   if (!parsedCode) {
     return res.status(StatusCodes.BAD_REQUEST).end();
   }
-  console.log(parsedCode);
+
   const course = await getCourseWithBooks(parsedCode);
 
   if (!course) {
