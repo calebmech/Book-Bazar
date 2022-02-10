@@ -8,9 +8,11 @@ import {
   HStack,
   Icon,
   Image,
+  Skeleton,
   Text,
 } from "@chakra-ui/react";
 import { PencilAltIcon, MailIcon, ChatIcon } from "@heroicons/react/solid";
+import ErrorPage from 'next/error'
 import Layout from "@components/Layout";
 import UserWithAvatar from "@components/UserWithAvatar";
 import { useBookQuery } from "@lib/hooks/book";
@@ -19,24 +21,24 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import { PostCardList } from "@components/CardList";
 import { useUserQuery } from "@lib/hooks/user";
-import moment from "moment";
 import DeletePostForm from "@components/post-page/DeletePostForm";
 import { resolveImageUrl } from "@lib/helpers/frontend/resolve-image-url";
+import { timeSinceDateString } from "@lib/helpers/frontend/time-between-dates";
 
 const PostPage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { data: post } = usePostQuery(id);
+  const { data: post, isLoading } = usePostQuery(id);
   const { data: book } = useBookQuery(post?.book.isbn);
   const { user } = useUserQuery();
 
   if (!post) {
-    return null;
+    if (isLoading) return null;
+    return <ErrorPage statusCode={404} />;
   }
 
-  const time = moment(post.createdAt);
-
   const isPostOwnedByUser = post.user ? user?.id === post.user.id : false;
+  const timeSincePost = timeSinceDateString(new Date(post.createdAt));
 
   var buttonText: string;
   var buttonFragment: React.ReactNode;
@@ -124,10 +126,7 @@ const PostPage: NextPage = () => {
 
           <HStack>
             <UserWithAvatar user={post.user} />
-            <Text>Posted {time.fromNow()}</Text>
-            {moment().diff(time, "hours") < 24 && (
-              <Badge colorScheme="teal">New</Badge>
-            )}
+            <Text>Posted {timeSincePost} ago</Text>
           </HStack>
 
           <Text mt="2">{post.description}</Text>
@@ -135,6 +134,7 @@ const PostPage: NextPage = () => {
         <Box>
           <Text fontWeight="bold">{buttonText}</Text>
           <HStack>{buttonFragment}</HStack>
+          
         </Box>
       </Flex>
     </Grid>
