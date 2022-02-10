@@ -13,8 +13,10 @@ import {
   OfficeBuildingIcon,
   CalendarIcon,
   BookOpenIcon,
-  ViewBoardsIcon
-} from "@heroicons/react/solid"
+  ViewBoardsIcon,
+  AcademicCapIcon,
+  ExternalLinkIcon,
+} from "@heroicons/react/solid";
 import Image from "next/image";
 import { PostCardList } from "@components/CardList";
 import Layout from "@components/Layout";
@@ -41,12 +43,20 @@ const BookPage: NextPage = () => {
   });
 
   const courseBadges: React.ReactFragment = (
-    <Wrap justify="space-between">
+    <Wrap>
       {book.courses.map((course, i) => (
-        <Link key={i} href={"/course/" + course.id} passHref>
-          <Badge variant="subtle" colorScheme="teal" cursor="pointer">
-            {course.name}
-          </Badge>
+        <Link
+          key={i}
+          href={"/course/" + course.dept.abbreviation + "-" + course.code}
+          passHref
+        >
+          <Button
+            size="xs"
+            colorScheme="teal"
+            leftIcon={<Icon as={AcademicCapIcon} />}
+          >
+            {course.dept.abbreviation + "-" + course.code}
+          </Button>
         </Link>
       ))}
     </Wrap>
@@ -77,14 +87,16 @@ const BookPage: NextPage = () => {
           justifyContent="center"
           alignItems="center"
           background="tertiaryBackground"
-          borderRadius='lg'
+          borderRadius="lg"
         >
-          <Image
-            alt="book-image"
-            src={resolveImageUrl(book)}
-            width="128px"
-            height="180px"
-          />
+          <Box width="128px" height="100%" position="relative">
+            <Image
+              alt="book-image"
+              src={resolveImageUrl(book)}
+              layout="fill"
+              objectFit="contain"
+            />
+          </Box>
         </Flex>
       </Box>
 
@@ -101,7 +113,7 @@ const BookPage: NextPage = () => {
 
           <Box mt="2">
             <HStack justify="space-between" color="tertiaryText">
-              <HStack direction="row" >
+              <HStack direction="row">
                 <Icon as={OfficeBuildingIcon} />
                 <Text> Publisher </Text>
               </HStack>
@@ -109,14 +121,13 @@ const BookPage: NextPage = () => {
                 <Icon as={CalendarIcon} />
                 <Text> Published Date </Text>
               </HStack>
-              
             </HStack>
             <HStack justify="space-between" fontSize="xl" fontStyle="bold">
               <Text>{googleBook?.publisher ?? "-"}</Text>
               <Text>{googleBook?.publishedDate ?? "-"}</Text>
             </HStack>
             <HStack justify="space-between" color="tertiaryText">
-              <HStack direction="row" >
+              <HStack direction="row">
                 <Icon as={ViewBoardsIcon} />
                 <Text> ISBN </Text>
               </HStack>
@@ -124,7 +135,6 @@ const BookPage: NextPage = () => {
                 <Icon as={BookOpenIcon} />
                 <Text> Page Count </Text>
               </HStack>
-              
             </HStack>
             <HStack justify="space-between" fontSize="xl" fontStyle="bold">
               <Text>{isbn && !Array.isArray(isbn) ? isbn : ""}</Text>
@@ -133,7 +143,11 @@ const BookPage: NextPage = () => {
           </Box>
         </Flex>
         {googleBook && (
-          <Button mt='1' onClick={() => window.open(googleBook.infoLink)}>
+          <Button
+            mt="1"
+            onClick={() => window.open(googleBook.infoLink)}
+            rightIcon={<Icon as={ExternalLinkIcon} />}
+          >
             View On Google Books
           </Button>
         )}

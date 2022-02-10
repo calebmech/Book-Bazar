@@ -15,8 +15,8 @@ const config: ThemeOverride = {
         _dark: "gray.700",
       },
       tertiaryBackground: {
-        default: "gray.300",
-        _dark: "gray.700",
+        default: "gray.100",
+        _dark: "gray.900",
       },
       secondaryText: {
         default: "gray.600",
