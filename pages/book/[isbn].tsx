@@ -1,5 +1,21 @@
-import { Badge, Box, Button, Flex, Grid, HStack, Spacer, Text, Wrap } from "@chakra-ui/react";
-import Image from 'next/image'
+import {
+  Badge,
+  Box,
+  Button,
+  Flex,
+  Grid,
+  HStack,
+  Icon,
+  Text,
+  Wrap,
+} from "@chakra-ui/react";
+import {
+  OfficeBuildingIcon,
+  CalendarIcon,
+  BookOpenIcon,
+  ViewBoardsIcon
+} from "@heroicons/react/solid"
+import Image from "next/image";
 import { PostCardList } from "@components/CardList";
 import Layout from "@components/Layout";
 import { useBookQuery } from "@lib/hooks/book";
@@ -17,93 +33,113 @@ const BookPage: NextPage = () => {
   }
   const { name, googleBook, posts } = book;
 
-  const postsWithBookIncluded = posts.map(post => {
+  const postsWithBookIncluded = posts.map((post) => {
     return {
       ...post,
       book: book,
-    }
-  })
+    };
+  });
 
   const courseBadges: React.ReactFragment = (
-    <Wrap justify='space-between'>
+    <Wrap justify="space-between">
       {book.courses.map((course, i) => (
-        <Link key={i} href={'/course/' + course.id} passHref>
-          <Badge variant='subtle' colorScheme='teal' cursor='pointer'>
+        <Link key={i} href={"/course/" + course.id} passHref>
+          <Badge variant="subtle" colorScheme="teal" cursor="pointer">
             {course.name}
           </Badge>
         </Link>
       ))}
     </Wrap>
-  ) 
+  );
 
   const bookInfo: React.ReactNode = (
-    <Grid 
-      width='100%' 
+    <Grid
+      width="100%"
       templateColumns={{
         base: "256px 1fr",
       }}
       templateRows={{
-        base: '300px',
+        base: "300px",
       }}
       templateAreas={{
-        sm: `'image image' 'info info'`, 
+        base: `'image image' 'info info'`,
         md: `'image info'`,
       }}
-      gap={8}
+      gap={{
+        base: 4,
+        md: 8,
+      }}
     >
-      <Box gridArea='image'>
-        <Flex 
-          direction='row' 
-          h='100%' 
-          justifyContent='center' 
-          alignItems='center' 
+      <Box gridArea="image">
+        <Flex
+          direction="row"
+          h="100%"
+          justifyContent="center"
+          alignItems="center"
+          background="tertiaryBackground"
+          borderRadius='lg'
         >
-          <Image 
-            alt='book-image' 
+          <Image
+            alt="book-image"
             src={resolveImageUrl(book)}
-            width='128px'
-            height='180px'
-          />  
+            width="128px"
+            height="180px"
+          />
         </Flex>
       </Box>
 
-      <Flex gridArea='info' direction='column' justify='space-between'>
-        <Flex direction='column'>
-          <Text fontSize='2xl' fontWeight='bold' >
+      <Flex gridArea="info" direction="column" justify="space-between">
+        <Flex direction="column">
+          <Text fontSize="2xl" fontWeight="bold">
             {name}
           </Text>
-          <Text
-            fontSize='lg'
-            fontWeight='semibold'
-            color='secondaryText'
-          >
-            {googleBook?.authors?.join(', ')}
+          <Text fontSize="lg" fontWeight="semibold" color="secondaryText">
+            {googleBook?.authors?.join(", ")}
           </Text>
 
           {courseBadges}
 
-          <Box mt='2'>
-            <BookInfoRow 
-              firstTitle='Publisher'
-              secondTitle='Published Date'
-              firstInfo={googleBook?.publisher} 
-              secondInfo={googleBook?.publishedDate}          
-            />
-            <BookInfoRow 
-              firstTitle='ISBN'
-              secondTitle='Page Count'
-              firstInfo={isbn && !Array.isArray(isbn) ? isbn  : ''} 
-              secondInfo={googleBook?.pageCount?.toString()}          
-            />        
+          <Box mt="2">
+            <HStack justify="space-between" color="tertiaryText">
+              <HStack direction="row" >
+                <Icon as={OfficeBuildingIcon} />
+                <Text> Publisher </Text>
+              </HStack>
+              <HStack>
+                <Icon as={CalendarIcon} />
+                <Text> Published Date </Text>
+              </HStack>
+              
+            </HStack>
+            <HStack justify="space-between" fontSize="xl" fontStyle="bold">
+              <Text>{googleBook?.publisher ?? "-"}</Text>
+              <Text>{googleBook?.publishedDate ?? "-"}</Text>
+            </HStack>
+            <HStack justify="space-between" color="tertiaryText">
+              <HStack direction="row" >
+                <Icon as={ViewBoardsIcon} />
+                <Text> ISBN </Text>
+              </HStack>
+              <HStack>
+                <Icon as={BookOpenIcon} />
+                <Text> Page Count </Text>
+              </HStack>
+              
+            </HStack>
+            <HStack justify="space-between" fontSize="xl" fontStyle="bold">
+              <Text>{isbn && !Array.isArray(isbn) ? isbn : ""}</Text>
+              <Text>{googleBook?.pageCount?.toString() ?? "-"}</Text>
+            </HStack>
           </Box>
         </Flex>
-        {googleBook && <Button onClick={() => window.open(googleBook.infoLink)}>
-          View On Google Books
-        </Button>}
+        {googleBook && (
+          <Button mt='1' onClick={() => window.open(googleBook.infoLink)}>
+            View On Google Books
+          </Button>
+        )}
       </Flex>
     </Grid>
-  )
-  
+  );
 
   return (
     <Layout extendedHeader={bookInfo}>
@@ -111,35 +147,5 @@ const BookPage: NextPage = () => {
     </Layout>
   );
 };
-
-type BookInfoRowProps = {
-  firstTitle: string;
-  secondTitle: string;
-  firstInfo: string | undefined;
-  secondInfo: string | undefined;
-}
-
-const BookInfoRow = ({firstTitle, secondTitle, firstInfo, secondInfo}: BookInfoRowProps) => {
-  return (
-    <>
-      <HStack justify='space-between' color='tertiaryText'>
-        <Text>
-          {firstTitle}
-        </Text>
-        <Text>
-          {secondTitle}
-        </Text>
-      </HStack>
-      <HStack justify='space-between' fontSize='xl' fontStyle='bold'>
-        <Text>
-          {firstInfo ? firstInfo : '-'}
-        </Text>
-        <Text>
-          {secondInfo ? secondInfo : '-'}
-        </Text>
-      </HStack>
-    </>
-  )
-}
 
 export default BookPage;
