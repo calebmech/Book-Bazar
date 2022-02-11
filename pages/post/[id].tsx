@@ -55,15 +55,6 @@ const PostPage: NextPage = () => {
       };
     });
 
-  const cannedMessage =
-    "Hi " +
-    post.user.name +
-    '! I am interested in the book you posted on Book Bazar "' +
-    post.book.name +
-    '". \n' +
-    window.location.href +
-    "\nIs it still available?";
-
   var buttonText: string;
   var buttonFragment: React.ReactNode;
   if (isPostOwnedByUser) {
@@ -77,6 +68,14 @@ const PostPage: NextPage = () => {
       </>
     );
   } else if (user) {
+    const cannedMessage =
+      "Hi " +
+      post.user.name +
+      '! I am interested in the book you posted on Book Bazar "' +
+      post.book.name +
+      '". \n' +
+      window.location.href +
+      "\nIs it still available?";
     const users = encodeURIComponent(post.user.email);
     const message = encodeURIComponent(cannedMessage);
     const parameters = `?users=${users}&message=${message}`;
