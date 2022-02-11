@@ -4,6 +4,14 @@ const config: ThemeOverride = {
   config: {
     useSystemColorMode: true,
   },
+  colors: {
+    microsoftTeams: {
+      200: "#7B83EB",
+      300: "#505AC9",
+      500: "#505AC9",
+      600: "#464EB8",
+    }
+  },
   semanticTokens: {
     colors: {
       primaryBackground: {

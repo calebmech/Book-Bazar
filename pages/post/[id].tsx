@@ -1,18 +1,22 @@
 import {
-  Badge,
   Box,
   Button,
   Flex,
   Grid,
-  Heading,
   HStack,
   Icon,
   Image,
   Skeleton,
   Text,
+  Link as ChakraLink,
 } from "@chakra-ui/react";
-import { PencilAltIcon, MailIcon, ChatIcon } from "@heroicons/react/solid";
-import ErrorPage from 'next/error'
+import {
+  PencilAltIcon,
+  MailIcon,
+  ChatIcon,
+  BookOpenIcon,
+} from "@heroicons/react/solid";
+import ErrorPage from "next/error";
 import Layout from "@components/Layout";
 import UserWithAvatar from "@components/UserWithAvatar";
 import { useBookQuery } from "@lib/hooks/book";
@@ -24,21 +28,41 @@ import { useUserQuery } from "@lib/hooks/user";
 import DeletePostForm from "@components/post-page/DeletePostForm";
 import { resolveImageUrl } from "@lib/helpers/frontend/resolve-image-url";
 import { timeSinceDateString } from "@lib/helpers/frontend/time-between-dates";
+import Link from "next/link";
 
 const PostPage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { data: post, isLoading } = usePostQuery(id);
-  const { data: book } = useBookQuery(post?.book.isbn);
+  const { data: post, isLoading: postIsLoading } = usePostQuery(id);
+  const { data: book, isLoading: bookIsLoading } = useBookQuery(
+    post?.book.isbn
+  );
   const { user } = useUserQuery();
 
   if (!post) {
-    if (isLoading) return null;
+    if (postIsLoading) return null;
     return <ErrorPage statusCode={404} />;
   }
 
-  const isPostOwnedByUser = post.user ? user?.id === post.user.id : false;
   const timeSincePost = timeSinceDateString(new Date(post.createdAt));
+  const isPostOwnedByUser = post.user ? user?.id === post.user.id : false;
+  const otherPostsForBook = book?.posts
+    .filter((p) => p.id !== post.id)
+    .map((p) => {
+      return {
+        ...p,
+        book: book,
+      };
+    });
+
+  const cannedMessage =
+    "Hi " +
+    post.user.name +
+    '! I am interested in the book you posted on Book Bazar "' +
+    post.book.name +
+    '". \n' +
+    window.location.href +
+    "\nIs it still available?";
 
   var buttonText: string;
   var buttonFragment: React.ReactNode;
@@ -53,105 +77,120 @@ const PostPage: NextPage = () => {
       </>
     );
   } else if (user) {
+    const users = encodeURIComponent(post.user.email);
+    const message = encodeURIComponent(cannedMessage);
+    const parameters = `?users=${users}&message=${message}`;
+    const teamsDeepLink = "https://teams.microsoft.com/l/chat/0/0" + parameters;
+
     buttonText = "Contact Seller";
     buttonFragment = (
       <>
-        <Button
-          leftIcon={<Icon as={MailIcon} />}
-          colorScheme="messenger"
-          onClick={() => window.open("mailto:" + post.user.email)}
+        <ChakraLink
+          href={teamsDeepLink}
+          _hover={{ textDecoration: "none" }}
+          isExternal
         >
-          Email
-        </Button>
-        <Button
-          leftIcon={<Icon as={ChatIcon} />}
-          colorScheme="teal"
-          onClick={() =>
-            window.open(
-              "https://teams.microsoft.com/l/chat/0/0?users=" + post.user.email
-            )
-          }
+          <Button
+            leftIcon={<Icon as={ChatIcon} />}
+            colorScheme="microsoftTeams"
+          >
+            Microsoft Teams
+          </Button>
+        </ChakraLink>
+        <ChakraLink
+          href={"mailto:" + post.user.email}
+          _hover={{ textDecoration: "none" }}
+          isExternal
         >
-          Microsoft Teams
-        </Button>
+          <Button leftIcon={<Icon as={MailIcon} />} colorScheme="blue">
+            Email
+          </Button>
+        </ChakraLink>
       </>
     );
   } else {
     buttonText = "Sign in to interact with the owner of this post.";
   }
 
-  const headerSection = (
+  const postInfo = (
     <Grid
       width="100%"
       templateColumns={{
-        base: "300px 1fr",
+        base: "256px 1fr",
       }}
       templateRows={{
-        base: "400px",
+        base: "300px",
       }}
       templateAreas={{
-        sm: `'image image' 'info info'`,
+        base: `'image image' 'info info'`,
         md: `'image info'`,
       }}
-      gap={8}
+      gap={{
+        base: 4,
+        md: 8,
+      }}
     >
-      <Flex gridArea="image" direction="row" justifyContent="center">
-        <Box
-          shadow="md"
-          h="400px"
-          w="300px"
-          borderRadius="md"
+      <Box gridArea="image">
+        <Flex
+          direction="row"
+          h="100%"
+          w="100%"
+          justifyContent="center"
+          alignItems="center"
+          background="tertiaryBackground"
+          borderRadius="lg"
           overflow="hidden"
         >
-          <Image
-            alt="book-image"
-            src={post.imageUrl ?? resolveImageUrl(book)}
-            width="300px"
-            height="400px"
-          />
-        </Box>
-      </Flex>
+          <Box >
+            <Image
+              alt="book-image"
+              src={post.imageUrl || resolveImageUrl(book)}
+              width="100%"
+              height="100%"
+              objectFit="contain"
+              maxH="322px"
+            />
+          </Box>
+        </Flex>
+      </Box>
 
-      <Flex
-        gridArea="info"
-        direction="column"
-        justifyContent="space-between"
-        minH="200px"
-      >
+      <Flex gridArea="info" direction="column" justifyContent="space-between">
         <Box>
-          <HStack alignItems="flex-start">
-            <Heading>{book?.name}</Heading>
-            <Heading color="teal">${post.price}</Heading>
+          <HStack fontSize="2xl" fontWeight="bold">
+            <Skeleton isLoaded={!bookIsLoading}>
+              <Text>{book?.name ?? "Placeholder for Skeleton"}</Text>
+            </Skeleton>
+            <Text color="teal">${post.price/100}</Text>
           </HStack>
 
           <HStack>
             <UserWithAvatar user={post.user} />
             <Text>Posted {timeSincePost} ago</Text>
+            <Link href={"/book/" + book?.isbn} passHref>
+              <Button
+                size="xs"
+                mt="2"
+                leftIcon={<Icon as={BookOpenIcon} />}
+                colorScheme="teal"
+              >
+                Book Page
+              </Button>
+            </Link>
           </HStack>
-
-          <Text mt="2">{post.description}</Text>
+          {/* max ~390 characters for description*/}
+          <Text mt="2" noOfLines={6}>{post.description}</Text>
         </Box>
         <Box>
           <Text fontWeight="bold">{buttonText}</Text>
           <HStack>{buttonFragment}</HStack>
-          
         </Box>
       </Flex>
     </Grid>
   );
 
-  const otherPosts = book?.posts
-    .filter((p) => p.id !== post.id)
-    .map((p) => {
-      return {
-        ...p,
-        book: book,
-      };
-    });
-
   return (
-    <Layout extendedHeader={headerSection}>
-      <PostCardList posts={otherPosts ?? []} isLinkActive />
+    <Layout extendedHeader={postInfo}>
+      <PostCardList posts={otherPostsForBook ?? []} isLinkActive />
     </Layout>
   );
 };
