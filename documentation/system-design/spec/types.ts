@@ -232,6 +232,6 @@ export const CourseCodeType: Type = {
   kind: TypeKind.TUPLE,
   values: {
     deptAbbreviation: "string",
-    description: "string",
+    code: "string",
   },
 };
