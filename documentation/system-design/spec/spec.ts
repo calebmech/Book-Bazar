@@ -674,11 +674,12 @@ const MagicLinkServiceModule: Module = {
           name: "sendMagicLink",
           in: {
             email: "string",
+            redirectUrl: "string",
           },
           out: [],
           semantics: [
             "Creates a new verification email database entry that expires one hour from the current time",
-            "Sends a email with a login link to \\texttt{/magic?token=VERIFICATION\\_TOKEN} to the specified email",
+            "Sends a email with a login link to \\texttt{/magic?token=VERIFICATION\\_TOKEN&redirectUrl=REDIRECT\\_PATH} to the specified email",
           ],
         },
         {

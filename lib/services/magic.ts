@@ -15,7 +15,10 @@ function getMagicLinkExpirationDate(): Date {
   return new Date(Date.now() + 1000 * 60 * 60); // 1 hour from now
 }
 
-export async function sendMagicLink(email: string): Promise<void> {
+export async function sendMagicLink(
+  email: string,
+  redirectUrl?: string
+): Promise<void> {
   const token = createToken();
   const hashedToken = hashToken(token);
 
@@ -29,9 +32,13 @@ export async function sendMagicLink(email: string): Promise<void> {
     },
   });
 
-  const magicLink = `https://${BASE_URL}/magic?token=${encodeURIComponent(
-    token
-  )}`;
+  const searchParams = new URLSearchParams();
+  searchParams.set("token", token);
+  if (redirectUrl) {
+    searchParams.set("redirectUrl", redirectUrl);
+  }
+
+  const magicLink = `https://${BASE_URL}/magic?${searchParams.toString()}`;
 
   sgMail.setApiKey(SENDGRID_API_KEY);
 
