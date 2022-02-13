@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { HttpMethod } from "@lib/http-method";
 import { getCourseWithBooks } from "@lib/services/course";
 import { StatusCodes } from "http-status-codes";
-import { validate } from 'uuid';
+import { parseCourseCode } from '@lib/helpers/backend/parse-course-code';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method as HttpMethod) {
@@ -14,19 +14,19 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function getCourseWithBooksHandler(req: NextApiRequest, res: NextApiResponse) {
-  const { id } = req.query;
+  const { code } = req.query;
 
-  if (Array.isArray(id)) {
-    return res.status(StatusCodes.BAD_REQUEST).end();
-  }
-  
-  const courseID = id as string;
-
-  if (!validate(courseID)) {
+  if (Array.isArray(code)) {
     return res.status(StatusCodes.BAD_REQUEST).end();
   }
 
-  const course = await getCourseWithBooks(courseID);
+  const parsedCode = parseCourseCode(code as string)
+
+  if (!parsedCode) {
+    return res.status(StatusCodes.BAD_REQUEST).end();
+  }
+
+  const course = await getCourseWithBooks(parsedCode);
 
   if (!course) {
     return res.status(StatusCodes.NOT_FOUND).end();

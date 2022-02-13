@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { useBookQuery } from "@lib/hooks/book";
 import { Book } from "@prisma/client";
 import Link from "next/link";
+import { resolveImageUrl } from "@lib/helpers/frontend/resolve-image-url";
 
 type BookCardProps = {
   book: Book;
@@ -10,7 +11,7 @@ type BookCardProps = {
 }
 
 export default function BookCard({ book, isLinkActive }: BookCardProps) {
-  const { name, imageUrl, isbn } = book;
+  const { name, isbn } = book;
   const { isLoading, data: populatedBook } = useBookQuery(isbn);
   let authorString: string = "-";
   
@@ -21,7 +22,7 @@ export default function BookCard({ book, isLinkActive }: BookCardProps) {
   const card = (
     <Box
       overflow='hidden'
-      maxW='140px'
+      maxW='128px'
       mb='3'
       mr='3'
       shadow='md'
@@ -32,12 +33,13 @@ export default function BookCard({ book, isLinkActive }: BookCardProps) {
       transition='0.3s'
       cursor={isLinkActive ? 'pointer' : 'cursor'}
     >
-      <Image 
-        width='140px'
-        height='190px'
-        src={imageUrl || ''} 
-        alt='book-image'
-      />
+      <Box width='100%' height='180px' position='relative' >
+        <Image 
+          layout="fill"
+          src={resolveImageUrl(populatedBook)} 
+          alt='book-image'
+        />
+      </Box>
 
       <Flex p='3' flexDir='column'>
         <Heading 

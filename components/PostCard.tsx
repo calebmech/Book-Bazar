@@ -4,6 +4,7 @@ import { useBookQuery } from "@lib/hooks/book";
 import { PostWithBookWithUser } from "@lib/services/post";
 import UserWithAvatar from "./UserWithAvatar";
 import Link from "next/link";
+import { resolveImageUrl } from "@lib/helpers/frontend/resolve-image-url";
 
 type PostCardProps = {
   post: PostWithBookWithUser;
@@ -11,10 +12,9 @@ type PostCardProps = {
 }
 
 export default function PostCard({ post, isLinkActive}: PostCardProps) {
-  const { id, price, description, user, bookId, imageUrl } = post;
-  const { isLoading: isBookLoading, data: book } = useBookQuery(bookId);
-  const bookName = book?.name || '-';
-  const authors = book?.googleBook?.authors?.join(',') || '-';
+  const { id, price, description, user, book, imageUrl } = post;
+  const { isLoading: isBookLoading, data: populatedBook } = useBookQuery(book.isbn);
+  const authors = populatedBook?.googleBook?.authors?.join(',') || '-';
 
   const card = (
     <Flex
@@ -33,7 +33,7 @@ export default function PostCard({ post, isLinkActive}: PostCardProps) {
       <Image 
         height='220px'
         width='160px'
-        src={imageUrl || book?.imageUrl || book?.googleBook?.imageLinks?.small || "https://via.placeholder.com/150"} 
+        src={imageUrl || resolveImageUrl(populatedBook)} 
         alt="book-image" 
       />
 
@@ -47,7 +47,7 @@ export default function PostCard({ post, isLinkActive}: PostCardProps) {
         <Box >
           <Skeleton isLoaded={!isBookLoading}>
             <Text fontWeight='semibold' isTruncated>
-              {bookName}
+              {book.name}
             </Text>
           </Skeleton>     
           <Skeleton isLoaded={!isBookLoading}>
