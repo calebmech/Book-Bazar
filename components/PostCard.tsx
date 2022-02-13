@@ -24,13 +24,68 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
   const authors = populatedBook?.googleBook?.authors?.join(", ") || "-";
 
   const card = (
-    <Flex
-      w="490px"
+    <Grid
+      templateColumns={{
+        base: "160px 1fr",
+      }}
+      templateRows={{
+        base: "220px",
+      }}
+      templateAreas={{
+        base: `'image info'`,
+      }}
       background="secondaryBackground"
       overflow="hidden"
       borderRadius="lg"
-      mb="3"
-      mx="3"
+      direction="row"
+      shadow="md"
+      _hover={{ shadow: "xl" }}
+      transition="0.3s"
+      cursor={isLinkActive ? "pointer" : "cursor"}
+    >
+      <Box gridArea="image" height="220px" width="160px" position="relative">
+        <Image
+          layout="fill"
+          src={imageUrl || resolveImageUrl(populatedBook)}
+          alt="book-image"
+        />
+      </Box>
+
+      <Flex
+        gridArea="info"
+        direction="column"
+        justify="space-between"
+        fontSize="sm"
+        p="4"
+      >
+        <Box>
+          <Skeleton isLoaded={!isBookLoading}>
+            <Text fontWeight="semibold" isTruncated>
+              {book.name}
+            </Text>
+          </Skeleton>
+          <Skeleton isLoaded={!isBookLoading}>
+            <Text mt="1" color="secondaryText" isTruncated>
+              {authors}
+            </Text>
+          </Skeleton>
+          <Text fontWeight="bold" fontSize="xl">
+            ${price / 100}
+          </Text>
+          <Text color="secondaryText" noOfLines={3}>
+            {description}
+          </Text>
+        </Box>
+        <UserWithAvatar user={user} />
+      </Flex>
+    </Grid>
+  );
+
+  const card2 = (
+    <Flex
+      background="secondaryBackground"
+      overflow="hidden"
+      borderRadius="lg"
       direction="row"
       shadow="md"
       _hover={{ shadow: "xl" }}

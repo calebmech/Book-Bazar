@@ -41,6 +41,49 @@ const CoursePage: NextPage = () => {
   const posts = postsData ? postsData : [];
   const morePosts = postsSecondData ? postsSecondData.length !== 0 : false;
 
+  const bookGrid = (
+    <Grid
+      mt="3"
+      templateColumns={{
+        base: "repeat(auto-fill, minmax(128px, 1fr))",
+      }}
+      gap={{
+        base: 4,
+        md: 2,
+      }}
+    >
+      {books.map((book, i) => {
+        return (
+          <GridItem key={i} justifyContent="center">
+            <BookCard book={book} isLinkActive={true} />
+          </GridItem>
+        );
+      })}
+    </Grid>
+  );
+
+  const postGrid = (
+    <Grid
+      mt="3"
+      templateColumns={{
+        base: "repeat(auto-fill, minmax(380px, 1fr))",
+        md: "repeat(auto-fill, minmax(340px, 1fr))",
+      }}
+      gap={{
+        base: 4,
+        md: 2,
+      }}
+    >
+      {posts.map((post, i) => {
+        return (
+          <GridItem key={i} justifyContent="center">
+            <PostCard post={post} isLinkActive={true} />
+          </GridItem>
+        );
+      })}
+    </Grid>
+  );
+
   return (
     <>
       <Head>
