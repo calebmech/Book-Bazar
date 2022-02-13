@@ -8,19 +8,38 @@ import { BookCardList, PostCardList } from "@components/CardList";
 import pageTitle from "@lib/helpers/frontend/page-title";
 import Head from "next/head";
 
+const MAX_NUM_POSTS = 4
+
 const CoursePage: NextPage = () => {
   const router = useRouter();
-  const { code } = router.query;
+  const { code, page: pageString } = router.query;
   const { isLoading: isLoadingCourseData, data: courseData } =
     useCourseQuery(code);
-  const { data: postsData } = useCoursePostsQuery(code);
+    var page: number;
+
+  if (!pageString || Array.isArray(pageString)) {
+    page = 0;
+  } else {
+    page = Number.parseInt(pageString);
+  }
+
+  const { data: postsData } = useCoursePostsQuery(code, page, MAX_NUM_POSTS);
+  const { data: postsSecondData } = useCoursePostsQuery(
+    code,
+    page + 1,
+    MAX_NUM_POSTS
+  );
 
   if (!courseData && !isLoadingCourseData) {
     return <ErrorPage statusCode={404} />;
   }
 
+  const courseName = courseData
+    ? courseData.name + " " + courseData.code
+    : "PlaceHolder";
   const books = courseData ? courseData.books : [];
   const posts = postsData ? postsData : [];
+  const morePosts = postsSecondData ? postsSecondData.length !== 0 : false;
 
   return (
     <>
