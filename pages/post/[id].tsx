@@ -5,7 +5,6 @@ import {
   Grid,
   HStack,
   Icon,
-  Image,
   Skeleton,
   Text,
   Link as ChakraLink,
@@ -16,6 +15,7 @@ import {
   ChatIcon,
   BookOpenIcon,
 } from "@heroicons/react/solid";
+import Image from "next/image";
 import ErrorPage from "next/error";
 import Layout from "@components/Layout";
 import UserWithAvatar from "@components/UserWithAvatar";
@@ -140,14 +140,12 @@ const PostPage: NextPage = () => {
           borderRadius="lg"
           overflow="hidden"
         >
-          <Box >
+          <Box width="110%" height="110%" position='relative'>
             <Image
-              alt="book-image"
+              alt="post-image"
               src={post.imageUrl || resolveImageUrl(book)}
-              width="100%"
-              height="100%"
+              layout="fill"
               objectFit="contain"
-              maxH="322px"
             />
           </Box>
         </Flex>
@@ -159,7 +157,7 @@ const PostPage: NextPage = () => {
             <Skeleton isLoaded={!bookIsLoading}>
               <Text>{book?.name ?? "Placeholder for Skeleton"}</Text>
             </Skeleton>
-            <Text color="teal">${post.price/100}</Text>
+            <Text color="teal">${post.price / 100}</Text>
           </HStack>
 
           <HStack>
@@ -177,7 +175,9 @@ const PostPage: NextPage = () => {
             </Link>
           </HStack>
           {/* max ~390 characters for description*/}
-          <Text mt="2" noOfLines={6}>{post.description}</Text>
+          <Text mt="2" noOfLines={6}>
+            {post.description}
+          </Text>
         </Box>
         <Box>
           <Text fontWeight="bold">{buttonText}</Text>
