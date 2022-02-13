@@ -4,7 +4,6 @@
 
 import { Text, Box, Heading, Link } from "@chakra-ui/react";
 import React from "react";
-import { useRouter } from "next/router";
 import { CourseWithDept } from "@lib/services/course";
 
 type CourseCardProps = {
@@ -13,18 +12,13 @@ type CourseCardProps = {
 };
 
 export default function CourseCard({ course, isLinkActive }: CourseCardProps) {
-  const router = useRouter();
+  const { name, dept, code } = course;
 
-  const { id, name, dept, code } = course;
-
-  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
-    e.preventDefault();
-    router.push(`/course/${id}`);
-  };
+  const truncatedName =
+    name && name!.length > 40 ? name?.substring(0, 40).trim() + "..." : name;
 
   const card = (
     <Box
-      minW="sm"
       borderWidth="1px"
       borderRadius="lg"
       backgroundColor="secondaryBackground"
@@ -32,19 +26,20 @@ export default function CourseCard({ course, isLinkActive }: CourseCardProps) {
       _hover={{ shadow: "xl" }}
       transition="0.3s"
       cursor={isLinkActive ? "pointer" : "cursor"}
-      onClick={handleClick}
     >
       <Heading m="5" mb="0" as="h4" size="md">
         {`${dept.abbreviation} ${code}`}
       </Heading>
       <Text m="5" mt="0">
-        {name || "-"}
+        {truncatedName || "-"}
       </Text>
     </Box>
   );
 
   if (isLinkActive) {
-    return <Link href={"/course/" + id}>{card}</Link>;
+    return (
+      <Link href={"/course/" + dept.abbreviation + "-" + code}>{card}</Link>
+    );
   }
 
   return card;

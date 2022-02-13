@@ -6,10 +6,8 @@
 */
 
 import { AutocompleteApi, AutocompleteState } from "@algolia/autocomplete-core";
-import { AutocompleteItem } from "./SearchBar";
-import SuggestionCard, { SuggestionProps } from "./SuggestionCard";
-import router from "next/router";
-import { Book } from "@prisma/client";
+import { AutocompleteItem } from "@lib/hooks/autocomplete";
+import SuggestionCard from "./SuggestionCard";
 import { Box } from "@chakra-ui/react";
 
 export interface SearchPanelProps {
@@ -21,11 +19,6 @@ export interface SearchPanelProps {
   >;
   autocompleteState: AutocompleteState<AutocompleteItem>;
   overlay: boolean;
-}
-
-export function getItemUrlPath(item: AutocompleteItem): string {
-  if (item.type === "course") return `/course/${item.entry.id}`;
-  return `/book/${(item.entry as Book).isbn}`;
 }
 
 /* The search input component takes the autocomplete hook and it's current state
@@ -41,7 +34,7 @@ export const SearchPanel = ({
   if (autocompleteState.query != "" && autocompleteState.isOpen) {
     return (
       <Box
-        bg="white"
+        bg="secondaryBackground"
         border="1px"
         borderColor="primaryBackground"
         rounded="md"
@@ -59,10 +52,6 @@ export const SearchPanel = ({
                     {items.length > 0 && (
                       <div {...autocomplete.getListProps()}>
                         {items.map((item) => {
-                          const suggestionProps: SuggestionProps = {
-                            type: item.type,
-                            entry: item.entry,
-                          };
                           return (
                             <div
                               key={item.objectID}
@@ -71,13 +60,10 @@ export const SearchPanel = ({
                                 item,
                                 source,
                               })}
-                              onClick={function clicking() {
-                                router.push(getItemUrlPath(item));
-                              }}
                             >
                               <SuggestionCard
                                 key={item.objectID}
-                                {...suggestionProps}
+                                {...{ item }}
                               />
                             </div>
                           );

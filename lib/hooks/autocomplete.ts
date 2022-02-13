@@ -7,35 +7,24 @@
 
 import React from "react";
 import {
-  AutocompleteApi,
   AutocompleteOptions,
   AutocompleteState,
   createAutocomplete,
 } from "@algolia/autocomplete-core";
 import { getAlgoliaResults } from "@algolia/autocomplete-preset-algolia";
-import { Hit } from "@algolia/client-search";
 import { searchClient, indexName } from "@lib/services/algolia";
-import { Book } from "@prisma/client";
-import { CourseWithDept } from "@lib/services/course";
-import { getItemUrlPath } from "@components/SearchPanel";
+import { Hit } from "@algolia/client-search";
+import { SearchItem } from "./algolia";
 
 const sourceId = "campus-store-data-source-id";
 const hitsPerPage = 5;
 
-export type AutocompleteItem = Hit<{
-  type: string;
-  entry: Book | CourseWithDept;
-}>;
+export type AutocompleteItem = Hit<SearchItem>;
 
-export interface SearchPanelProps {
-  autocomplete: AutocompleteApi<
-    AutocompleteItem,
-    React.BaseSyntheticEvent<object, any, any>,
-    React.MouseEvent<Element, MouseEvent>,
-    React.KeyboardEvent<Element>
-  >;
-  autocompleteState: AutocompleteState<AutocompleteItem>;
-  panelRef: React.RefObject<HTMLDivElement>;
+function getItemUrlPath(item: AutocompleteItem): string {
+  if (item.type === "course")
+    return `/course/${item.entry.dept.abbreviation}-${item.entry.code}`;
+  return `/book/${item.entry.isbn}`;
 }
 
 export function useAutocomplete(

@@ -7,11 +7,12 @@
 import { useRef } from "react";
 import {
   Button,
-  Flex,
   Input,
   InputGroup,
   InputRightElement,
   Icon,
+  FormControl,
+  HStack,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@heroicons/react/solid";
 import { AutocompleteApi } from "@algolia/autocomplete-core";
@@ -31,33 +32,34 @@ export const SearchInput = (
   const inputRef = useRef<HTMLInputElement>(null);
   return (
     <form action="/search">
-      <Flex>
-        <InputGroup size="lg">
-          <Input
-            {...autocomplete.getInputProps({
-              inputElement: inputRef.current,
-            })}
-            type="text"
-            name="q"
-            placeholder="Search for book or course"
-            required
-            width="40rem"
-            autoComplete="off"
-            shadow="sm"
-            bg="white"
-          />
-          <InputRightElement className="InputRight" pr="0.5rem" width="7.5">
-            <Button
-              rightIcon={<Icon as={SearchIcon} />}
-              colorScheme="teal"
-              h="2.3rem"
-              type="submit"
-            >
-              Search
-            </Button>
-          </InputRightElement>
-        </InputGroup>
-      </Flex>
+      <FormControl>
+        <HStack>
+          <InputGroup size="lg">
+            <Input
+              {...autocomplete.getInputProps({
+                inputElement: inputRef.current,
+              })}
+              type="search"
+              name="q"
+              placeholder="Search for book or course"
+              required
+              width="40rem"
+              autoComplete="off"
+              shadow="sm"
+              bg="secondaryBackground"
+            />
+            <InputRightElement pr="0.5rem" width="7.5">
+              <Button
+                rightIcon={<Icon as={SearchIcon} />}
+                colorScheme="teal"
+                h="2.3rem"
+              >
+                Search
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        </HStack>
+      </FormControl>
     </form>
   );
 };

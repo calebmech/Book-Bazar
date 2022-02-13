@@ -4,8 +4,9 @@ import { useAlgolia } from "@lib/hooks/algolia";
 import { Book } from "@prisma/client";
 import { CourseWithDept } from "@lib/services/course";
 import { BookCardList, CourseCardList } from "@components/CardList";
-import { Flex, Heading } from "@chakra-ui/react";
+import { Flex, Heading, Text } from "@chakra-ui/react";
 import Layout from "@components/Layout";
+import Loading from "@components/Loading";
 
 enum HEADER {
   RESULTS_AVAILABLE = "Results for ",
@@ -22,7 +23,7 @@ const Search: NextPage = () => {
 
   // TODO Replace with something to indicate loading
   if (isLoading) {
-    return <></>;
+    return <Loading />;
   }
 
   const hits = algoliaSearchResponse?.hits || [];
@@ -47,13 +48,17 @@ const Search: NextPage = () => {
         {courses.length > 0 ? (
           <CourseCardList courses={courses} isLinkActive={true} />
         ) : (
-          <div className="no books"></div>
+          <Text mt="10" fontSize="2xl" color="secondaryText">
+            No courses found.
+          </Text>
         )}
 
         {books.length > 0 ? (
           <BookCardList books={books} isLinkActive={true} />
         ) : (
-          <div className="no courses"></div>
+          <Text mt="10" fontSize="2xl" color="secondaryText">
+            No books found.
+          </Text>
         )}
       </Flex>
     </Layout>

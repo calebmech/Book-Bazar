@@ -3,10 +3,8 @@ import Layout from "@components/Layout";
 import pageTitle from "@lib/helpers/frontend/page-title";
 import { useUserQuery } from "@lib/hooks/user";
 import type { NextPage } from "next";
-import Image from "next/image";
-import bookBazarLogo from "../assets/bookBazarLogo.png";
 import Head from "next/head";
-
+import Logo from "@components/Logo";
 import { SearchBar } from "@components/SearchBar";
 
 const Home: NextPage = () => {
@@ -22,13 +20,8 @@ const Home: NextPage = () => {
       <Layout hideHeaderSearch={true} marginY={"130px"}>
         <Stack align={"center"}>
           <HStack spacing={5} align={"center"}>
-            <Image
-              src={bookBazarLogo}
-              alt="Book Bazar Logo"
-              width={60}
-              height={60}
-            />
-            <Text fontSize="6xl" color="#017185" fontFamily="title">
+            <Logo />
+            <Text fontSize="6xl" color="accent" fontFamily="title">
               Book Bazar
             </Text>
           </HStack>

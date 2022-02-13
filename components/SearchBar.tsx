@@ -12,17 +12,10 @@ import {
   AutocompleteOptions,
   AutocompleteState,
 } from "@algolia/autocomplete-core";
-import { Hit } from "@algolia/client-search";
-import { Book } from "@prisma/client";
-import { CourseWithDept } from "@lib/services/course";
 import { SearchInput } from "./SearchInput";
 import { SearchPanel, SearchPanelProps } from "./SearchPanel";
 import { useAutocomplete } from "@lib/hooks/autocomplete";
-
-export type AutocompleteItem = Hit<{
-  type: string;
-  entry: Book | CourseWithDept;
-}>;
+import { AutocompleteItem } from "@lib/hooks/autocomplete";
 
 const initialAutocompleteState: AutocompleteState<AutocompleteItem> = {
   collections: [],

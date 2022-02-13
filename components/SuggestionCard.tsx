@@ -11,33 +11,32 @@ import {
   Stack,
   Image,
   Skeleton,
+  Link,
 } from "@chakra-ui/react";
 import { useBookQuery } from "@lib/hooks/book";
 import { CourseWithDept } from "@lib/services/course";
 import { Book } from "@prisma/client";
+import { AutocompleteItem } from "@lib/hooks/autocomplete";
 
 const fallbackImageSrc =
   "https://campusstore.mcmaster.ca/cgi-mcm/ws/getTradeImage.pl?isbn=281000000883B";
 
-export interface SuggestionProps {
-  type: string;
-  entry: Book | CourseWithDept;
-}
-
 export const CourseSuggestionCard = ({ name, code, dept }: CourseWithDept) => {
   return (
-    <HStack>
-      <Stack>
-        <Container alignContent={"left"} marginY={2}>
-          <Heading isTruncated as="h4" size="md" color="primaryText">
-            {`${dept.abbreviation} ${code}`}
-          </Heading>
-          <Text color="secondaryText" isTruncated>
-            {name || ""}
-          </Text>
-        </Container>
-      </Stack>
-    </HStack>
+    <Link href={"/course/" + dept.abbreviation + "-" + code}>
+      <HStack>
+        <Stack>
+          <Container alignContent={"left"} marginY={2}>
+            <Heading isTruncated as="h4" size="md" color="primaryText">
+              {`${dept.abbreviation} ${code}`}
+            </Heading>
+            <Text color="secondaryText" isTruncated>
+              {name || ""}
+            </Text>
+          </Container>
+        </Stack>
+      </HStack>
+    </Link>
   );
 };
 
@@ -49,38 +48,44 @@ export const BookSuggestionCard = ({ isbn, name, imageUrl }: Book) => {
   }
 
   return (
-    <HStack>
-      <Image
-        maxH={"100px"}
-        maxW={"60px"}
-        src={imageUrl || fallbackImageSrc}
-        alt={"book image"}
-      ></Image>
-      <Stack>
-        <Container alignContent={"left"} marginY={2}>
-          <Heading isTruncated as="h4" size="md" color="primaryText">
-            {`${name}`}
-          </Heading>
-          <Skeleton isLoaded={!isLoading}>
-            <Text color="secondaryText" isTruncated>
-              {authorString}
-            </Text>
-          </Skeleton>
-        </Container>
-      </Stack>
-    </HStack>
+    <Link href={"/book/" + isbn}>
+      <HStack>
+        <Image
+          maxH={"100px"}
+          maxW={"60px"}
+          src={imageUrl || fallbackImageSrc}
+          alt={"book image"}
+        ></Image>
+        <Stack>
+          <Container alignContent={"left"} marginY={2}>
+            <Heading isTruncated as="h4" size="md" color="primaryText">
+              {`${name}`}
+            </Heading>
+            <Skeleton isLoaded={!isLoading}>
+              <Text color="secondaryText" isTruncated>
+                {authorString}
+              </Text>
+            </Skeleton>
+          </Container>
+        </Stack>
+      </HStack>
+    </Link>
   );
 };
 
-export const SuggestionCard = ({ type, entry }: SuggestionProps) => {
+export interface SuggestionCardProps {
+  item: AutocompleteItem;
+}
+
+export const SuggestionCard: React.FC<SuggestionCardProps> = ({ item }) => {
   return (
     <>
-      {type === "course" ? (
-        <CourseSuggestionCard {...(entry as CourseWithDept)}>
+      {item.type === "course" ? (
+        <CourseSuggestionCard {...(item.entry as CourseWithDept)}>
           {" "}
         </CourseSuggestionCard>
       ) : (
-        <BookSuggestionCard {...(entry as Book)}> </BookSuggestionCard>
+        <BookSuggestionCard {...(item.entry as Book)}> </BookSuggestionCard>
       )}
     </>
   );
