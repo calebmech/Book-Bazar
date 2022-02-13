@@ -12,9 +12,9 @@ import fs from "fs/promises";
 if (!process.env.NODE_ENV) process.env.NODE_ENV = "development";
 require("dotenv").config({ path: `../.env.${process.env.NODE_ENV}` });
 
-export const algoliaAppId = process.env.ALGOLIA_APP_ID;
-export const algoliaApiKey = process.env.ALGOLIA_API_KEY;
-export const algoliaIndexName = process.env.ALGOLIA_INDEX_NAME;
+export const algoliaAppId = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID;
+export const algoliaApiKey = process.env.ADMIN_ALGOLIA_API_KEY;
+export const algoliaIndexName = process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME;
 
 if (!algoliaAppId || !algoliaApiKey || !algoliaIndexName)
   throw Error("Please set Algolia environment variables");
