@@ -46,6 +46,7 @@ const CoursePage: NextPage = () => {
       mt="3"
       templateColumns={{
         base: "repeat(auto-fill, minmax(128px, 1fr))",
+        md: "repeat(auto-fill, minmax(128px, 1fr))",
       }}
       gap={{
         base: 4,
