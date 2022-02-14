@@ -16,6 +16,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
 export interface SendMagicLinkBody {
   macID: string;
+  redirectUrl?: string;
 }
 
 function instanceOfSendMagicLinkBody(object: any): object is SendMagicLinkBody {
@@ -30,7 +31,7 @@ async function sendMagicLinkHandler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const email = body.macID + MCMASTER_EMAIL_SUFFIX;
-  await sendMagicLink(email);
+  await sendMagicLink(email, body.redirectUrl);
 
   return res.status(StatusCodes.OK).end();
 }
