@@ -27,11 +27,11 @@ const searchableAttributes: string[] = [
 ];
 
 const rankings: string[] = [
+  "typo",
   "asc(entry.code)",
   "asc(entry.dept.abbreviation)",
   "asc(entry.dept.name)",
   "attribute",
-  "typo",
   "words",
   "proximity",
   "exact",

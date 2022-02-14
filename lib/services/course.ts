@@ -1,10 +1,14 @@
-import type { Prisma } from "@prisma/client";
+import type { Course, Dept, Prisma } from "@prisma/client";
 import { prisma } from "@lib/services/db";
 import { CourseCode } from "@lib/helpers/backend/parse-course-code";
 
 export type CourseWithBooks = Prisma.PromiseReturnType<
   typeof getCourseWithBooks
 >;
+
+export type CourseWithDept = Course & {
+  dept: Dept;
+};
 
 /**
  * Returns the course with the given id.
