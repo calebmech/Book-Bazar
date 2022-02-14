@@ -1,7 +1,7 @@
 import { ToastId, useToast } from "@chakra-ui/react";
-import { ResponseObject } from "@lib/helpers/type-utilities";
 import axios from "axios";
 import { useRouter } from "next/dist/client/router";
+import { SendMagicLinkBody } from "pages/api/auth/magic";
 import { GetCurrentUserResponse } from "pages/api/user";
 import { UpdateUserRequest } from "pages/api/user/[id]";
 import { useEffect, useRef } from "react";
@@ -83,8 +83,8 @@ export function useDeleteUserMutation() {
 }
 
 export function useSendMagicLinkMutation() {
-  return useMutation((macID: string) =>
-    axios.post("/api/auth/magic", { macID })
+  return useMutation((request: SendMagicLinkBody) =>
+    axios.post("/api/auth/magic", request)
   );
 }
 

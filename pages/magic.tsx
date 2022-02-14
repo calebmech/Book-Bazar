@@ -25,7 +25,7 @@ export const getServerSideProps: GetServerSideProps<MagicProps> = async ({
   res,
   query,
 }) => {
-  const { token } = query;
+  const { token, redirectUrl } = query;
 
   if (typeof token !== "string") {
     res.statusCode = StatusCodes.BAD_REQUEST;
@@ -55,7 +55,7 @@ export const getServerSideProps: GetServerSideProps<MagicProps> = async ({
 
   return {
     redirect: {
-      destination: "/",
+      destination: typeof redirectUrl === "string" ? redirectUrl : "/",
       permanent: false,
     },
   };

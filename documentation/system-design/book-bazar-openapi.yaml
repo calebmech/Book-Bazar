@@ -261,6 +261,9 @@ paths:
                 macID:
                   type: string
                   example: mechc2
+                redirectUrl:
+                  type: string
+                  example: /account
       responses:
         200:
           description: Successful response; email has been sent
