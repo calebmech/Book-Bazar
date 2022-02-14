@@ -38,6 +38,10 @@ const config: ThemeOverride = {
         default: "gray.400",
         _dark: "gray.500",
       },
+      accent: {
+        default: "teal.500",
+        _dark: "teal.200",
+      },
     },
     fonts: {
       title: "Lora, Georgia, serif",

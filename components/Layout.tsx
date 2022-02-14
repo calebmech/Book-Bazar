@@ -8,18 +8,20 @@ export interface LayoutProps {
    * Extend the header with additional content
    */
   extendedHeader?: React.ReactNode;
+  marginY?: string;
 }
 
 const Layout: React.FC<LayoutProps> = ({
   children,
   extendedHeader,
   hideHeaderSearch = false,
+  marginY = "8",
 }) => {
   return (
     <Flex direction="column" justifyContent="space-between" minHeight="100vh">
       <div>
         <Header hideSearch={hideHeaderSearch}>{extendedHeader}</Header>
-        <Container as="main" marginY={8} maxWidth="container.lg">
+        <Container as="main" marginY={marginY} maxWidth="container.lg">
           {children}
         </Container>
       </div>

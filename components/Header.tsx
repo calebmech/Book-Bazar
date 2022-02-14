@@ -2,19 +2,16 @@ import {
   Box,
   Button,
   Container,
-  FormControl,
   Grid,
   Heading,
   HStack,
   Icon,
-  Input,
-  InputGroup,
-  InputRightElement,
   Spacer,
 } from "@chakra-ui/react";
-import { CreditCardIcon, SearchIcon } from "@heroicons/react/solid";
+import { CreditCardIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import HeaderUserInfo from "./HeaderUserInfo";
+import { SearchBar } from "./SearchBar";
 
 export interface HeaderProps {
   hideSearch?: boolean;
@@ -55,29 +52,7 @@ const Header: React.FC<HeaderProps> = ({ hideSearch = false, children }) => {
           {hideSearch ? (
             <Spacer gridArea="search" />
           ) : (
-            // Placeholder search input
-            <FormControl gridArea="search" zIndex={0}>
-              <HStack>
-                <InputGroup>
-                  <Input
-                    type="search"
-                    variant="filled"
-                    // Could make this cycle through a list of placeholders
-                    placeholder="Algorithms 4th Edition"
-                  />
-                  <InputRightElement width="auto" pr="1">
-                    <Button
-                      colorScheme="teal"
-                      size="sm"
-                      px={5}
-                      rightIcon={<Icon as={SearchIcon} />}
-                    >
-                      Search
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-              </HStack>
-            </FormControl>
+            <SearchBar openOnFocus={true} overlay={true} />
           )}
           <Box gridArea="account" textAlign="right">
             <HStack align="baseline">
