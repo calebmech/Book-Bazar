@@ -8,3 +8,8 @@
 
 !UIStateDiagram.pdf
 !spec.pdf
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
