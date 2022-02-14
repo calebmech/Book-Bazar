@@ -41,6 +41,8 @@ export const SearchPanel = ({
         boxShadow={"md"}
         position={overlay ? "absolute" : "relative"}
         marginY={1}
+        width="100%"
+        zIndex="1"
       >
         <div key={"search-panel-key"}>
           {autocompleteState.isOpen && (
@@ -61,10 +63,7 @@ export const SearchPanel = ({
                                 source,
                               })}
                             >
-                              <SuggestionCard
-                                key={item.objectID}
-                                {...{ item }}
-                              />
+                              <SuggestionCard key={item.objectID} item={item} />
                             </div>
                           );
                         })}

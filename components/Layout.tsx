@@ -3,7 +3,7 @@ import Footer from "./Footer";
 import Header from "./Header";
 
 export interface LayoutProps {
-  hideHeaderSearch?: boolean;
+  minimalHeader?: boolean;
   /**
    * Extend the header with additional content
    */
@@ -14,14 +14,13 @@ export interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({
   children,
   extendedHeader,
-  hideHeaderSearch = false,
-  marginY = "8",
+  minimalHeader = false,
 }) => {
   return (
     <Flex direction="column" justifyContent="space-between" minHeight="100vh">
       <div>
-        <Header hideSearch={hideHeaderSearch}>{extendedHeader}</Header>
-        <Container as="main" marginY={marginY} maxWidth="container.lg">
+        <Header minimalContent={minimalHeader}>{extendedHeader}</Header>
+        <Container as="main" marginY="8" maxWidth="container.lg">
           {children}
         </Container>
       </div>

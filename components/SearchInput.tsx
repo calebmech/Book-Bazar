@@ -33,32 +33,29 @@ export const SearchInput = (
   return (
     <form action="/search">
       <FormControl>
-        <HStack>
-          <InputGroup size="lg">
-            <Input
-              {...autocomplete.getInputProps({
-                inputElement: inputRef.current,
-              })}
-              type="search"
-              name="q"
-              placeholder="Search for book or course"
-              required
-              width="40rem"
-              autoComplete="off"
-              shadow="sm"
-              bg="secondaryBackground"
-            />
-            <InputRightElement pr="0.5rem" width="7.5">
-              <Button
-                rightIcon={<Icon as={SearchIcon} />}
-                colorScheme="teal"
-                h="2.3rem"
-              >
-                Search
-              </Button>
-            </InputRightElement>
-          </InputGroup>
-        </HStack>
+        <InputGroup size="lg">
+          <Input
+            {...autocomplete.getInputProps({
+              inputElement: inputRef.current,
+            })}
+            type="search"
+            name="q"
+            placeholder="Search for book or course"
+            required
+            autoComplete="off"
+            shadow="sm"
+            bg="secondaryBackground"
+          />
+          <InputRightElement pr="0.5rem" width="7.5">
+            <Button
+              rightIcon={<Icon as={SearchIcon} />}
+              colorScheme="teal"
+              h="2.3rem"
+            >
+              Search
+            </Button>
+          </InputRightElement>
+        </InputGroup>
       </FormControl>
     </form>
   );
