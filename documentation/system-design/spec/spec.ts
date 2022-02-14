@@ -24,6 +24,7 @@ import {
   CourseWithDeptType,
   GoogleBookType,
   BufferType,
+  CourseCodeType,
 } from "./types.ts";
 
 export enum Implementer {
@@ -464,16 +465,16 @@ const CourseServiceModule: Module = {
       exportedAccessPrograms: [
         {
           name: "getCourseWithBooks",
-          in: { id: "string" },
+          in: { code: CourseCodeType },
           out: [CourseWithBooksType, "null"],
           semantics: [
-            "Gets a course by ID and populates the books for that course",
+            "Gets a course by code and populates the books for that course",
           ],
         },
         {
           name: "getPostsForCourse",
           in: {
-            id: "string",
+            code: CourseCodeType,
             length: "integer",
             page: "integer",
             includeUser: "boolean",
@@ -484,7 +485,7 @@ const CourseServiceModule: Module = {
             "null",
           ],
           semantics: [
-            "Get posts for a course ID",
+            "Get posts for a course code",
             "The number of posts to return is determined by length",
             "The offset of posts to return is determined by page",
             "The user in posts is only populated if includeUser is true",

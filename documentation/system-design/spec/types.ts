@@ -226,3 +226,12 @@ export const GoogleBookType: Type = {
     "https://github.com/googleapis/google-api-nodejs-client/blob/01bf480d3e35354cc3fdc7d7aa2559611d459b50/src/apis/books/v1.ts#L1049"
   ),
 };
+
+export const CourseCodeType: Type = {
+  name: "CourseCode",
+  kind: TypeKind.TUPLE,
+  values: {
+    deptAbbreviation: "string",
+    code: "string",
+  },
+};
