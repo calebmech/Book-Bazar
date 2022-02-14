@@ -5,6 +5,7 @@ module.exports = {
     domains: [
       'book-bazar-images.s3.us-east-2.amazonaws.com',
       'campusstore.mcmaster.ca',
+      'books.google.com',
     ],
   },
   async rewrites() {

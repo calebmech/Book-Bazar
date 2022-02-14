@@ -18,6 +18,7 @@ import {
 import { ArrowRightIcon, RefreshIcon, UserIcon } from "@heroicons/react/solid";
 import { useSendMagicLinkMutation } from "@lib/hooks/user";
 import useRandomMacID from "@lib/hooks/useRandomMacID";
+import { useRouter } from "next/router";
 import { FormEvent, useState } from "react";
 
 export interface LoginModalProps {
@@ -36,12 +37,16 @@ export default function LoginModal({
   const [macID, setMacID] = useState("");
   const macIDPlaceholder = useRandomMacID();
   const mutation = useSendMagicLinkMutation();
+  const router = useRouter();
 
   const showUserIcon = useBreakpointValue({ base: false, sm: true });
 
   const handleSubmit = (event: FormEvent) => {
     if (macID.length > 0) {
-      mutation.mutate(macID);
+      mutation.mutate({
+        macID,
+        redirectUrl: router.asPath,
+      });
     }
     event.preventDefault();
   };

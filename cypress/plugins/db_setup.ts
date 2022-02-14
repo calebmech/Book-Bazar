@@ -4,13 +4,15 @@ import {
   TEST_BOOK_1_ISBN,
   TEST_BOOK_2_ISBN,
   TEST_COURSE_UUID,
-  TEST_DEPARTMENT_UUID,
   TEST_OTHER_PERSON_POST_UUID,
   TEST_POST_1_UUID,
   TEST_POST_2_UUID,
   TEST_POST_UUID,
   TEST_USER,
   TEST_USER_UUID,
+  TEST_COURSE,
+  TEST_DEPARTMENT,
+  TEST_BOOK,
 } from "../../cypress/support/constants";
 
 export default async () => {
@@ -20,36 +22,13 @@ export default async () => {
       data: TEST_USER as User,
     });
     await prisma.dept.create({
-      data: {
-        id: TEST_DEPARTMENT_UUID,
-        name: "Software Engineering",
-        abbreviation: "SFWR",
-      },
+      data: TEST_DEPARTMENT,
     });
     await prisma.course.create({
-      data: {
-        id: TEST_COURSE_UUID,
-        name: "Very Hard Course",
-        code: "2H03",
-        term: "Winter",
-        deptId: TEST_DEPARTMENT_UUID,
-      },
+      data: TEST_COURSE,
     });
     await prisma.book.create({
-      data: {
-        courses: {
-          connect: {
-            id: TEST_COURSE_UUID,
-          },
-        },
-        id: TEST_BOOK_UUID,
-        isbn: TEST_BOOK_1_ISBN,
-        name: "Algorithms",
-        imageUrl: "https://localhost:1000/image.jpg",
-        googleBooksId: "MTpsAQAAQBAJ",
-        campusStorePrice: 4000,
-        isCampusStoreBook: true,
-      },
+      data: TEST_BOOK,
     });
     await prisma.book.create({
       data: {
