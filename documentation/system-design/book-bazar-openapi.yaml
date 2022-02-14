@@ -171,19 +171,18 @@ paths:
       security:
         - {}
         - auth: []
-  /course/{id}:
+  /course/{code}:
     get:
       tags:
         - Course
-      summary: Get a course by ID, including all books for it
+      summary: Get a course by code, including all books for it
       parameters:
-        - name: id
+        - name: code
           in: path
-          description: ID of course to return
+          description: The department abbreviation and the course code connected with a hypen e.g. SFWRENG-3DX4
           required: true
           schema:
             type: string
-            format: uuid
       responses:
         200:
           description: Successful response.
@@ -192,22 +191,21 @@ paths:
               schema:
                 $ref: "#/components/schemas/CourseWithBooks"
         400:
-          description: Invalid ID supplied
+          description: Invalid code supplied
         404:
           description: Course was not found
-  /course/{id}/posts:
+  /course/{code}/posts:
     get:
       tags:
         - Course
       summary: Get posts for a course by ID
       parameters:
-        - name: id
+        - name: code
           in: path
-          description: ID of book to return posts for
+          description: The department abbreviation and the course code connected with a hypen e.g. SFWRENG-3DX4
           required: true
           schema:
             type: string
-            format: uuid
         - name: length
           in: query
           description: Maximum number of posts to return
@@ -238,7 +236,7 @@ paths:
                       $ref: "#/components/schemas/PostWithUser"
 
         400:
-          description: Invalid ID supplied
+          description: Invalid code supplied
         404:
           description: Course was not found
       security:

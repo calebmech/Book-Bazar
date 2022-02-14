@@ -4,7 +4,7 @@ import { User } from "@prisma/client";
 interface UserWithAvatarProps {
   user: User | null;
 }
-export default function UserWithAvatar({user}: UserWithAvatarProps) {
+export default function UserWithAvatar({ user }: UserWithAvatarProps) {
   if (user) {
     return (
       <HStack>
@@ -21,13 +21,12 @@ export default function UserWithAvatar({user}: UserWithAvatarProps) {
           <Avatar size="sm" />
         )}
 
-        <Text color='secondaryText' fontSize='sm' fontWeight={'bold'} isTruncated>
+        <Text color="secondaryText" fontWeight={"bold"} isTruncated>
           {user.name}
         </Text>
       </HStack>
-    )
-  }
-  else {
+    );
+  } else {
     return null;
   }
 }

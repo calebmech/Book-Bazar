@@ -10,6 +10,7 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{amssymb}
 \usepackage{amsthm}
+\usepackage[normalem]{ulem}
 \usepackage{amsmath}
 \usepackage{multirow}
 \usepackage{verbatim}
@@ -49,7 +50,7 @@
 
 \begin{comment}
 \makeglossaries
-\newacronym{SRS}{System Requirements Specification}
+\newacronym{SRS}{System Requirements Specification Rev1}
 \newacronym{UPC}{Universal Product Code}
 \newacronym{ISBN}{International Standard Book Number}
 \newacronym{GUI}{Graphical User Interface}
@@ -60,7 +61,7 @@
 \vspace*{\fill}
 \begin{center}
 
-  {\Huge \textbf{System Requirements}}\\
+  {\Huge \textbf{System Requirements Rev1}}\\
 \hrulefill\\[2mm]
   {\huge \textbf{Book Bazar}}\\[2mm]
 {\large \today}\\[15mm]
@@ -111,12 +112,15 @@
 \hline
 5 & 19.10.2021 & Harsh Mahajan & Edited Use-Case Diagram to match TA's feedback.\\
 \hline
-6 & 25.02.2022 & Caleb Mech & Edited user and authentication requirements to match system design.\\
+6 & 25.01.2022 & Caleb Mech & Edited user and authentication requirements to match system design.\\
+\hline
+7 & 09.02.2022 & All team members & Made the following edits as part of Rev1:\newline FR15,FR16,FR17,FR18,FR19 added; \newline FR 14 stricken; \newline FR13 moved to Miscellaneous Requirements.\\
 \hline
 \end{tabular}
 \caption{Table of Revisions}
 
 \end{table}
+\newpage
 
 \section{Purpose}
 The motivation for this project is to create an application that allows McMaster students to conveniently buy and sell textbooks in a secure marketplace. Currently, students use online websites like Facebook (https://www.facebook.com/groups/macusedtexts) or the campus store’s buyback program \\ (https://campusstore.mcmaster.ca/information/guaranteed-buyback.html, suspended because of COVID) to sell their books. These current solutions are either disorganized or take a cut of the transaction. Book Bazar aims to create an organized marketplace that allows users to sell books for a better price than at the campus store.
@@ -124,7 +128,6 @@ The motivation for this project is to create an application that allows McMaster
 The purpose of this System Requirements Specification (SRS) is to provide a clear overview of the project’s functional and non-functional requirements that are relevant to the application’s stakeholders.\\ % Comment about not needing non-functional requirements removed since TA said we need them
 \newline
 \small{ \textbf{NOTE:} Book Bazar's website where all the books to be sold are listed, is referred to as \textit{marketplace} in certain parts of this document.}
-\newpage
 \section{Scope}
 The scope for the project covers the following application features:
 \be
@@ -139,6 +142,7 @@ The scope for the project covers the following application features:
 \ee
 
 %Not including the scalable part as we're movig it to a stretch goal.
+\newpage
 
 \section{Context Diagram}
 \label{sec:context}
@@ -160,7 +164,6 @@ The Book Bazar application will not be using any elements from the physical worl
 
 %Help refining / sounding a bit more technical?
 \newpage
-
 \section{Behaviour Overview}
 \begin{comment}
 This specification document specifies a software system that allows McMaster University students to buy and sell used textbooks. Students who have used textbooks that they want to sell can create a posting/listing on the system by entering the UPC/ISBN13 code of the book and adding their desired sell price. Students who are looking to buy books can view the listings that the sellers created. The buyers will be able to filter postings/listings in order to quickly find what they are looking for. When a buyer finds a posting for a textbook that they want, they will be able to send a message to the seller in order to confirm the price and schedule a time to meet up to sell/buy the textbook. A book seller will be able to remove their posting if they decide not to sell the textbook or manage to find a buyer some other way.
@@ -254,10 +257,10 @@ FR4 &  The system shall allow sellers to view the price the book is currently be
 \hline
 FR19 & System shall allow sellers to edit their posting.& The seller may want to change the price or edit their posting.\\
 \hline
-\hline
 \end{tabular}
 \caption{Requirements for Posting Book}
 \end{table}
+
 \newpage
 \subsection{Buying Book}
 \begin{table}[h!]
@@ -299,8 +302,6 @@ FR11 &The system shall allow new users to create an account.& Users will need an
 \hline
 FR12&The system shall allow users to delete their account. & Users may wish to no longer have their information on the website.\\
 \hline
-FR13 & The system shall provide tips regarding safe interaction between buyers and sellers. & -\\
-\hline
 FR15 &The system shall allow existing users to login.& -\\
 \hline
 FR16 &The system shall allow authenticated users to logout.& -\\
@@ -311,6 +312,25 @@ FR18 &The system shall prevent users modifying user information that is not thei
 \hline
 \end{tabular}
 \caption{Requirements for the Authentication System}
+\end{table}
+
+\subsection{Miscellaneous Requirements}
+\begin{table}[h!]
+\flushleft
+\begin{tabular}{|c|p{6cm}|p{6cm}|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Requirement} & \textbf{Description} & \textbf{Rationale} \\
+\hline
+FR13 & The system shall provide tips regarding safe interaction between buyers and sellers. & -\\
+\hline
+
+\sout{FR14}& \sout{The application shall allow an administrator to erase all stored data related to a user of the application at the user's request.} & \sout{Users may request for their data to be deleted, and it should be simple to accomplish this.}\\
+\hline
+
+%Omitted the post-scondary requirement as we're moving it to a stretch goal.
+\end{tabular}
+\caption{Other Miscellaneous Requirements}
 \end{table}
 
 \section{Functional Requirements Likelihood of Change}
@@ -347,7 +367,6 @@ NFR1 &The application GUI must have a self-consistent design language; a GUI com
 \caption{NFR: Look and Feel}
 \end{table}
 
-\newpage
 
 \subsection{Usability Requirements}
 \begin{table}[h!]
@@ -407,6 +426,7 @@ NFR7& The application must have an availability rate of 99.9\% within any alloca
 \end{tabular}
 \caption{NFR: Performance}
 \end{table}
+\newpage
 
 \subsection{Operational and Environmental Requirements}
 \begin{table}[h!]
@@ -476,7 +496,6 @@ NFR15 & The user-interface of the application will be in Canadian English. & Eng
 \caption{NFR: Cultural}
 \end{table}
 
-\newpage
 
 \subsection{Legal Requirements}
 \begin{table}[h!]
