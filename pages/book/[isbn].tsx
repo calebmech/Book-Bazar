@@ -27,21 +27,35 @@ import {
 } from "@lib/helpers/frontend/resolve-book-data";
 import { formatIntPrice } from "@lib/helpers/priceHelpers";
 import { useBookQuery } from "@lib/hooks/book";
+import { MAX_NUM_POSTS, PostCardGrid } from "@components/CardList";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { resolveImageUrl } from "@lib/helpers/frontend/resolve-image-url";
+import { PaginationButtons } from "@components/PaginationButtons";
 
 const BookPage: NextPage = () => {
   const router = useRouter();
-  const { isbn } = router.query;
-  const { data: book } = useBookQuery(isbn);
+  const { isbn, page: pageString } = router.query;
+  var page: number;
+  if (!pageString || Array.isArray(pageString)) {
+    page = 0;
+  } else {
+    page = Number.parseInt(pageString);
+  }
+  const { data: book, isLoading } = useBookQuery(isbn, page, MAX_NUM_POSTS);
+  const { data: bookSecondData } = useBookQuery(isbn, page + 1, MAX_NUM_POSTS);
+  const morePosts = bookSecondData ? bookSecondData.posts.length !== 0 : false;
+
   if (!book) {
-    return null;
+    if (isLoading) return null;
+    return <ErrorPage statusCode={404} />;
   }
   const { googleBook, posts } = book;
 
+  const { name, googleBook, posts } = book;
   const postsWithBookIncluded = posts.map((post) => {
     return {
       ...post,
@@ -181,7 +195,14 @@ const BookPage: NextPage = () => {
         <title>{pageTitle(resolveBookTitle(book))}</title>
       </Head>
       <Layout extendedHeader={bookInfo}>
-        <PostCardList posts={postsWithBookIncluded} isLinkActive={true} />
+        <PostCardGrid posts={postsWithBookIncluded} />
+        {(page === 0 ? posts.length === MAX_NUM_POSTS : posts.length !== 0) && (
+          <PaginationButtons
+            page={page}
+            url={"/book/" + isbn}
+            morePosts={morePosts}
+          />
+        )}
 
         {book.isCampusStoreBook && (
           <>

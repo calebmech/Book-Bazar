@@ -52,7 +52,9 @@ export default function SetPriceAndDescription({
     <FormControl>
       <form onSubmit={handleSubmit}>
         <VStack spacing={7}>
-          <BookCard book={book} isLinkActive={false} />
+          <Box width="128px">
+            <BookCard book={book} isLinkActive={false} />
+          </Box>
           <SimpleGrid
             columns={2}
             spacing={3}

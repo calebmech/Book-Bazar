@@ -31,8 +31,8 @@ export default function BookCard({ book, isLinkActive }: BookCardProps) {
       shadow="md"
       borderRadius="lg"
       background="secondaryBackground"
-      fontSize="xs"
-      _hover={{ shadow: "xl" }}
+      fontSize="xs"      
+      _hover={{ shadow: isLinkActive ? "xl" : "md"  }}
       transition="0.3s"
       as={isLinkActive ? "a" : "div"}
     >

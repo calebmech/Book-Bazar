@@ -2,20 +2,23 @@ import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import ErrorPage from "next/error";
 import { useCoursePostsQuery, useCourseQuery } from "@lib/hooks/course";
-import { Heading, Skeleton, Text } from "@chakra-ui/react";
+import { Box, Heading, Skeleton, Text } from "@chakra-ui/react";
 import Layout from "@components/Layout";
-import { BookCardList, PostCardList } from "@components/CardList";
+import {
+  BookCardGrid,
+  MAX_NUM_POSTS,
+  PostCardGrid,
+} from "@components/CardList";
+import { PaginationButtons } from "@components/PaginationButtons";
 import pageTitle from "@lib/helpers/frontend/page-title";
-import Head from "next/head";
-
-const MAX_NUM_POSTS = 4
+import { Head } from "next/document";
 
 const CoursePage: NextPage = () => {
   const router = useRouter();
   const { code, page: pageString } = router.query;
   const { isLoading: isLoadingCourseData, data: courseData } =
     useCourseQuery(code);
-    var page: number;
+  var page: number;
 
   if (!pageString || Array.isArray(pageString)) {
     page = 0;
@@ -41,50 +44,6 @@ const CoursePage: NextPage = () => {
   const posts = postsData ? postsData : [];
   const morePosts = postsSecondData ? postsSecondData.length !== 0 : false;
 
-  const bookGrid = (
-    <Grid
-      mt="3"
-      templateColumns={{
-        base: "repeat(auto-fill, minmax(128px, 1fr))",
-        md: "repeat(auto-fill, minmax(128px, 1fr))",
-      }}
-      gap={{
-        base: 4,
-        md: 2,
-      }}
-    >
-      {books.map((book, i) => {
-        return (
-          <GridItem key={i} justifyContent="center">
-            <BookCard book={book} isLinkActive={true} />
-          </GridItem>
-        );
-      })}
-    </Grid>
-  );
-
-  const postGrid = (
-    <Grid
-      mt="3"
-      templateColumns={{
-        base: "repeat(auto-fill, minmax(380px, 1fr))",
-        md: "repeat(auto-fill, minmax(340px, 1fr))",
-      }}
-      gap={{
-        base: 4,
-        md: 2,
-      }}
-    >
-      {posts.map((post, i) => {
-        return (
-          <GridItem key={i} justifyContent="center">
-            <PostCard post={post} isLinkActive={true} />
-          </GridItem>
-        );
-      })}
-    </Grid>
-  );
-
   return (
     <>
       <Head>
@@ -108,8 +67,41 @@ const CoursePage: NextPage = () => {
           </Skeleton>
         }
       >
-        <BookCardList books={books} isLinkActive={true} />
-        <PostCardList posts={posts} isLinkActive={true} />
+        <Skeleton isLoaded={!isLoadingCourseData}>
+          <Text mt="1" fontSize="4xl" fontWeight="semibold">
+            {courseName}
+          </Text>
+        </Skeleton>
+
+        <Skeleton isLoaded={!isLoadingCourseData}>
+          <Text mt="10" fontSize="2xl">
+            Course Books
+          </Text>
+        </Skeleton>
+        <BookCardGrid books={books} />
+
+        <Skeleton isLoaded={!isLoadingCourseData}>
+          <Text mt="10" fontSize="2xl">
+            Active Listings
+          </Text>
+        </Skeleton>
+
+        <Box
+          h={{
+            base: "auto",
+            md: "450px",
+          }}
+        >
+          <PostCardGrid posts={posts} />
+        </Box>
+
+        {(page === 0 ? posts.length === MAX_NUM_POSTS : posts.length !== 0) && (
+          <PaginationButtons
+            page={page}
+            url={"/course/" + code}
+            morePosts={morePosts}
+          />
+        )}
       </Layout>
     </>
   );

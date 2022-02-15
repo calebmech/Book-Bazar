@@ -1,4 +1,4 @@
-import { Button, HStack, VStack } from "@chakra-ui/react";
+import { Box, Button, HStack, VStack } from "@chakra-ui/react";
 import { PopulatedBook } from "@lib/services/book";
 import BookCard from "../BookCard";
 
@@ -11,7 +11,9 @@ interface Props {
 export default function ConfirmBook({ book, onClickYes, onClickNo }: Props) {
   return (
     <VStack spacing={3}>
-      <BookCard book={book} isLinkActive={false} />
+      <Box width="128px">
+        <BookCard book={book} isLinkActive={false} />
+      </Box>
       <HStack spacing={7}>
         <Button colorScheme="red" onClick={onClickNo}>
           No
