@@ -48,6 +48,7 @@ export const SearchInput = (
           />
           <InputRightElement pr="0.5rem" width="7.5">
             <Button
+              type="submit"
               rightIcon={<Icon as={SearchIcon} />}
               colorScheme="teal"
               h="2.3rem"
