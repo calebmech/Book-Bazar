@@ -51,6 +51,7 @@ export default function IsbnEntry({ onIsbnSubmitted }: Props) {
             <InputGroup>
               <Input
                 backgroundColor="primaryBackground"
+                aria-label="isbn"
                 onChange={(e) => setIsbn(e.target.value.trim())}
               />
               <InputRightElement width="6.5rem">
