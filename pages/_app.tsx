@@ -5,6 +5,7 @@ import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import theme from "../styles/theme";
+import "../styles/reset.css";
 import "@algolia/autocomplete-theme-classic";
 
 if (IS_E2E) {

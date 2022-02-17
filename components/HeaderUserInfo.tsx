@@ -38,9 +38,19 @@ export default function HeaderUserInfo() {
           variant="link"
           onClick={handleLoginClick}
           alignSelf={{ base: "center", sm: "initial" }}
+          aria-label="Login"
         >
           <HStack spacing="0">
-            <Text fontWeight="semibold" color="tertiaryText" mr="3">
+            <Text
+              fontWeight="semibold"
+              color="tertiaryText"
+              mr="3"
+              sx={{
+                "@media (max-width: 400px)": {
+                  display: "none",
+                },
+              }}
+            >
               Login
             </Text>
             <Avatar size="sm" />

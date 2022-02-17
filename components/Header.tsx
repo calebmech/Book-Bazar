@@ -7,6 +7,7 @@ import {
   HStack,
   Icon,
   Spacer,
+  Text,
 } from "@chakra-ui/react";
 import { CreditCardIcon } from "@heroicons/react/solid";
 import Link from "next/link";
@@ -72,7 +73,17 @@ const Header: React.FC<HeaderProps> = ({
                   variant="ghost"
                   rightIcon={<Icon as={CreditCardIcon} />}
                 >
-                  Sell book
+                  Sell
+                  <Text
+                    as="span"
+                    sx={{
+                      "@media (max-width: 320px)": {
+                        display: "none",
+                      },
+                    }}
+                  >
+                    &nbsp;book
+                  </Text>
                 </Button>
               </Link>
               <HeaderUserInfo />

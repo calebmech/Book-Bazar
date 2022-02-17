@@ -4,19 +4,19 @@
   The file returns the search input used to retrieve user queries.
 */
 
-import { useRef } from "react";
+import { AutocompleteApi } from "@algolia/autocomplete-core";
 import {
   Button,
+  FormControl,
+  Icon,
+  IconButton,
   Input,
   InputGroup,
   InputRightElement,
-  Icon,
-  FormControl,
-  HStack,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@heroicons/react/solid";
-import { AutocompleteApi } from "@algolia/autocomplete-core";
 import { AutocompleteItem } from "@lib/hooks/autocomplete";
+import { useRef } from "react";
 
 /* The search input component takes the autocomplete hook as input to update
    the state of the search.
@@ -40,18 +40,37 @@ export const SearchInput = (
             })}
             type="search"
             name="q"
-            placeholder="Search for book or course"
+            aria-label="Find a book or course"
+            placeholder="Find a book or course"
             required
             autoComplete="off"
             shadow="sm"
+            textColor="primaryText"
             bg="secondaryBackground"
           />
-          <InputRightElement pr="0.5rem" width="7.5">
+          <InputRightElement pr="0.5rem" width="auto">
+            <IconButton
+              type="submit"
+              aria-label="Search"
+              icon={<Icon as={SearchIcon} />}
+              colorScheme="teal"
+              h="2.3rem"
+              sx={{
+                "@media (min-width: 376px)": {
+                  display: "none",
+                },
+              }}
+            />
             <Button
               type="submit"
               rightIcon={<Icon as={SearchIcon} />}
               colorScheme="teal"
               h="2.3rem"
+              sx={{
+                "@media (max-width: 375px)": {
+                  display: "none",
+                },
+              }}
             >
               Search
             </Button>
