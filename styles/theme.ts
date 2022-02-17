@@ -3,7 +3,7 @@ import { extendTheme, ThemeOverride } from "@chakra-ui/react";
 const config: ThemeOverride = {
   config: {
     useSystemColorMode: true,
-    initialColorMode: "dark"
+    initialColorMode: "dark",
   },
   colors: {
     microsoftTeams: {
@@ -11,7 +11,7 @@ const config: ThemeOverride = {
       300: "#505AC9",
       500: "#505AC9",
       600: "#464EB8",
-    }
+    },
   },
   semanticTokens: {
     colors: {
@@ -27,6 +27,10 @@ const config: ThemeOverride = {
         default: "gray.100",
         _dark: "gray.900",
       },
+      primaryText: {
+        default: "gray.800",
+        _dark: "whiteAlpha.900",
+      },
       secondaryText: {
         default: "gray.600",
         _dark: "gray.200",
@@ -41,7 +45,7 @@ const config: ThemeOverride = {
       },
       fieldDecoration: {
         default: "gray.300",
-        _dark: "gray.600"
+        _dark: "gray.600",
       },
       accent: {
         default: "teal.500",
@@ -50,7 +54,7 @@ const config: ThemeOverride = {
       accentHover: {
         default: "teal.600",
         _dark: "teal.300",
-      }
+      },
     },
     fonts: {
       title: "Lora, Georgia, serif",

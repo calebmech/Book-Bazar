@@ -4,37 +4,41 @@
 */
 
 import {
-  Text,
+  Box,
   Container,
   Heading,
   HStack,
-  Stack,
-  Image,
-  Skeleton,
   Link,
+  Skeleton,
+  Tag,
+  TagLabel,
+  TagLeftIcon,
+  Text,
 } from "@chakra-ui/react";
+import { AcademicCapIcon } from "@heroicons/react/solid";
+import { resolveImageUrl } from "@lib/helpers/frontend/resolve-image-url";
+import { AutocompleteItem } from "@lib/hooks/autocomplete";
 import { useBookQuery } from "@lib/hooks/book";
 import { CourseWithDept } from "@lib/services/course";
 import { Book } from "@prisma/client";
-import { AutocompleteItem } from "@lib/hooks/autocomplete";
-
-const fallbackImageSrc =
-  "https://campusstore.mcmaster.ca/cgi-mcm/ws/getTradeImage.pl?isbn=281000000883B";
+import Image from "next/image";
 
 export const CourseSuggestionCard = ({ name, code, dept }: CourseWithDept) => {
   return (
-    <Link href={"/course/" + dept.abbreviation + "-" + code}>
+    <Link
+      href={"/course/" + dept.abbreviation + "-" + code}
+      _hover={{ textDecoration: "none" }}
+    >
       <HStack>
-        <Stack>
-          <Container alignContent={"left"} marginY={2}>
-            <Heading isTruncated as="h4" size="md" color="primaryText">
-              {`${dept.abbreviation} ${code}`}
-            </Heading>
-            <Text color="secondaryText" isTruncated>
-              {name || ""}
-            </Text>
-          </Container>
-        </Stack>
+        {/* Let box width be controlled by flex parent */}
+        <Container marginX="0" marginY="2" flex="1" width="0">
+          <Heading isTruncated as="p" size="md" color="primaryText" mb="1">
+            {`${dept.abbreviation} ${code}`}
+          </Heading>
+          <Text color="secondaryText" isTruncated>
+            {name || ""}
+          </Text>
+        </Container>
       </HStack>
     </Link>
   );
@@ -48,26 +52,42 @@ export const BookSuggestionCard = ({ isbn, name, imageUrl }: Book) => {
   }
 
   return (
-    <Link href={"/book/" + isbn}>
-      <HStack>
-        <Image
-          maxH={"100px"}
-          maxW={"60px"}
-          src={imageUrl || fallbackImageSrc}
-          alt={"book image"}
-        ></Image>
-        <Stack>
-          <Container alignContent={"left"} marginY={2}>
-            <Heading isTruncated as="h4" size="md" color="primaryText">
-              {`${name}`}
-            </Heading>
-            <Skeleton isLoaded={!isLoading}>
-              <Text color="secondaryText" isTruncated>
-                {authorString}
-              </Text>
-            </Skeleton>
-          </Container>
-        </Stack>
+    <Link href={"/book/" + isbn} _hover={{ textDecoration: "none" }}>
+      <HStack spacing="0" alignItems="start">
+        <Box height="90px" width="60px" position="relative">
+          <Image
+            layout="fill"
+            objectFit="contain"
+            src={resolveImageUrl(populatedBook)}
+            alt={"book image"}
+          />
+        </Box>
+        {/* Let box width be controlled by flex parent */}
+        <Container flex="1" width="0">
+          <Heading isTruncated as="p" size="md" color="primaryText" mb="1">
+            {name}
+          </Heading>
+          <Skeleton isLoaded={!isLoading}>
+            <Text color="secondaryText" isTruncated>
+              {authorString}
+            </Text>
+          </Skeleton>
+          <Skeleton isLoaded={!isLoading} mt="3">
+            <Box overflowX="auto" whiteSpace="nowrap">
+              {populatedBook?.courses.slice(0, 3).map((course) => (
+                <Tag key={course.id} mr="2">
+                  <TagLeftIcon as={AcademicCapIcon} />
+                  <TagLabel isTruncated={false} whiteSpace="nowrap">
+                    {course.dept.abbreviation} {course.code}
+                  </TagLabel>
+                </Tag>
+              ))}
+              {populatedBook?.courses && populatedBook.courses.length > 3 && (
+                <span>…</span>
+              )}
+            </Box>
+          </Skeleton>
+        </Container>
       </HStack>
     </Link>
   );
@@ -78,17 +98,15 @@ export interface SuggestionCardProps {
 }
 
 export const SuggestionCard: React.FC<SuggestionCardProps> = ({ item }) => {
-  return (
-    <>
-      {item.type === "course" ? (
-        <CourseSuggestionCard {...(item.entry as CourseWithDept)}>
-          {" "}
-        </CourseSuggestionCard>
-      ) : (
-        <BookSuggestionCard {...(item.entry as Book)}> </BookSuggestionCard>
-      )}
-    </>
-  );
+  if (item.type === "course") {
+    return <CourseSuggestionCard {...item.entry} />;
+  }
+
+  if (item.type === "book") {
+    return <BookSuggestionCard {...item.entry} />;
+  }
+
+  return <></>;
 };
 
 export default SuggestionCard;

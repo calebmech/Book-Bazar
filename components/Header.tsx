@@ -7,6 +7,7 @@ import {
   HStack,
   Icon,
   Spacer,
+  Text,
 } from "@chakra-ui/react";
 import { CreditCardIcon } from "@heroicons/react/solid";
 import Link from "next/link";
@@ -14,21 +15,26 @@ import HeaderUserInfo from "./HeaderUserInfo";
 import { SearchBar } from "./SearchBar";
 
 export interface HeaderProps {
-  hideSearch?: boolean;
+  minimalContent?: boolean;
 }
 
-const Header: React.FC<HeaderProps> = ({ hideSearch = false, children }) => {
+const Header: React.FC<HeaderProps> = ({
+  minimalContent = false,
+  children,
+}) => {
   return (
     <Box as="header" backgroundColor="secondaryBackground" boxShadow="md">
       <Container py={{ base: 5, md: 8 }} maxWidth="container.lg">
         <Grid
-          templateRows={{ base: "1fr 1fr", md: "1fr" }}
+          templateRows={minimalContent ? "1fr" : { base: "1fr 1fr", md: "1fr" }}
           templateColumns={{
             base: "auto auto",
             md: "1fr minmax(auto, 575px) 1fr",
           }}
           templateAreas={{
-            base: `'logo account' 'search search'`,
+            base: minimalContent
+              ? `'logo account'`
+              : `'logo account' 'search search'`,
             md: `'logo search account'`,
           }}
           justifyContent="space-between"
@@ -39,20 +45,24 @@ const Header: React.FC<HeaderProps> = ({ hideSearch = false, children }) => {
           columnGap={{ base: "4", lg: "12" }}
           rowGap="3"
         >
-          <Heading
-            gridArea="logo"
-            as="h1"
-            size="lg"
-            fontFamily="title"
-            fontWeight="500"
-            whiteSpace="nowrap"
-          >
-            <Link href="/">Book Bazar</Link>
-          </Heading>
-          {hideSearch ? (
-            <Spacer gridArea="search" />
+          {minimalContent ? (
+            <Spacer gridArea="logo" />
           ) : (
-            <SearchBar openOnFocus={true} overlay={true} />
+            <Heading
+              gridArea="logo"
+              as="h1"
+              size="lg"
+              fontFamily="title"
+              fontWeight="500"
+              whiteSpace="nowrap"
+            >
+              <Link href="/">Book Bazar</Link>
+            </Heading>
+          )}
+          {!minimalContent && (
+            <Box gridArea="search">
+              <SearchBar openOnFocus={true} overlay={true} />
+            </Box>
           )}
           <Box gridArea="account" textAlign="right">
             <HStack align="baseline">
@@ -63,7 +73,17 @@ const Header: React.FC<HeaderProps> = ({ hideSearch = false, children }) => {
                   variant="ghost"
                   rightIcon={<Icon as={CreditCardIcon} />}
                 >
-                  Sell book
+                  Sell
+                  <Text
+                    as="span"
+                    sx={{
+                      "@media (max-width: 320px)": {
+                        display: "none",
+                      },
+                    }}
+                  >
+                    &nbsp;book
+                  </Text>
                 </Button>
               </Link>
               <HeaderUserInfo />

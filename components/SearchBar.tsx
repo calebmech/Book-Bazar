@@ -16,6 +16,7 @@ import { SearchInput } from "./SearchInput";
 import { SearchPanel, SearchPanelProps } from "./SearchPanel";
 import { useAutocomplete } from "@lib/hooks/autocomplete";
 import { AutocompleteItem } from "@lib/hooks/autocomplete";
+import { Box } from "@chakra-ui/react";
 
 const initialAutocompleteState: AutocompleteState<AutocompleteItem> = {
   collections: [],
@@ -35,7 +36,7 @@ export function SearchBar(
     AutocompleteState<AutocompleteItem>
   >(initialAutocompleteState);
 
-  // Autocomplete hook used to retreive data from Algolia while searching
+  // Autocomplete hook used to retrieve data from Algolia while searching
   const autocomplete = useAutocomplete(props, setAutocompleteState);
 
   // Props for the search panel (containing)
@@ -46,9 +47,9 @@ export function SearchBar(
   };
 
   return (
-    <div className="aa-Autocomplete">
+    <Box className="aa-Autocomplete" width="100%" position="relative">
       <SearchInput {...autocomplete}></SearchInput>
       <SearchPanel {...searchPanelProps}></SearchPanel>
-    </div>
+    </Box>
   );
 }
