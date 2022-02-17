@@ -58,7 +58,7 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
             </Text>
           </Skeleton>
           <Text fontWeight="bold" fontSize="xl">
-            ${price}
+            ${(price/100).toFixed(2)}
           </Text>
           <Text color="secondaryText" noOfLines={3}>
             {description}
