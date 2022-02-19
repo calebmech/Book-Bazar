@@ -141,7 +141,7 @@ Section 11.9 of the team's System Requirements Rev0 document covers this hazard.
 \subsubsection*{Explanation}
 To verify that a user is a member of the McMaster community, Book Bazar shall generate magic links which will be emailed to their McMaster emails. A malicious user may guess the link by brute force. When they access the link, they may use that to impersonate the user on Book Bazar platform. 
 \subsubsection*{Cause of Event}
-One of the means via which an attacker may acquire a user's magic link is by brute forcing all possible combinations. Apart from this, if the user is sharing their screen then, a malicious user viewing the screen would be able to note down the magic link.
+One of the means via which an attacker may acquire a user's magic link is by brute forcing all possible combinations. Apart from this, if the user is sharing their screen, then a malicious user viewing the screen would be able to note down the magic link.
 
 \subsubsection*{Mitigation}
 We shall ensure that the magic links generated are sufficiently random and long to avoid someone viewing a screen from noting down the magic link. Furthermore the magic link will also have a short-enough lifespan to prevent any brute-force attempts.
