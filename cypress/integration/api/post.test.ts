@@ -1,4 +1,5 @@
 import { HttpMethod } from "@lib/http-method";
+import { Post } from "@prisma/client";
 import { StatusCodes } from "http-status-codes";
 import { v4 } from "uuid";
 import {
@@ -231,6 +232,12 @@ describe("test post api", () => {
       body: formData,
     }).then((response) => {
       expect(response.status).equal(StatusCodes.OK);
+      const createdPost: Post = JSON.parse(
+        new TextDecoder("utf-8").decode(response.body)
+      )
+      expect(createdPost.bookId).to.equal(TEST_BOOK_UUID);
+      expect(createdPost.description).to.equal("this is my book, please buy");
+      expect(createdPost.price).to.equal(42);
     });
   });
 
