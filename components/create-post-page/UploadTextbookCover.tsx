@@ -1,27 +1,27 @@
 import ImageUploadModal from "@components/ImageUpload/ImageUploadModal";
-import { ChangeEvent } from "react";
 
 interface Props {
+  key: string;
   onCoverPhotoUploaded: (coverPhoto: Blob) => void;
+  isOpen: boolean;
+  onClose: VoidFunction;
 }
 
-export default function UploadTextbookCover({ onCoverPhotoUploaded }: Props) {
-  const wrapTextbookCoverUploaded = (e: ChangeEvent<HTMLInputElement>) => {
-    const blob = e.target.files?.[0];
-    if (blob) {
-      onCoverPhotoUploaded(blob);
-    }
-  };
-
+export default function UploadTextbookCover({
+  key,
+  onCoverPhotoUploaded,
+  isOpen,
+  onClose,
+}: Props) {
   const newWrapTextbookCoverUploaded = async (blob: Blob) => {
     onCoverPhotoUploaded(blob);
   };
-
   return (
     <ImageUploadModal
+      key={key}
       aspectRatio={4 / 5}
-      isOpen={true}
-      onClose={() => {}}
+      isOpen={isOpen}
+      onClose={onClose}
       onUpload={newWrapTextbookCoverUploaded}
       shape="rect"
     />

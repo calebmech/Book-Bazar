@@ -4,6 +4,7 @@ import {
   Icon,
   IconButton,
   Spacer,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import Quagga from "@ericblade/quagga2";
@@ -19,6 +20,8 @@ import ScanBarcode from "./ScanBarcode";
 import SetPriceAndDescription from "./SetPriceAndDescription";
 import TextbookUploaded from "./TextbookUploaded";
 import UploadTextbookCover from "./UploadTextbookCover";
+import ViewTextbookCover from "./ViewTextbookCover";
+import { v4 as uuid } from "uuid";
 
 export default function CreatePostingWizard() {
   const NUMBER_PAGES = 6;
@@ -30,14 +33,23 @@ export default function CreatePostingWizard() {
 
   const toast = useToast();
 
+  // Image upload modal values
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [imageUploadModalKey, setImageUploadModalKey] = useState("");
+  const handleOpenUploadImage = () => {
+    setImageUploadModalKey(uuid());
+    onOpen();
+  };
   const createPostMutation = useCreatePostMutation();
 
   const onIsbnTyped = (book: PopulatedBook) => {
     setBook(book);
+    setCoverPhoto(null);
     setPageNumber(2);
   };
 
   const onScanSelected = () => {
+    setCoverPhoto(null);
     setPageNumber(1);
   };
 
@@ -79,15 +91,27 @@ export default function CreatePostingWizard() {
 
   const onConfirmIsBook = () => {
     setPageNumber(pageNumber + 1);
+    if (!coverPhoto) {
+      handleOpenUploadImage();
+    }
   };
 
   const onConfirmIsNotBook = () => {
+    setCoverPhoto(null);
     setPageNumber(0);
   };
 
   const onCoverPhotoUploaded = (inputCoverPhoto: Blob) => {
     setCoverPhoto(inputCoverPhoto);
     setPageNumber(pageNumber + 1);
+    onClose();
+  };
+
+  const onCoverPhotoClose = () => {
+    if (!coverPhoto) {
+      setPageNumber(pageNumber - 1);
+    }
+    onClose();
   };
 
   const onSubmitPressed = async (
@@ -173,7 +197,15 @@ export default function CreatePostingWizard() {
             />
           ),
           "3": (
-            <UploadTextbookCover onCoverPhotoUploaded={onCoverPhotoUploaded} />
+            <>
+              <ViewTextbookCover onOpen={onOpen} coverPhoto={coverPhoto} />
+              <UploadTextbookCover
+                key={imageUploadModalKey}
+                onCoverPhotoUploaded={onCoverPhotoUploaded}
+                isOpen={isOpen}
+                onClose={onCoverPhotoClose}
+              />
+            </>
           ),
           "4": book && (
             <SetPriceAndDescription
@@ -182,7 +214,11 @@ export default function CreatePostingWizard() {
               isLoading={createPostMutation.isLoading}
             />
           ),
-          "5": <TextbookUploaded post={createPostMutation.data as PostWithBookWithUser} />,
+          "5": (
+            <TextbookUploaded
+              post={createPostMutation.data as PostWithBookWithUser}
+            />
+          ),
         }[pageNumber]
       }
     </>
