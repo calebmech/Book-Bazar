@@ -13,20 +13,14 @@ import { TrashIcon } from "@heroicons/react/outline";
 import { useDeletePostMutation } from "@lib/hooks/post";
 import { Post } from "@prisma/client";
 import { useRef } from "react";
+import { useRouter } from "next/router";
 
-export interface DeletPostFormProps {
-  post: Post;
-  isAccountPage?: boolean;
-}
-
-export default function DeletePostForm({
-  post,
-  isAccountPage,
-}: DeletPostFormProps) {
+export default function DeletePostForm({ post }: { post: Post }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const router = useRouter();
   const cancelRef = useRef(null);
 
-  const mutation = useDeletePostMutation(post.id, isAccountPage);
+  const mutation = useDeletePostMutation(post.id);
 
   const handleDeleteSubmit = () => {
     mutation.mutate();
@@ -38,7 +32,7 @@ export default function DeletePostForm({
         onClick={() => onOpen()}
         colorScheme="red"
         leftIcon={<Icon as={TrashIcon} />}
-        width={isAccountPage ? "240px" : "fit-content"}
+        width={router.asPath == "/account" ? "240px" : "fit-content"}
       >
         Delete post
       </Button>
