@@ -41,7 +41,7 @@ export default function AccountPostCard({
         >
           Edit
         </Button>
-        <DeletePostForm post={post} buttonWidth="240px" />
+        <DeletePostForm post={post} isAccountPage={true} />
       </HStack>
       <EditPostModal
         key={editPostModalKey}

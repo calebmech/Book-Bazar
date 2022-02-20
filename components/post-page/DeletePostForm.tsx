@@ -16,17 +16,17 @@ import { useRef } from "react";
 
 export interface DeletPostFormProps {
   post: Post;
-  buttonWidth?: string;
+  isAccountPage?: boolean;
 }
 
 export default function DeletePostForm({
   post,
-  buttonWidth,
+  isAccountPage,
 }: DeletPostFormProps) {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const cancelRef = useRef(null);
 
-  const mutation = useDeletePostMutation(post.id);
+  const mutation = useDeletePostMutation(post.id, isAccountPage);
 
   const handleDeleteSubmit = () => {
     mutation.mutate();
@@ -38,7 +38,7 @@ export default function DeletePostForm({
         onClick={() => onOpen()}
         colorScheme="red"
         leftIcon={<Icon as={TrashIcon} />}
-        width={buttonWidth}
+        width={isAccountPage ? "240px" : "fit-content"}
       >
         Delete post
       </Button>
