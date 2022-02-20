@@ -29,7 +29,7 @@ export default function AccountPostCard({
   };
 
   const card = postsWithBookWithUser ? (
-    <Stack align={"center"}>
+    <Stack align={"center"} paddingBottom={2}>
       <PostCard post={postsWithBookWithUser} isLinkActive={isLinkActive} />
       <HStack>
         <Button
