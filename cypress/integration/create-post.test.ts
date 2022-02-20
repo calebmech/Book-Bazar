@@ -30,12 +30,16 @@ describe("create post flow", () => {
 
     cy.fixture("guy.jpg", null).as("image");
     cy.get("input[type=file]").selectFile("@image", { force: true });
-    cy.findByRole("button", { name: /upload/i }).click();
+    cy.findByRole("dialog")
+      .findByRole("button", { name: /upload/i })
+      .click();
 
     cy.findByRole("textbox", { name: /description/i }).type(
       "{selectAll}There are sticky notes in it"
     );
-    cy.findByRole("spinbutton", { name: /asking price/i }).type("{selectAll}240");
+    cy.findByRole("spinbutton", { name: /asking price/i }).type(
+      "{selectAll}240"
+    );
     cy.findByRole("button", { name: /create/i }).click();
 
     cy.findByText("There are sticky notes in it").should("exist");
