@@ -23,13 +23,13 @@ export function usePostQuery(
   );
 }
 
-export function useDeletePostMutation(postId: string) {
+export function useDeletePostMutation(postId: string, isAccountPage?: boolean) {
   const queryClient = useQueryClient();
   const router = useRouter();
   return useMutation(() => axios.delete("/api/post/" + postId), {
     onSuccess: () => {
       queryClient.invalidateQueries("post-" + postId);
-      router.push("/");
+      router.push(isAccountPage ? "/account" : "/");
     },
   });
 }
