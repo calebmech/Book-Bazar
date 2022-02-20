@@ -26,6 +26,7 @@ export async function getCourseWithBooks(courseCode: CourseCode) {
     },
     include: {
       books: true,
+      dept: true,
     },
   });
 }
@@ -56,7 +57,7 @@ export async function getPostsForCourse(
       books: true,
     },
   });
-  
+
   if (!course) {
     return null;
   }

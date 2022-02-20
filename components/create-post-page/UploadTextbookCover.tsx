@@ -1,25 +1,19 @@
 import ImageUploadModal from "@components/ImageUpload/ImageUploadModal";
-import { ChangeEvent } from "react";
+
+export const TEXTBOOK_ASPECT_RATIO = 4 / 5;
 
 interface Props {
   onCoverPhotoUploaded: (coverPhoto: Blob) => void;
 }
 
 export default function UploadTextbookCover({ onCoverPhotoUploaded }: Props) {
-  const wrapTextbookCoverUploaded = (e: ChangeEvent<HTMLInputElement>) => {
-    const blob = e.target.files?.[0];
-    if (blob) {
-      onCoverPhotoUploaded(blob);
-    }
-  };
-
   const newWrapTextbookCoverUploaded = async (blob: Blob) => {
     onCoverPhotoUploaded(blob);
   };
 
   return (
     <ImageUploadModal
-      aspectRatio={4 / 5}
+      aspectRatio={TEXTBOOK_ASPECT_RATIO}
       isOpen={true}
       onClose={() => {}}
       onUpload={newWrapTextbookCoverUploaded}

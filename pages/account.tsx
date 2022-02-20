@@ -46,7 +46,7 @@ const AccountPage: NextPage<AccountPageProps> = ({ initialUser }) => {
     >
       <EditImageWidget user={user} display={{ base: "none", md: "initial" }} />
       <VStack align="start" width="100%">
-        <Heading as="h1" size="lg" fontWeight="semibold" fontFamily="title">
+        <Heading as="h1" size="lg" fontWeight="500" fontFamily="title">
           Your Account
         </Heading>
         <Text color="tertiaryText" fontWeight="semibold">

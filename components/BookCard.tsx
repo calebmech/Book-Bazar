@@ -3,7 +3,7 @@ import Image from "next/image";
 import { useBookQuery } from "@lib/hooks/book";
 import { Book } from "@prisma/client";
 import Link from "next/link";
-import { resolveImageUrl } from "@lib/helpers/frontend/resolve-image-url";
+import { resolveImageUrl } from "@lib/helpers/frontend/resolve-book-data";
 
 type BookCardProps = {
   book: Book;
@@ -21,23 +21,25 @@ export default function BookCard({ book, isLinkActive }: BookCardProps) {
 
   const card = (
     <Box
-      overflow='hidden'
-      maxW='128px'
-      mb='3'
-      mx='3'
-      shadow='md'
-      borderRadius='lg'
-      background='secondaryBackground'
-      fontSize='xs'
-      _hover={{ shadow: 'xl' }}
-      transition='0.3s'
-      cursor={isLinkActive ? 'pointer' : 'cursor'}
+      overflow="hidden"
+      maxW="128px"
+      mb="3"
+      mx="3"
+      shadow="md"
+      borderRadius="lg"
+      background="secondaryBackground"
+      fontSize="xs"
+      _hover={{ shadow: "xl" }}
+      transition="0.3s"
+      as={isLinkActive ? "a" : "div"}
+      cursor={isLinkActive ? "pointer" : "cursor"}
     >
-      <Box width='100%' height='180px' position='relative' >
+      <Box width="100%" height="180px" position="relative">
         <Image
           layout="fill"
+          objectFit="contain"
           src={resolveImageUrl(populatedBook)}
-          alt='book-image'
+          alt="book-image"
         />
       </Box>
 
@@ -56,7 +58,11 @@ export default function BookCard({ book, isLinkActive }: BookCardProps) {
   );
 
   if (isLinkActive) {
-    return <Link href={"/book/" + isbn}>{card}</Link>;
+    return (
+      <Link href={"/book/" + isbn} passHref>
+        {card}
+      </Link>
+    );
   }
 
   return card;

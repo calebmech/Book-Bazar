@@ -6,6 +6,7 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
   Button,
+  ButtonProps,
   Icon,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -14,7 +15,10 @@ import { useDeletePostMutation } from "@lib/hooks/post";
 import { Post } from "@prisma/client";
 import { useRef } from "react";
 
-export default function DeletePostForm({ post }: { post: Post }) {
+export default function DeletePostForm({
+  post,
+  ...props
+}: { post: Post } & ButtonProps) {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const cancelRef = useRef(null);
 
@@ -30,6 +34,7 @@ export default function DeletePostForm({ post }: { post: Post }) {
         onClick={() => onOpen()}
         colorScheme="red"
         leftIcon={<Icon as={TrashIcon} />}
+        {...props}
       >
         Delete post
       </Button>

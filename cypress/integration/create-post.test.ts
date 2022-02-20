@@ -35,11 +35,13 @@ describe("create post flow", () => {
     cy.findByRole("textbox", { name: /description/i }).type(
       "{selectAll}There are sticky notes in it"
     );
-    cy.findByRole("spinbutton", { name: /asking price/i }).type("{selectAll}240");
+    cy.findByRole("spinbutton", { name: /asking price/i }).type(
+      "{selectAll}240"
+    );
     cy.findByRole("button", { name: /create/i }).click();
 
     cy.findByText("There are sticky notes in it").should("exist");
     cy.findByText(/algorithms/i).should("exist");
-    cy.findByText("$240.00").should("exist");
+    cy.findByText("$240").should("exist");
   });
 });
