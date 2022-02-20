@@ -1,30 +1,13 @@
 import { Box, Button, Flex, Icon } from "@chakra-ui/react";
 import Image from "next/image";
 import { UploadIcon } from "@heroicons/react/outline";
-import { useState } from "react";
 
 interface Props {
   onOpen: VoidFunction;
-  coverPhoto: Blob | null;
+  imageUrl: string | null;
 }
 
-export default function ViewTextbookCover({ onOpen, coverPhoto }: Props) {
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-
-  const handleRawImage = (image: Blob) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(image);
-    reader.onload = () => {
-      if (typeof reader.result === "string") {
-        setImageUrl(reader.result);
-      }
-    };
-  };
-
-  if (coverPhoto) {
-    handleRawImage(coverPhoto);
-  }
-
+export default function ViewTextbookCover({ onOpen, imageUrl }: Props) {
   return (
     <Flex
       direction="column"

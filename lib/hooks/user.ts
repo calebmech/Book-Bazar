@@ -1,11 +1,17 @@
 import { ToastId, useToast } from "@chakra-ui/react";
+import { UserWithPosts } from "@lib/services/user";
 import axios from "axios";
 import { useRouter } from "next/dist/client/router";
 import { SendMagicLinkBody } from "pages/api/auth/magic";
 import { GetCurrentUserResponse } from "pages/api/user";
 import { UpdateUserRequest } from "pages/api/user/[id]";
 import { useEffect, useRef } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  UseQueryResult,
+} from "react-query";
 
 const USER_KEY = "user";
 
@@ -23,6 +29,18 @@ export function useUserQuery(initialData?: User) {
     user: query.data,
     isAuthenticated: Boolean(query.data),
   };
+}
+
+export function useUserIdQuery(
+  id: string | string[] | undefined
+): UseQueryResult<UserWithPosts> {
+  return useQuery(
+    "user-" + id,
+    () => axios.get<UserWithPosts>(`/api/user/${id}/`).then((res) => res.data),
+    {
+      enabled: !!id && !Array.isArray(id),
+    }
+  );
 }
 
 export interface UpdateUserMutationProps {

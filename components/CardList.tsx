@@ -1,11 +1,26 @@
 import { Box, Text, HStack, Wrap } from "@chakra-ui/react";
 import { CourseWithDept } from "@lib/services/course";
 import { PostWithBookWithUser } from "@lib/services/post";
-import { Book } from "@prisma/client";
+import { Book, Post } from "@prisma/client";
 import { ReactNode } from "react";
+import AccountPostCard from "./account-page/AccountPostCard";
 import BookCard from "./BookCard";
 import CourseCard from "./CourseCard";
 import PostCard from "./PostCard";
+
+interface AccountPostCardListProps {
+  posts: Post[];
+  isLinkActive: boolean;
+}
+export function AccountPostCardList({
+  posts,
+  isLinkActive,
+}: AccountPostCardListProps) {
+  const items = posts.map((post, i) => {
+    return <AccountPostCard key={i} post={post} isLinkActive={isLinkActive} />;
+  });
+  return <CardList items={items} itemName="Active Listing" />;
+}
 
 interface PostCardListProps {
   posts: PostWithBookWithUser[];

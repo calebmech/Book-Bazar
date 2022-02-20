@@ -24,8 +24,6 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
       background="secondaryBackground"
       overflow="hidden"
       borderRadius="lg"
-      mb="3"
-      mx="3"
       direction="row"
       shadow="md"
       _hover={{ shadow: "xl" }}
@@ -58,7 +56,7 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
             </Text>
           </Skeleton>
           <Text fontWeight="bold" fontSize="xl">
-            ${(price/100).toFixed(2)}
+            ${(price / 100).toFixed(2)}
           </Text>
           <Text color="secondaryText" noOfLines={3}>
             {description}

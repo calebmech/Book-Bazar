@@ -1,4 +1,4 @@
-import { Divider, Flex, Heading, Spacer, Text, VStack } from "@chakra-ui/react";
+import { Divider, Flex, Heading, Text, VStack } from "@chakra-ui/react";
 import DeleteAccountForm from "@components/account-page/DeleteAccountForm";
 import EditImageWidget from "@components/account-page/EditImageWidget";
 import UpdateNameForm from "@components/account-page/UpdateNameForm";
@@ -10,6 +10,9 @@ import { CreateResponseObject } from "@lib/helpers/type-utilities";
 import { User, useUserQuery } from "@lib/hooks/user";
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
+import { Post } from "@prisma/client";
+import { AccountPostCardList } from "@components/CardList";
+import { useUserIdQuery } from "@lib/hooks/user";
 
 const PAGE_TITLE = pageTitle("Account");
 
@@ -19,6 +22,10 @@ interface AccountPageProps {
 
 const AccountPage: NextPage<AccountPageProps> = ({ initialUser }) => {
   const { user } = useUserQuery(initialUser ?? undefined);
+
+  const { data: userWithPosts } = useUserIdQuery(user?.id);
+
+  const posts: Post[] = userWithPosts?.posts || [];
 
   if (!user) {
     return (
@@ -76,8 +83,7 @@ const AccountPage: NextPage<AccountPageProps> = ({ initialUser }) => {
         <title>{PAGE_TITLE}</title>
       </Head>
       <Layout extendedHeader={PageHeader}>
-        {/* TODO: Allow editing and deleting of posts */}
-        <Spacer height="lg" />
+        <AccountPostCardList posts={posts} isLinkActive={true} />
       </Layout>
     </>
   );

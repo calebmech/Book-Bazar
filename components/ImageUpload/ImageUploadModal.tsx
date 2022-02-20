@@ -20,6 +20,7 @@ import {
 } from "@heroicons/react/solid";
 import { ChangeEvent, DragEvent, useCallback, useState } from "react";
 import ImageCrop from "./ImageCrop";
+import { handleRawImage } from "@lib/helpers/frontend/handle-raw-image";
 
 export interface ImageCropModalProps {
   isOpen: boolean;
@@ -36,7 +37,9 @@ export default function ImageUploadModal({
   aspectRatio,
   onUpload,
 }: ImageCropModalProps) {
-  const [uncroppedImageUrl, setUncroppedImageUrl] = useState<string>();
+  const [uncroppedImageUrl, setUncroppedImageUrl] = useState<string | null>(
+    null
+  );
   const [croppedImage, setCroppedImage] = useState<Blob>();
   const [uploadStatus, setUploadStatus] = useState<
     "idle" | "uploading" | "error"
@@ -45,7 +48,7 @@ export default function ImageUploadModal({
   const handleImageSelect = (event: ChangeEvent<HTMLInputElement>) => {
     const imageBlob = event.target.files?.[0];
     if (imageBlob) {
-      handleRawImage(imageBlob);
+      handleRawImage(imageBlob, setUncroppedImageUrl);
     }
   };
 
@@ -55,18 +58,8 @@ export default function ImageUploadModal({
 
     const imageBlob = event.dataTransfer?.files?.[0];
     if (imageBlob) {
-      handleRawImage(imageBlob);
+      handleRawImage(imageBlob, setUncroppedImageUrl);
     }
-  };
-
-  const handleRawImage = (image: Blob) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(image);
-    reader.onload = () => {
-      if (typeof reader.result === "string") {
-        setUncroppedImageUrl(reader.result);
-      }
-    };
   };
 
   const handleUploadImage = () => {

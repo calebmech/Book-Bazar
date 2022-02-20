@@ -14,6 +14,7 @@ import { PopulatedBook } from "@lib/services/book";
 import { PostWithBookWithUser } from "@lib/services/post";
 import axios from "axios";
 import { useState } from "react";
+import { handleRawImage } from "@lib/helpers/frontend/handle-raw-image";
 import ChooseScanOrType from "./ChooseScanOrType";
 import ConfirmBook from "./ConfirmBook";
 import ScanBarcode from "./ScanBarcode";
@@ -36,20 +37,26 @@ export default function CreatePostingWizard() {
   // Image upload modal values
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [imageUploadModalKey, setImageUploadModalKey] = useState("");
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
   const handleOpenUploadImage = () => {
     setImageUploadModalKey(uuid());
     onOpen();
   };
+
+  const clearUploadedPhoto = () => {
+    setCoverPhoto(null);
+    setImageUrl(null);
+  };
+
   const createPostMutation = useCreatePostMutation();
 
   const onIsbnTyped = (book: PopulatedBook) => {
     setBook(book);
-    setCoverPhoto(null);
     setPageNumber(2);
   };
 
   const onScanSelected = () => {
-    setCoverPhoto(null);
     setPageNumber(1);
   };
 
@@ -60,6 +67,8 @@ export default function CreatePostingWizard() {
       Quagga.stop();
       setPageNumber(pageNumber - 1);
     }
+
+    if (pageNumber == 0) clearUploadedPhoto();
   };
 
   const onScanIsbn = async (isbn: string) => {
@@ -97,12 +106,13 @@ export default function CreatePostingWizard() {
   };
 
   const onConfirmIsNotBook = () => {
-    setCoverPhoto(null);
+    clearUploadedPhoto();
     setPageNumber(0);
   };
 
   const onCoverPhotoUploaded = (inputCoverPhoto: Blob) => {
     setCoverPhoto(inputCoverPhoto);
+    handleRawImage(inputCoverPhoto, setImageUrl);
     setPageNumber(pageNumber + 1);
     onClose();
   };
@@ -198,7 +208,7 @@ export default function CreatePostingWizard() {
           ),
           "3": (
             <>
-              <ViewTextbookCover onOpen={onOpen} coverPhoto={coverPhoto} />
+              <ViewTextbookCover onOpen={onOpen} imageUrl={imageUrl} />
               <UploadTextbookCover
                 key={imageUploadModalKey}
                 onCoverPhotoUploaded={onCoverPhotoUploaded}
