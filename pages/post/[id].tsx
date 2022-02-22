@@ -219,12 +219,16 @@ const PostPage: NextPage = () => {
             {post.description && (
               <Text
                 noOfLines={6}
-                background="tertiaryBackground"
                 padding="6"
                 width="100%"
                 border="1px"
-                borderColor="tertiaryBackgroundBorder"
                 borderRadius="lg"
+                background="gray.100"
+                borderColor="gray.200"
+                _dark={{
+                  background: "gray.800",
+                  borderColor: "whiteAlpha.300",
+                }}
               >
                 {post.description}
               </Text>
