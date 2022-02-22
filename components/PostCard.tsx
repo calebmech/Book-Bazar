@@ -39,7 +39,7 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
       transition="0.3s"
       cursor={isLinkActive ? "pointer" : "cursor"}
     >
-      <Box gridArea="image" height="220px" width="160px" position="relative">
+      <Box gridArea="image" height="220px" width="165px" position="relative">
         <Image
           layout="fill"
           src={imageUrl || resolveImageUrl(populatedBook)}

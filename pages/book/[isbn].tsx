@@ -10,7 +10,6 @@ import {
   VStack,
   Wrap,
 } from "@chakra-ui/react";
-import { PostCardList } from "@components/CardList";
 import Layout from "@components/Layout";
 import {
   AcademicCapIcon,
@@ -32,8 +31,8 @@ import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import ErrorPage from "next/error";
 import { useRouter } from "next/router";
-import { resolveImageUrl } from "@lib/helpers/frontend/resolve-image-url";
 import { PaginationButtons } from "@components/PaginationButtons";
 
 const BookPage: NextPage = () => {
@@ -55,7 +54,6 @@ const BookPage: NextPage = () => {
   }
   const { googleBook, posts } = book;
 
-  const { name, googleBook, posts } = book;
   const postsWithBookIncluded = posts.map((post) => {
     return {
       ...post,
@@ -200,7 +198,8 @@ const BookPage: NextPage = () => {
           <PaginationButtons
             page={page}
             url={"/book/" + isbn}
-            morePosts={morePosts}
+            morePosts={morePosts} 
+            isPreviousData={false}          
           />
         )}
 

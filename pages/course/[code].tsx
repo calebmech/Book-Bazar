@@ -46,9 +46,7 @@ const CoursePage: NextPage = () => {
 
   return (
     <>
-      <Head>
-        <title>{pageTitle(code?.toString().replace("-", " "))}</title>
-      </Head>
+      
       <Layout
         extendedHeader={
           <Skeleton isLoaded={!isLoadingCourseData}>
@@ -104,6 +102,7 @@ const CoursePage: NextPage = () => {
         />
       )}
     </Layout>
+    </>
   );
 };
 

@@ -40,4 +40,4 @@ export function PaginationButtons({page, url, morePosts, isPreviousData}: Pagina
       </Link>
     </Flex>
   );
-}
+} 

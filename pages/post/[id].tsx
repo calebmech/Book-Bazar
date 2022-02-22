@@ -11,7 +11,6 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import { PostCardList } from "@components/CardList";
 import { TEXTBOOK_ASPECT_RATIO } from "@components/create-post-page/UploadTextbookCover";
 import Layout from "@components/Layout";
 import LoginModal from "@components/LoginModal";
@@ -33,8 +32,6 @@ import { timeSinceDateString } from "@lib/helpers/frontend/time-between-dates";
 import { formatIntPrice } from "@lib/helpers/priceHelpers";
 import { useBookQuery } from "@lib/hooks/book";
 import { usePostQuery } from "@lib/hooks/post";
-import type { NextPage } from "next";
-import { useRouter } from "next/router";
 import { PostCardGrid } from "@components/CardList";
 import { useUserQuery } from "@lib/hooks/user";
 import type { NextPage } from "next";
@@ -249,10 +246,8 @@ const PostPage: NextPage = () => {
         <title>{pageTitle()}</title>
       </Head>
       <Layout extendedHeader={postInfo}>
-        <PostCardList
+        <PostCardGrid
           posts={otherPostsForBook ?? []}
-          isLinkActive
-          itemName="Similar Post"
         />
         <LoginModal
           isOpen={isLoginModalOpen}
