@@ -27,7 +27,7 @@ const CoursePage: NextPage = () => {
   }
 
   const { data: postsData } = useCoursePostsQuery(code, page, MAX_NUM_POSTS);
-  const { data: postsSecondData } = useCoursePostsQuery(
+  const { data: postsSecondData, isPreviousData } = useCoursePostsQuery(
     code,
     page + 1,
     MAX_NUM_POSTS
@@ -95,15 +95,15 @@ const CoursePage: NextPage = () => {
           <PostCardGrid posts={posts} />
         </Box>
 
-        {(page === 0 ? posts.length === MAX_NUM_POSTS : posts.length !== 0) && (
-          <PaginationButtons
-            page={page}
-            url={"/course/" + code}
-            morePosts={morePosts}
-          />
-        )}
-      </Layout>
-    </>
+      {(page === 0 ? posts.length === MAX_NUM_POSTS : posts.length !== 0) && (
+        <PaginationButtons
+          page={page}
+          url={"/course/" + code}
+          morePosts={morePosts}
+          isPreviousData={isPreviousData}
+        />
+      )}
+    </Layout>
   );
 };
 

@@ -36,6 +36,7 @@ export function useCoursePostsQuery(
         .then((res) => res.data),
     {
       enabled: !(courseCode == undefined || Array.isArray(courseCode)),
+      keepPreviousData: true,
     }
   );
 }

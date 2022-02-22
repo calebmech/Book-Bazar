@@ -6,9 +6,10 @@ export interface PaginationButtonsProps {
   page: number;
   url: string;
   morePosts: boolean;
+  isPreviousData: boolean;
 }
 
-export function PaginationButtons({page, url, morePosts}: PaginationButtonsProps) {
+export function PaginationButtons({page, url, morePosts, isPreviousData}: PaginationButtonsProps) {
   return (
     <Flex w="100%" justify="center" mt="4">
       <Link href={url + "?page=" + (page - 1)} passHref shallow>
@@ -34,6 +35,7 @@ export function PaginationButtons({page, url, morePosts}: PaginationButtonsProps
           aria-label="next-page"
           disabled={!morePosts}
           icon={<Icon as={ChevronRightIcon} />}
+          isLoading={isPreviousData}
         />
       </Link>
     </Flex>
