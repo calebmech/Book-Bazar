@@ -52,8 +52,8 @@ type CardListProps = {
 function CardList({ itemName, items }: CardListProps) {
   if (items.length === 0) {
     return (
-      <Text mt="10" fontSize="2xl" color="secondaryText">
-        No {itemName}s found.
+      <Text my="20" fontSize="lg" textAlign="center">
+        No {itemName.toLowerCase()}s found.
       </Text>
     );
   }

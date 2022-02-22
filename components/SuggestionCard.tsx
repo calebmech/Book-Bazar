@@ -8,7 +8,6 @@ import {
   Container,
   Heading,
   HStack,
-  Link,
   Skeleton,
   Tag,
   TagLabel,
@@ -25,14 +24,12 @@ import { useBookQuery } from "@lib/hooks/book";
 import { CourseWithDept } from "@lib/services/course";
 import { Book } from "@prisma/client";
 import Image from "next/image";
+import Link from "next/link";
 
 export const CourseSuggestionCard = ({ name, code, dept }: CourseWithDept) => {
   return (
-    <Link
-      href={"/course/" + dept.abbreviation + "-" + code}
-      _hover={{ textDecoration: "none" }}
-    >
-      <HStack>
+    <Link href={"/course/" + dept.abbreviation + "-" + code} passHref>
+      <HStack as="a">
         {/* Let box width be controlled by flex parent */}
         <Container marginX="0" marginY="2" flex="1" width="0">
           <Heading isTruncated as="p" size="md" color="primaryText" mb="1">
@@ -55,8 +52,8 @@ export const BookSuggestionCard = (book: Book) => {
   }
 
   return (
-    <Link href={"/book/" + book.isbn} _hover={{ textDecoration: "none" }}>
-      <HStack spacing="0" alignItems="start">
+    <Link href={"/book/" + book.isbn} passHref>
+      <HStack as="a" spacing="0" alignItems="start">
         <Box height="90px" width="60px" position="relative">
           <Image
             layout="fill"

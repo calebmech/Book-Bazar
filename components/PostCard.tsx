@@ -36,7 +36,6 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
       _hover={{ shadow: "xl" }}
       transition="0.3s"
       as={isLinkActive ? "a" : "div"}
-      cursor={isLinkActive ? "pointer" : "cursor"}
     >
       <Flex
         flex="1"

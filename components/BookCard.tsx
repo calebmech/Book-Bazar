@@ -3,7 +3,10 @@ import Image from "next/image";
 import { useBookQuery } from "@lib/hooks/book";
 import { Book } from "@prisma/client";
 import Link from "next/link";
-import { resolveImageUrl } from "@lib/helpers/frontend/resolve-book-data";
+import {
+  resolveBookTitle,
+  resolveImageUrl,
+} from "@lib/helpers/frontend/resolve-book-data";
 
 type BookCardProps = {
   book: Book;
@@ -11,7 +14,7 @@ type BookCardProps = {
 };
 
 export default function BookCard({ book, isLinkActive }: BookCardProps) {
-  const { name, isbn } = book;
+  const { isbn } = book;
   const { isLoading, data: populatedBook } = useBookQuery(isbn);
   let authorString: string = "-";
 
@@ -32,9 +35,13 @@ export default function BookCard({ book, isLinkActive }: BookCardProps) {
       _hover={{ shadow: "xl" }}
       transition="0.3s"
       as={isLinkActive ? "a" : "div"}
-      cursor={isLinkActive ? "pointer" : "cursor"}
     >
-      <Box width="100%" height="180px" position="relative">
+      <Box
+        width="100%"
+        height="180px"
+        position="relative"
+        background="tertiaryBackground"
+      >
         <Image
           layout="fill"
           objectFit="contain"
@@ -45,7 +52,7 @@ export default function BookCard({ book, isLinkActive }: BookCardProps) {
 
       <Flex p="3" flexDir="column">
         <Heading fontSize="xs" fontWeight="semibold" isTruncated>
-          {name ?? "Book Name Unavailable"}
+          {resolveBookTitle(populatedBook ?? book) ?? "Book Name Unavailable"}
         </Heading>
 
         <Skeleton isLoaded={!isLoading}>

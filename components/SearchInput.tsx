@@ -16,7 +16,8 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon } from "@heroicons/react/solid";
 import { AutocompleteItem } from "@lib/hooks/autocomplete";
-import { useRef } from "react";
+import { Router, useRouter } from "next/router";
+import { FormEvent, useRef } from "react";
 
 /* The search input component takes the autocomplete hook as input to update
    the state of the search.
@@ -30,8 +31,21 @@ export const SearchInput = (
   >
 ) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+
+  const handleSearchSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const formData = new FormData(event.currentTarget);
+    const query = formData.get("q");
+
+    if (typeof query === "string") {
+      router.push("/search?q=" + encodeURIComponent(query));
+    }
+
+    event.preventDefault();
+  };
+
   return (
-    <form action="/search">
+    <form onSubmit={handleSearchSubmit}>
       <FormControl>
         <InputGroup size="lg">
           <Input
