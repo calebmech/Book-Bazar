@@ -90,7 +90,7 @@ const Header: React.FC<HeaderProps> = ({
             </HStack>
           </Box>
         </Grid>
-        {children && <Box mt="8">{children}</Box>}
+        {children && <Box mt={{ base: 8, md: 12 }}>{children}</Box>}
       </Container>
     </Box>
   );

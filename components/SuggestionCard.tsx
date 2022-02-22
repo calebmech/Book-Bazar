@@ -16,7 +16,10 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { AcademicCapIcon } from "@heroicons/react/solid";
-import { resolveImageUrl } from "@lib/helpers/frontend/resolve-image-url";
+import {
+  resolveBookTitle,
+  resolveImageUrl,
+} from "@lib/helpers/frontend/resolve-book-data";
 import { AutocompleteItem } from "@lib/hooks/autocomplete";
 import { useBookQuery } from "@lib/hooks/book";
 import { CourseWithDept } from "@lib/services/course";
@@ -44,15 +47,15 @@ export const CourseSuggestionCard = ({ name, code, dept }: CourseWithDept) => {
   );
 };
 
-export const BookSuggestionCard = ({ isbn, name, imageUrl }: Book) => {
-  const { isLoading, data: populatedBook } = useBookQuery(isbn);
+export const BookSuggestionCard = (book: Book) => {
+  const { isLoading, data: populatedBook } = useBookQuery(book.isbn);
   let authorString: string = "-";
   if (populatedBook?.googleBook?.authors) {
     authorString = populatedBook.googleBook.authors.join(", ");
   }
 
   return (
-    <Link href={"/book/" + isbn} _hover={{ textDecoration: "none" }}>
+    <Link href={"/book/" + book.isbn} _hover={{ textDecoration: "none" }}>
       <HStack spacing="0" alignItems="start">
         <Box height="90px" width="60px" position="relative">
           <Image
@@ -65,7 +68,7 @@ export const BookSuggestionCard = ({ isbn, name, imageUrl }: Book) => {
         {/* Let box width be controlled by flex parent */}
         <Container flex="1" width="0">
           <Heading isTruncated as="p" size="md" color="primaryText" mb="1">
-            {name}
+            {resolveBookTitle(populatedBook ?? book)}
           </Heading>
           <Skeleton isLoaded={!isLoading}>
             <Text color="secondaryText" isTruncated>

@@ -24,7 +24,7 @@ import { useBookQuery } from "@lib/hooks/book";
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { resolveImageUrl } from "@lib/helpers/frontend/resolve-image-url";
+import { resolveImageUrl } from "@lib/helpers/frontend/resolve-book-data";
 
 const BookPage: NextPage = () => {
   const router = useRouter();

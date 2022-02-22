@@ -26,6 +26,21 @@ export function getIntStringPriceAsNumber(price: string): number | null {
   return null;
 }
 
+/**
+ * Formats a price and returns it as a string
+ *
+ * @param price int price
+ * @returns formatted price as a string
+ */
+export function formatIntPrice(price: number): string {
+  if (price % 100 == 0) {
+    // No cents value
+    return (price / 100).toFixed(0);
+  }
+
+  return (price / 100).toFixed(2);
+}
+
 function isPriceValid(price: number) {
   return !Number.isNaN(price) && Number.isFinite(price) && price >= 0;
 }

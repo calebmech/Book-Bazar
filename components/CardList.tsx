@@ -10,12 +10,17 @@ import PostCard from "./PostCard";
 interface PostCardListProps {
   posts: PostWithBookWithUser[];
   isLinkActive: boolean;
+  itemName?: string;
 }
-export function PostCardList({ posts, isLinkActive }: PostCardListProps) {
+export function PostCardList({
+  posts,
+  isLinkActive,
+  itemName = "Active Listing",
+}: PostCardListProps) {
   const items = posts.map((post, i) => {
     return <PostCard key={i} post={post} isLinkActive={isLinkActive} />;
   });
-  return <CardList items={items} itemName="Active Listing" />;
+  return <CardList items={items} itemName={itemName} />;
 }
 
 interface BookCardListProps {
@@ -55,11 +60,15 @@ function CardList({ itemName, items }: CardListProps) {
 
   return (
     <Box mt="10">
-      <HStack spacing="12px" fontSize="2xl">
-        <Text>{itemName}s</Text>
-        <Text color="secondaryText">({items.length} matching)</Text>
+      <HStack spacing="0" flexWrap="wrap">
+        <Text fontFamily="title" fontWeight="500" fontSize="2xl" mr="2">
+          {itemName}s
+        </Text>
+        <Text color="secondaryText" fontSize="xl">
+          ({items.length} matching)
+        </Text>
       </HStack>
-      <Wrap mt="2">{items}</Wrap>
+      <Wrap mt="4">{items}</Wrap>
     </Box>
   );
 }
