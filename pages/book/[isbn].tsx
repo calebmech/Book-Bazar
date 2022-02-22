@@ -117,7 +117,13 @@ const BookPage: NextPage = () => {
 
           <CourseBadges />
 
-          <Box my="4" maxWidth="sm">
+          <Box
+            my="4"
+            maxWidth={{
+              base: "100%",
+              md: "sm",
+            }}
+          >
             <HStack justify="space-between" color="tertiaryText">
               <HStack direction="row">
                 <Icon as={OfficeBuildingIcon} />
@@ -132,7 +138,7 @@ const BookPage: NextPage = () => {
               <Text>{googleBook?.publisher ?? "\u2013"}</Text>
               <Text>{googleBook?.publishedDate ?? "\u2013"}</Text>
             </HStack>
-            <HStack justify="space-between" color="tertiaryText">
+            <HStack justify="space-between" color="tertiaryText" mt="2">
               <HStack direction="row">
                 <Icon as={ViewBoardsIcon} />
                 <Text> ISBN </Text>
