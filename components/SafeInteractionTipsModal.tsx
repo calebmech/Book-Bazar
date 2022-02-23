@@ -18,6 +18,8 @@ import {
   UserGroupIcon,
 } from "@heroicons/react/outline";
 
+const SHOWN_MODAL_LOCAL_STORAGE_KEY = "SHOWN_SAFE_INTERACTION_TIPS_MODAL";
+
 export interface SafeInteractionTipsModalProps {
   isOpen: boolean;
   onClose: VoidFunction;
@@ -29,6 +31,23 @@ export default function SafeInteractionTipsModal({
   onClose,
   onAccept,
 }: SafeInteractionTipsModalProps) {
+  const hasUserSeenModal =
+    localStorage.getItem(SHOWN_MODAL_LOCAL_STORAGE_KEY) === "true";
+
+  const handleAccept = () => {
+    onAccept();
+    onClose();
+    localStorage.setItem(SHOWN_MODAL_LOCAL_STORAGE_KEY, "true");
+  };
+
+  if (hasUserSeenModal) {
+    if (isOpen) {
+      onAccept();
+      onClose();
+    }
+    return null;
+  }
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="lg">
       <ModalOverlay />
@@ -90,13 +109,7 @@ export default function SafeInteractionTipsModal({
           <Button variant="outline" mr={3} onClick={onClose}>
             Cancel
           </Button>
-          <Button
-            colorScheme="teal"
-            onClick={() => {
-              onAccept();
-              onClose();
-            }}
-          >
+          <Button colorScheme="teal" onClick={handleAccept}>
             Sounds good!
           </Button>
         </ModalFooter>
