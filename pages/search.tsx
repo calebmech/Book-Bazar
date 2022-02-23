@@ -1,5 +1,5 @@
 import { Heading, HStack, Text } from "@chakra-ui/react";
-import { BookCardGrid, BookCardList, CourseCardList } from "@components/CardList";
+import { BookCardGrid, CourseCardList } from "@components/CardList";
 import Layout from "@components/Layout";
 import Loading from "@components/Loading";
 import pageTitle from "@lib/helpers/frontend/page-title";
