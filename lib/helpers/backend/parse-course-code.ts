@@ -4,11 +4,11 @@ export type CourseCode = {
 };
 
 export function parseCourseCode(code: string): CourseCode | null {
-  let match = /(\w+)-(\d\w\w\d)/.exec(code);
-  if (match) {
+  const parts = code.split("-");
+  if (parts.length === 2) {
     return {
-      deptAbbreviation: match[1].toUpperCase(),
-      code: match[2].toUpperCase(),
+      deptAbbreviation: parts[0].toUpperCase(),
+      code: parts[1].toUpperCase(),
     };
   }
   return null;
