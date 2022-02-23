@@ -25,16 +25,13 @@ export default function BookCard({ book, isLinkActive }: BookCardProps) {
   const card = (
     <Box
       overflow="hidden"
-      maxW="128px"
-      mb="3"
-      mx="3"
       shadow="md"
       borderRadius="lg"
       background="secondaryBackground"
-      fontSize="xs"      
-      _hover={{ shadow: isLinkActive ? "xl" : "md"  }}
+      fontSize="xs"
+      _hover={{ shadow: isLinkActive ? "xl" : "md" }}
       transition="0.3s"
-      as={isLinkActive ? "a" : "div"}
+      cursor={isLinkActive ? "pointer" : "cursor"}
     >
       <Box
         width="100%"

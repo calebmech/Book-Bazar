@@ -9,23 +9,17 @@ import {
   MAX_NUM_POSTS,
   PostCardGrid,
 } from "@components/CardList";
-import { PaginationButtons } from "@components/PaginationButtons";
 import pageTitle from "@lib/helpers/frontend/page-title";
-import { Head } from "next/document";
+import Head from "next/head";
+import { PaginationButtons } from "@components/PaginationButtons";
+import { parsePageString } from "@lib/helpers/frontend/parse-page-string";
 
 const CoursePage: NextPage = () => {
   const router = useRouter();
   const { code, page: pageString } = router.query;
   const { isLoading: isLoadingCourseData, data: courseData } =
     useCourseQuery(code);
-  var page: number;
-
-  if (!pageString || Array.isArray(pageString)) {
-    page = 0;
-  } else {
-    page = Number.parseInt(pageString);
-  }
-
+  const page = parsePageString(pageString);
   const { data: postsData } = useCoursePostsQuery(code, page, MAX_NUM_POSTS);
   const { data: postsSecondData, isPreviousData } = useCoursePostsQuery(
     code,
@@ -37,16 +31,15 @@ const CoursePage: NextPage = () => {
     return <ErrorPage statusCode={404} />;
   }
 
-  const courseName = courseData
-    ? courseData.name + " " + courseData.code
-    : "PlaceHolder";
   const books = courseData ? courseData.books : [];
   const posts = postsData ? postsData : [];
   const morePosts = postsSecondData ? postsSecondData.length !== 0 : false;
 
   return (
     <>
-      
+      <Head>
+        <title>{pageTitle(code?.toString().replace("-", " "))}</title>
+      </Head>
       <Layout
         extendedHeader={
           <Skeleton isLoaded={!isLoadingCourseData}>
@@ -65,43 +58,25 @@ const CoursePage: NextPage = () => {
           </Skeleton>
         }
       >
-        <Skeleton isLoaded={!isLoadingCourseData}>
-          <Text mt="1" fontSize="4xl" fontWeight="semibold">
-            {courseName}
-          </Text>
-        </Skeleton>
-
-        <Skeleton isLoaded={!isLoadingCourseData}>
-          <Text mt="10" fontSize="2xl">
-            Course Books
-          </Text>
-        </Skeleton>
+        <Text mt="10" fontSize="2xl">
+          Course Books
+        </Text>
         <BookCardGrid books={books} />
 
-        <Skeleton isLoaded={!isLoadingCourseData}>
-          <Text mt="10" fontSize="2xl">
-            Active Listings
-          </Text>
-        </Skeleton>
+        <Text mt="10" fontSize="2xl">
+          {posts.length !== 0 ? "Active Listings" : "No Active Listings"}
+        </Text>
 
-        <Box
-          h={{
-            base: "auto",
-            md: "450px",
-          }}
-        >
-          <PostCardGrid posts={posts} />
-        </Box>
-
-      {(page === 0 ? posts.length === MAX_NUM_POSTS : posts.length !== 0) && (
-        <PaginationButtons
-          page={page}
-          url={"/course/" + code}
-          morePosts={morePosts}
-          isPreviousData={isPreviousData}
-        />
-      )}
-    </Layout>
+        <PostCardGrid posts={posts} />
+        {(page === 0 ? posts.length === MAX_NUM_POSTS : posts.length !== 0) && (
+          <PaginationButtons
+            page={page}
+            url={"/course/" + code}
+            morePosts={morePosts}
+            isLoadingNextPage={isPreviousData}
+          />
+        )}
+      </Layout>
     </>
   );
 };

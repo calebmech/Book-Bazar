@@ -21,16 +21,15 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
   const card = (
     <Grid
       templateColumns={{
-        base: "160px minmax(0, 1fr)",
+        base: "120px minmax(0, 1fr)",
+        sm: "165px minmax(0, 1fr)",
       }}
       templateRows={{
-        base: "220px",
+        base: "160px",
+        sm: "220px",
       }}
-      templateAreas={{
-        base: `'image info'`,
-      }}
+      templateAreas="'image info'"
       width="100%"
-      minW="340px"
       background="secondaryBackground"
       overflow="hidden"
       borderRadius="lg"
@@ -39,7 +38,13 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
       transition="0.3s"
       cursor={isLinkActive ? "pointer" : "cursor"}
     >
-      <Box gridArea="image" height="220px" width="165px" position="relative">
+      <Box
+        height={{ base: "160px", sm: "220px" }}
+        width={{ base: "120px", sm: "165px" }}
+        gridArea="image"
+        position="relative"
+        display="flex"
+      >
         <Image
           layout="fill"
           src={imageUrl || resolveImageUrl(populatedBook)}
@@ -52,7 +57,7 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
         direction="column"
         justify="space-between"
         fontSize="sm"
-        p="4"
+        p={{ base: "2", sm: "4" }}
       >
         <Box>
           <Skeleton isLoaded={!isBookLoading}>
@@ -68,7 +73,7 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
           <Text fontWeight="bold" fontSize="xl">
             ${price / 100}
           </Text>
-          <Text color="secondaryText" noOfLines={3}>
+          <Text color="secondaryText" noOfLines={{ base: 1, sm: 3 }}>
             {description}
           </Text>
         </Box>

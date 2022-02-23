@@ -15,8 +15,9 @@ export function PostCardGrid({ posts }: PostCardListProps) {
     <Grid
       mt="3"
       templateColumns={{
-        base: "repeat(auto-fill, minmax(380px, 1fr))",
-        md: "repeat(auto-fill, minmax(340px, 1fr))",
+        base: "repeat(auto-fill, minmax(250px, 1fr))",
+        sm: "repeat(auto-fill, minmax(350px, 1fr))",
+        md: "repeat(auto-fill, minmax(380px, 1fr))",
       }}
       gap={4}
     >

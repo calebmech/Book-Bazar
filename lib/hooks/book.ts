@@ -17,6 +17,7 @@ export function useBookQuery(
         .then((res) => res.data),
     {
       enabled: !!bookIsbn && !Array.isArray(bookIsbn),
+      keepPreviousData: true,
     }
   );
 }

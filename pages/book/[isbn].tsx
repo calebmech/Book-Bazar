@@ -34,18 +34,18 @@ import Link from "next/link";
 import ErrorPage from "next/error";
 import { useRouter } from "next/router";
 import { PaginationButtons } from "@components/PaginationButtons";
+import { parsePageString } from "@lib/helpers/frontend/parse-page-string";
 
 const BookPage: NextPage = () => {
   const router = useRouter();
   const { isbn, page: pageString } = router.query;
-  var page: number;
-  if (!pageString || Array.isArray(pageString)) {
-    page = 0;
-  } else {
-    page = Number.parseInt(pageString);
-  }
+  const page = parsePageString(pageString);
   const { data: book, isLoading } = useBookQuery(isbn, page, MAX_NUM_POSTS);
-  const { data: bookSecondData } = useBookQuery(isbn, page + 1, MAX_NUM_POSTS);
+  const { data: bookSecondData, isPreviousData } = useBookQuery(
+    isbn,
+    page + 1,
+    MAX_NUM_POSTS
+  );
   const morePosts = bookSecondData ? bookSecondData.posts.length !== 0 : false;
 
   if (!book) {
@@ -193,13 +193,16 @@ const BookPage: NextPage = () => {
         <title>{pageTitle(resolveBookTitle(book))}</title>
       </Head>
       <Layout extendedHeader={bookInfo}>
+        <Text mt="10" fontSize="2xl">
+          {posts.length !== 0 ? "Active Listings" : "No Active Listings For This Book"}
+        </Text>
         <PostCardGrid posts={postsWithBookIncluded} />
         {(page === 0 ? posts.length === MAX_NUM_POSTS : posts.length !== 0) && (
           <PaginationButtons
             page={page}
             url={"/book/" + isbn}
-            morePosts={morePosts} 
-            isPreviousData={false}          
+            morePosts={morePosts}
+            isLoadingNextPage={isPreviousData}
           />
         )}
 
