@@ -1,5 +1,6 @@
 import { Box, Flex, Grid, Skeleton, Text } from "@chakra-ui/react";
 import { resolveImageUrl } from "@lib/helpers/frontend/resolve-book-data";
+import { formatIntPrice } from "@lib/helpers/priceHelpers";
 import { useBookQuery } from "@lib/hooks/book";
 import { PostWithBookWithUser } from "@lib/services/post";
 import Image from "next/image";
@@ -70,8 +71,8 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
               {authors}
             </Text>
           </Skeleton>
-          <Text fontWeight="bold" fontSize="xl">
-            ${price / 100}
+          <Text my="1" fontWeight="bold" fontSize="xl">
+            ${formatIntPrice(price)}
           </Text>
           <Text color="secondaryText" noOfLines={{ base: 1, sm: 3 }}>
             {description}
