@@ -105,6 +105,8 @@
 \hline
 6& 06.02.2022& Harsh Mahajan& Corrected grammar and revised document based on David's peer review\\
 \hline
+7& 22.02.2022& Caleb Mech & Updated tests to match changes to BookHttpHandler Module design\\
+\hline
 \end{tabular}
 \caption{Table of Revisions}
 
@@ -253,25 +255,27 @@ M2T19 & should give 400 when attempting to create a post with missing book while
 \hline
  \rowcolor{lightgray} 
 \textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
-M3T1 & should give a 200 when GETting an existing book, it's 4 posts, and it's course & FR4, FR9, FR10 \\
+M3T1 & should give a 200 when GETting an existing book and it's course & FR4, FR10 \\
 \hline
-M3T2 & should give users of posts when GETting an existing book and it's posts while AuthN & FR4, FR9, FR10 \\
+M3T2 & should give users when GETting posts for an existing book while AuthN & FR9 \\
 \hline
 M3T3 & should return null for the google book data of a book that does not exist on google books & FR4, FR9, FR10 \\
 \hline
 M3T4 & should give a 404 when trying to GET a book with an isbn that does not exist & FR4, FR9, FR10 \\
 \hline
-M3T5 & should include the first 3 of 4 posts when GETting a book and it's posts with a length of 3 & FR4, FR9, FR10 \\
+M3T5 & should include the first 3 of 4 posts when GETting posts for a book with a length of 3 & FR6 \\
 \hline
-M3T6 & should include the last post of 4 when GETting a book and it's posts with a length of 3 and page of 1 & FR4, FR9, FR10 \\
+M3T6 & should include the last post of 4 when GETting posts for a book with a length of 3 and page of 1 & FR6 \\
 \hline
-M3T7 & should include zero posts when GETting a book and it's posts with a length of 3 and page of 2 & FR4, FR9, FR10 \\
+M3T7 & should include zero posts when GETting posts for a book with a length of 3 and page of 2 & FR6 \\
 \hline
-M3T8 & should return a default result of 4 posts for an invalid length input & FR4, FR9, FR10 \\
+M3T8 & should return a default result of 4 posts when GETting posts for a book for an invalid length input & FR6 \\
 \hline
-M3T9 & should return a default result of 4 posts for an invalid page input & FR4, FR9, FR10 \\
-
-
+M3T9 & should return a default result of 4 posts when GETting posts for a book for an invalid page input & FR6 \\
+\hline
+M3T10 & should not give users when GETting posts for an existing book while un-AuthN & FR9 \\
+\hline
+M3T11 & should give a 404 when trying to GET posts for a book with an isbn that does not exist & FR6 \\
 \hline
 \end{tabular}
 \end{table}
@@ -459,27 +463,31 @@ M2T19 & Authenticated HTTP POST request to /api/post, with the bookId parameter 
 \subsection{BookHttpHandler Module (M3)}
 \begin{table}[H]
 \flushleft
-\begin{tabular}{|c|p{4.5cm}|p{3.6cm}|p{3.6cm}|c|}
+\begin{tabular}{|c|p{5.6cm}|p{3.6cm}|c|c|}
 \hline
  \rowcolor{lightgray} 
 \textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
-M3T1 & HTTP GET request to /api/book/:isbn & HTTP OK response containing 4 post objects, without users included, and including expected values & Same as expected & Pass\\
+M3T1 & HTTP GET request to /api/book/:isbn & HTTP OK response including expected values & Same as expected & Pass\\
 \hline
-M3T2 & Authenticated HTTP GET request to /api/book/:isbn & HTTP OK response containing 4 post objects with users included & Same as expected & Pass\\
+M3T2 & Authenticated HTTP GET request to /api/book/:isbn/posts & HTTP OK response containing 4 post objects with users included & Same as expected & Pass\\
 \hline
 M3T3 & HTTP GET request to /api/book/:isbn where isbn has no googleBooks data & HTTP OK response with googleBooks field set to null & Same as expected & Pass\\
 \hline
 M3T4 & HTTP GET request /api/book/:isbn with invalid isbn & HTTP Not Found Response  & Same as expected & Pass\\
 \hline
-M3T5 & HTTP GET request to /api/book/:isbn/?length=3\&page=0 &  HTTP OK response containing 3 post objects & Same as expected & Pass\\
+M3T5 & HTTP GET request to /api/book/:isbn/posts?length=3\&page=0 &  HTTP OK response containing 3 post objects & Same as expected & Pass\\
 \hline
-M3T6 & HTTP GET request to /api/book/:isbn/?length=3\&page=1 &  HTTP OK response containing 1 post object & Same as expected & Pass\\
+M3T6 & HTTP GET request to /api/book/:isbn/posts?length=3\&page=1 &  HTTP OK response containing 1 post object & Same as expected & Pass\\
 \hline
-M3T7 & HTTP GET request to /api/book/:isbn/?length=3\&page=2 &  HTTP OK response containing 0 post objects & Same as expected & Pass\\
+M3T7 & HTTP GET request to /api/book/:isbn/posts?length=3\&page=2 &  HTTP OK response containing 0 post objects & Same as expected & Pass\\
 \hline
-M3T8 & HTTP GET request to /api/book/:isbn/?length=-1\&page=0 &  HTTP OK response containing default options with 4 post objects & Same as expected & Pass\\
+M3T8 & HTTP GET request to /api/book/:isbn/posts?length=-1\&page=0 &  HTTP OK response containing default options with 4 post objects & Same as expected & Pass\\
 \hline
-M3T9 & HTTP GET request to /api/book/:isbn/?length=1\&page=a &  HTTP OK response containing default options with 4 post objects & Same as expected & Pass\\
+M3T9 & HTTP GET request to /api/book/:isbn/posts?length=1\&page=a &  HTTP OK response containing default options with 4 post objects & Same as expected & Pass\\
+\hline
+M3T10 & Authenticated HTTP GET request to /api/book/:isbn/posts & HTTP OK response containing 4 post objects without users included & Same as expected & Pass\\
+\hline
+M3T11 & HTTP GET request /api/book/:isbn/posts with invalid isbn & HTTP Not Found Response  & Same as expected & Pass\\
 \hline
 
 

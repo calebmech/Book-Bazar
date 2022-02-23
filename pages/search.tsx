@@ -1,7 +1,7 @@
 import { Heading, HStack, Text } from "@chakra-ui/react";
-import { BookCardGrid, CourseCardList } from "@components/CardList";
+import { CourseCardList, BookCardGrid } from "@components/CardList";
 import Layout from "@components/Layout";
-import Loading from "@components/Loading";
+import LoadingPage from "@components/LoadingPage";
 import pageTitle from "@lib/helpers/frontend/page-title";
 import { useAlgolia } from "@lib/hooks/algolia";
 import { CourseWithDept } from "@lib/services/course";
@@ -16,9 +16,8 @@ const Search: NextPage = () => {
 
   const { isLoading, data: algoliaSearchResponse } = useAlgolia(search);
 
-  // TODO Replace with something to indicate loading
   if (isLoading) {
-    return <Loading />;
+    return <LoadingPage />;
   }
 
   const hits = algoliaSearchResponse?.hits || [];
@@ -42,25 +41,40 @@ const Search: NextPage = () => {
 
     return (
       <>
-        <HStack mt="10" fontSize="2xl">
-          <Text>{courses.length > 0 && "Courses"}</Text>
-          <Text color="tertiaryText">
-            {courses.length > 0
-              ? "(" + courses.length + " matching)"
-              : "No books found."}
+        <HStack mt="10" mb="4">
+          <Text fontFamily="title" fontWeight="500" fontSize="2xl">
+            Courses
+          </Text>
+          <Text fontSize="xl" color="tertiaryText">
+            ({courses.length} matching)
           </Text>
         </HStack>
-        <CourseCardList courses={courses} />
 
-        <HStack mt="10" fontSize="2xl">
-          <Text>{books.length > 0 && "Books"}</Text>
-          <Text color="tertiaryText">
-            {books.length > 0
-              ? "(" + books.length + " matching)"
-              : "No books found."}
+        {courses.length === 0 ? (
+          <Text fontSize="lg" color="secondaryText">
+            No courses found
+          </Text>
+        ) : (
+          <CourseCardList courses={courses} />
+        )}
+
+        <HStack mt="10" mb="4">
+          <Text fontFamily="title" fontWeight="500" fontSize="2xl">
+            Books
+          </Text>
+          <Text fontSize="xl" color="tertiaryText">
+            ({books.length} matching)
           </Text>
         </HStack>
-        <BookCardGrid books={books} />
+        {books.length === 0 ? (
+          <Text fontSize="lg" color="secondaryText">
+            No books found
+          </Text>
+        ) : (
+          // TODO: Add back in when Algolia stores PopulatedBook
+          // <BookCardGrid books={books} />
+          "WIP"
+        )}
       </>
     );
   };

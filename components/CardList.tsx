@@ -1,14 +1,15 @@
-import { Wrap, Grid, GridItem } from "@chakra-ui/react";
+import { Grid, GridItem, Wrap } from "@chakra-ui/react";
+import { PopulatedBook } from "@lib/services/book";
 import { CourseWithDept } from "@lib/services/course";
-import { PostWithBookWithUser } from "@lib/services/post";
-import { Book } from "@prisma/client";
+import { PostWithBook, PostWithBookWithUser } from "@lib/services/post";
 import BookCard from "./BookCard";
 import CourseCard from "./CourseCard";
 import PostCard from "./PostCard";
 
-export const MAX_NUM_POSTS = 4;
+export const MAX_NUM_POSTS = 10;
+
 interface PostCardListProps {
-  posts: PostWithBookWithUser[];
+  posts: (PostWithBook | PostWithBookWithUser)[];
 }
 export function PostCardGrid({ posts }: PostCardListProps) {
   return (
@@ -33,7 +34,7 @@ export function PostCardGrid({ posts }: PostCardListProps) {
 }
 
 interface BookCardListProps {
-  books: Book[];
+  books: PopulatedBook[];
 }
 export function BookCardGrid({ books }: BookCardListProps) {
   return (
@@ -48,7 +49,7 @@ export function BookCardGrid({ books }: BookCardListProps) {
       {books.map((book, i) => {
         return (
           <GridItem key={i}>
-            <BookCard book={book} isLinkActive={true}/>
+            <BookCard book={book} isLinkActive={true} />
           </GridItem>
         );
       })}

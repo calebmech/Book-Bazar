@@ -32,7 +32,9 @@ export default function SafeInteractionTipsModal({
   onAccept,
 }: SafeInteractionTipsModalProps) {
   const hasUserSeenModal =
-    localStorage.getItem(SHOWN_MODAL_LOCAL_STORAGE_KEY) === "true";
+    globalThis.window &&
+    globalThis.window.localStorage.getItem(SHOWN_MODAL_LOCAL_STORAGE_KEY) ===
+      "true";
 
   const handleAccept = () => {
     onAccept();

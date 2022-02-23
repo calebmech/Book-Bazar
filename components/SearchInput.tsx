@@ -50,6 +50,8 @@ export const SearchInput = (
         <InputGroup size="lg">
           <Input
             {...autocomplete.getInputProps({
+              id: "search-input",
+              "aria-labelledby": "",
               inputElement: inputRef.current,
             })}
             type="search"

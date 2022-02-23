@@ -1,26 +1,24 @@
-import { Box, Heading, Text, Skeleton, Flex } from "@chakra-ui/react";
-import Image from "next/image";
-import { useBookQuery } from "@lib/hooks/book";
-import { Book } from "@prisma/client";
-import Link from "next/link";
+import { Box, Flex, Heading, Text } from "@chakra-ui/react";
 import {
   resolveBookTitle,
   resolveImageUrl,
 } from "@lib/helpers/frontend/resolve-book-data";
+import { PopulatedBook } from "@lib/services/book";
+import Image from "next/image";
+import Link from "next/link";
 
 type BookCardProps = {
-  book: Book;
+  book: PopulatedBook;
   isLinkActive: boolean;
   width?: string;
 };
 
 export default function BookCard({ book, isLinkActive, width }: BookCardProps) {
   const { isbn } = book;
-  const { isLoading, data: populatedBook } = useBookQuery(isbn);
   let authorString: string = "-";
 
-  if (populatedBook?.googleBook?.authors) {
-    authorString = populatedBook.googleBook.authors.join(", ");
+  if (book?.googleBook?.authors) {
+    authorString = book.googleBook.authors.join(", ");
   }
 
   const card = (
@@ -44,21 +42,19 @@ export default function BookCard({ book, isLinkActive, width }: BookCardProps) {
         <Image
           layout="fill"
           objectFit="contain"
-          src={resolveImageUrl(populatedBook)}
+          src={resolveImageUrl(book)}
           alt="book-image"
         />
       </Box>
 
       <Flex p="3" flexDir="column">
         <Heading fontSize="xs" fontWeight="semibold" isTruncated>
-          {resolveBookTitle(populatedBook ?? book) ?? "Book Name Unavailable"}
+          {resolveBookTitle(book) ?? "Book Name Unavailable"}
         </Heading>
 
-        <Skeleton isLoaded={!isLoading}>
-          <Text color="secondaryText" isTruncated>
-            {authorString}
-          </Text>
-        </Skeleton>
+        <Text color="secondaryText" isTruncated>
+          {authorString}
+        </Text>
       </Flex>
     </Box>
   );

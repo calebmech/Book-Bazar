@@ -1,20 +1,19 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import { HttpMethod } from "@lib/http-method";
-import { StatusCodes } from "http-status-codes";
-import { getPopulatedBook } from "../../../lib/services/book";
 import { isAuthenticated } from "@lib/helpers/backend/user-helpers";
-import { PopulatedBook } from "../../../lib/services/book";
+import { HttpMethod } from "@lib/http-method";
+import { getPostsForBook } from "@lib/services/book";
+import { StatusCodes } from "http-status-codes";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method as HttpMethod) {
     case HttpMethod.GET:
-      return getPopulatedBookHandler(req, res);
+      return getPostsForBookHandler(req, res);
     default:
       return res.status(StatusCodes.METHOD_NOT_ALLOWED).end();
   }
 }
 
-async function getPopulatedBookHandler(
+async function getPostsForBookHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
@@ -37,17 +36,11 @@ async function getPopulatedBookHandler(
 
   const includeUser: boolean = await isAuthenticated(req, res);
 
-  // Get relevant book from the database
-  const populatedBook: PopulatedBook | null = await getPopulatedBook(
-    isbn,
-    includeUser,
-    lengthInt,
-    pageInt
-  );
+  const posts = await getPostsForBook(isbn, lengthInt, pageInt, includeUser);
 
   // Return response to user
-  if (populatedBook) {
-    res.status(StatusCodes.OK).json(populatedBook);
+  if (posts) {
+    res.status(StatusCodes.OK).json(posts);
   } else {
     res.status(StatusCodes.NOT_FOUND).end();
   }

@@ -6,11 +6,15 @@ import {
   Heading,
   HStack,
   Icon,
+  Spinner,
   Text,
   VStack,
   Wrap,
 } from "@chakra-ui/react";
+import { MAX_NUM_POSTS, PostCardGrid } from "@components/CardList";
 import Layout from "@components/Layout";
+import LoadingPage from "@components/LoadingPage";
+import { PaginationButtons } from "@components/PaginationButtons";
 import {
   AcademicCapIcon,
   BookOpenIcon,
@@ -20,41 +24,57 @@ import {
   ViewBoardsIcon,
 } from "@heroicons/react/solid";
 import pageTitle from "@lib/helpers/frontend/page-title";
+import { parsePageString } from "@lib/helpers/frontend/parse-page-string";
 import {
   resolveBookTitle,
   resolveImageUrl,
 } from "@lib/helpers/frontend/resolve-book-data";
 import { formatIntPrice } from "@lib/helpers/priceHelpers";
-import { useBookQuery } from "@lib/hooks/book";
-import { MAX_NUM_POSTS, PostCardGrid } from "@components/CardList";
-import type { NextPage } from "next";
+import { useBookPostsQuery, useBookQuery } from "@lib/hooks/book";
+import { getPopulatedBook, PopulatedBook } from "@lib/services/book";
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import ErrorPage from "next/error";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
-import ErrorPage from "next/error";
 import { useRouter } from "next/router";
-import { PaginationButtons } from "@components/PaginationButtons";
-import { parsePageString } from "@lib/helpers/frontend/parse-page-string";
 
-const BookPage: NextPage = () => {
+interface BookPageProps {
+  initialBook: PopulatedBook;
+}
+
+const BookPage: NextPage<Partial<BookPageProps>> = ({ initialBook }) => {
   const router = useRouter();
   const { isbn, page: pageString } = router.query;
   const page = parsePageString(pageString);
-  const { data: book, isLoading } = useBookQuery(isbn, page, MAX_NUM_POSTS);
-  const { data: bookSecondData, isPreviousData } = useBookQuery(
+  const { data: book, isSuccess: isBookSuccess } = useBookQuery(
+    isbn,
+    initialBook
+  );
+
+  const { data: posts, isLoading: isLoadingPosts } = useBookPostsQuery(
+    isbn,
+    page,
+    MAX_NUM_POSTS
+  );
+  const { data: morePosts, isPreviousData } = useBookPostsQuery(
     isbn,
     page + 1,
     MAX_NUM_POSTS
   );
-  const morePosts = bookSecondData ? bookSecondData.posts.length !== 0 : false;
+  const hasMorePosts = morePosts?.length !== 0;
 
   if (!book) {
-    if (isLoading) return null;
-    return <ErrorPage statusCode={404} />;
-  }
-  const { googleBook, posts } = book;
+    if (isBookSuccess) {
+      return <ErrorPage statusCode={404} />;
+    }
 
-  const postsWithBookIncluded = posts.map((post) => {
+    return <LoadingPage />;
+  }
+
+  const { googleBook } = book;
+
+  const postsWithBookIncluded = posts?.map((post) => {
     return {
       ...post,
       book: book,
@@ -63,7 +83,7 @@ const BookPage: NextPage = () => {
 
   const CourseBadges = () => (
     <Wrap>
-      {book.courses.map((course, i) => (
+      {book?.courses.map((course, i) => (
         <Link
           key={i}
           href={"/course/" + course.dept.abbreviation + "-" + course.code}
@@ -193,17 +213,31 @@ const BookPage: NextPage = () => {
         <title>{pageTitle(resolveBookTitle(book))}</title>
       </Head>
       <Layout extendedHeader={bookInfo}>
-        <Text mt="10" fontSize="2xl">
-          {posts.length !== 0 ? "Active Listings" : "No Active Listings For This Book"}
+        <Text fontFamily="title" fontWeight="500" fontSize="2xl" mt="10" mb="4">
+          Active Listings
         </Text>
-        <PostCardGrid posts={postsWithBookIncluded} />
-        {(page === 0 ? posts.length === MAX_NUM_POSTS : posts.length !== 0) && (
-          <PaginationButtons
-            page={page}
-            url={"/book/" + isbn}
-            morePosts={morePosts}
-            isLoadingNextPage={isPreviousData}
-          />
+        {isLoadingPosts ? (
+          <Flex width="100%" height="56" align="center" justifyContent="center">
+            <Spinner />
+          </Flex>
+        ) : !posts || posts.length === 0 ? (
+          <Text my="10" fontSize="lg">
+            No active listings found.
+          </Text>
+        ) : (
+          <>
+            <PostCardGrid posts={postsWithBookIncluded ?? []} />
+            {(page === 0
+              ? posts.length === MAX_NUM_POSTS
+              : posts.length !== 0) && (
+              <PaginationButtons
+                page={page}
+                url={"/book/" + isbn}
+                morePosts={hasMorePosts}
+                isLoadingNextPage={isPreviousData}
+              />
+            )}
+          </>
         )}
 
         {book.isCampusStoreBook && (
@@ -242,6 +276,31 @@ const BookPage: NextPage = () => {
       </Layout>
     </>
   );
+};
+
+export const getStaticProps: GetStaticProps<BookPageProps> = async (
+  context
+) => {
+  const isbn = context.params?.isbn;
+  if (typeof isbn !== "string") return { notFound: true };
+
+  const book = await getPopulatedBook(isbn);
+  if (!book) return { notFound: true };
+
+  return {
+    props: {
+      initialBook: book,
+    },
+    // Book should only change after an index
+    revalidate: 60 * 60 * 24, // 1 day
+  };
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: true,
+  };
 };
 
 export default BookPage;
