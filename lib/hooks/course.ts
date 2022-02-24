@@ -26,12 +26,17 @@ export function useCoursePostsQuery(
   page: number,
   length: number
 ): UseQueryResult<PostWithBookWithUser[]> {
+  const parameters = new URLSearchParams();
+  if (page) parameters.set("page", page.toString());
+  if (length) parameters.set("length", length.toString());
   return useQuery(
     "course-posts-" + courseCode + "-" + page,
     () =>
       axios
         .get<PostWithBookWithUser[]>(
-          `/api/course/${courseCode}/posts?page=${page}&length=${length}`
+          "/api/course/" +
+            courseCode +
+            (page || length ? "/?" + parameters.toString() : "")
         )
         .then((res) => res.data),
     {
