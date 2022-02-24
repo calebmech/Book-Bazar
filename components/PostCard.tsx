@@ -1,5 +1,5 @@
 import { Box, Flex, Grid, Skeleton, Text } from "@chakra-ui/react";
-import { resolveImageUrl } from "@lib/helpers/frontend/resolve-book-data";
+import { resolveBookTitle, resolveImageUrl } from "@lib/helpers/frontend/resolve-book-data";
 import { formatIntPrice } from "@lib/helpers/priceHelpers";
 import { useBookQuery } from "@lib/hooks/book";
 import { PostWithBookWithUser } from "@lib/services/post";
@@ -60,10 +60,10 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
         fontSize="sm"
         p={{ base: "2", sm: "4" }}
       >
-        <Box>
+        <Box mb="3">
           <Skeleton isLoaded={!isBookLoading}>
-            <Text fontWeight="semibold" isTruncated>
-              {book.name}
+            <Text fontSize="lg" fontWeight="semibold" isTruncated>
+              {resolveBookTitle(populatedBook ?? book)}
             </Text>
           </Skeleton>
           <Skeleton isLoaded={!isBookLoading}>
