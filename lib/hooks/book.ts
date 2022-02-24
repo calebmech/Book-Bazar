@@ -7,7 +7,6 @@ export function useBookQuery(
   page: number | null = null,
   length: number | null = null
 ): UseQueryResult<PopulatedBook> {
-  const url = "/api/book/" + bookIsbn;
   const parameters = new URLSearchParams();
   if (page) parameters.set("page", page.toString());
   if (length) parameters.set("length", length.toString());
@@ -15,7 +14,11 @@ export function useBookQuery(
     "book-" + bookIsbn + "-" + page,
     () =>
       axios
-        .get<PopulatedBook>(url + parameters.toString())
+        .get<PopulatedBook>(
+          "/api/book/" +
+            bookIsbn +
+            (page || length ? "/?" + parameters.toString() : "")
+        )
         .then((res) => res.data),
     {
       enabled: !!bookIsbn && !Array.isArray(bookIsbn),
