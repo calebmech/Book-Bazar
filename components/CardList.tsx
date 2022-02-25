@@ -48,7 +48,7 @@ export function BookCardGrid({ books }: BookCardListProps) {
       {books.map((book, i) => {
         return (
           <GridItem key={i}>
-            <BookCard book={book} isLinkActive={true} />
+            <BookCard book={book} isLinkActive={true}/>
           </GridItem>
         );
       })}

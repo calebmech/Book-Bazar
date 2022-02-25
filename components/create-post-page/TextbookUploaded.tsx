@@ -21,9 +21,7 @@ export default function TextbookUploaded({ post }: Props) {
   return (
     <Container maxWidth="container.md">
       <VStack spacing="3">
-        <Container>
-          <PostCard post={post} isLinkActive={true} />
-        </Container>
+        <PostCard post={post} isLinkActive={true} />
         <Container textAlign="left">
           <Text>
             Your textbook post is now live! Make sure to check your messages

@@ -30,7 +30,6 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
         sm: "220px",
       }}
       templateAreas="'image info'"
-      width="100%"
       background="secondaryBackground"
       overflow="hidden"
       borderRadius="lg"
