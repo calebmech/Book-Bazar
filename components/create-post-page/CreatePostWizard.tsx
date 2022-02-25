@@ -22,7 +22,6 @@ import SetPriceAndDescription from "./SetPriceAndDescription";
 import TextbookUploaded from "./TextbookUploaded";
 import UploadTextbookCover from "./UploadTextbookCover";
 import ViewTextbookCover from "./ViewTextbookCover";
-import { v4 as uuid } from "uuid";
 
 export default function CreatePostingWizard() {
   const NUMBER_PAGES = 6;
@@ -36,13 +35,7 @@ export default function CreatePostingWizard() {
 
   // Image upload modal values
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [imageUploadModalKey, setImageUploadModalKey] = useState("");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
-
-  const handleOpenUploadImage = () => {
-    setImageUploadModalKey(uuid());
-    onOpen();
-  };
 
   const clearUploadedPhoto = () => {
     setCoverPhoto(null);
@@ -54,10 +47,12 @@ export default function CreatePostingWizard() {
   const onIsbnTyped = (book: PopulatedBook) => {
     setBook(book);
     setPageNumber(2);
+    clearUploadedPhoto();
   };
 
   const onScanSelected = () => {
     setPageNumber(1);
+    clearUploadedPhoto();
   };
 
   const onBackButton = () => {
@@ -101,7 +96,7 @@ export default function CreatePostingWizard() {
   const onConfirmIsBook = () => {
     setPageNumber(pageNumber + 1);
     if (!coverPhoto) {
-      handleOpenUploadImage();
+      onOpen();
     }
   };
 
@@ -210,7 +205,6 @@ export default function CreatePostingWizard() {
             <>
               <ViewTextbookCover onOpen={onOpen} imageUrl={imageUrl} />
               <UploadTextbookCover
-                key={imageUploadModalKey}
                 onCoverPhotoUploaded={onCoverPhotoUploaded}
                 isOpen={isOpen}
                 onClose={onCoverPhotoClose}

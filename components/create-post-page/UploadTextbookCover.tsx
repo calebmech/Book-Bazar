@@ -1,14 +1,12 @@
 import ImageUploadModal from "@components/ImageUpload/ImageUploadModal";
 
 interface Props {
-  key: string;
   onCoverPhotoUploaded: (coverPhoto: Blob) => void;
   isOpen: boolean;
   onClose: VoidFunction;
 }
 
 export default function UploadTextbookCover({
-  key,
   onCoverPhotoUploaded,
   isOpen,
   onClose,
@@ -18,7 +16,7 @@ export default function UploadTextbookCover({
   };
   return (
     <ImageUploadModal
-      key={key}
+      key={"image-upload-modal"}
       aspectRatio={4 / 5}
       isOpen={isOpen}
       onClose={onClose}

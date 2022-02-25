@@ -5,7 +5,7 @@ import { useState } from "react";
 import PostCard from "../PostCard";
 import { Post } from "@prisma/client";
 import { usePostQuery } from "@lib/hooks/post";
-import { TrashIcon, PencilAltIcon } from "@heroicons/react/outline";
+import { PencilAltIcon } from "@heroicons/react/outline";
 import DeletePostForm from "@components/post-page/DeletePostForm";
 
 type AccountPostCardProps = {
@@ -41,7 +41,7 @@ export default function AccountPostCard({
         >
           Edit
         </Button>
-        <DeletePostForm post={post} />
+        <DeletePostForm post={post} isAccountPage={true} />
       </HStack>
       <EditPostModal
         key={editPostModalKey}

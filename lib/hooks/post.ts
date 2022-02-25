@@ -1,6 +1,5 @@
 import { PostWithBookWithUser } from "@lib/services/post";
 import axios from "axios";
-import { useRouter } from "next/router";
 import {
   UseQueryResult,
   useQuery,
@@ -23,13 +22,12 @@ export function usePostQuery(
   );
 }
 
-export function useDeletePostMutation(postId: string) {
+export function useDeletePostMutation(postId: string, userId?: string) {
   const queryClient = useQueryClient();
-  const router = useRouter();
   return useMutation(() => axios.delete("/api/post/" + postId), {
     onSuccess: () => {
       queryClient.invalidateQueries("post-" + postId);
-      router.asPath == "/account" ? router.reload() : router.push("/");
+      queryClient.invalidateQueries("user-" + userId);
     },
   });
 }
@@ -41,17 +39,25 @@ export interface EditablePostClient {
 }
 
 export function useEditPostMutation(postId: string) {
-  return useMutation((request: EditablePostClient) => {
-    const formData = new FormData();
+  const queryClient = useQueryClient();
+  return useMutation(
+    (request: EditablePostClient) => {
+      const formData = new FormData();
 
-    if (request.description)
-      formData.append("description", request.description);
+      if (request.description)
+        formData.append("description", request.description);
 
-    if (request.price)
-      formData.append("price", request.price.toFixed(2).replace(".", ""));
+      if (request.price)
+        formData.append("price", request.price.toFixed(2).replace(".", ""));
 
-    if (request.image) formData.append("image", request.image);
+      if (request.image) formData.append("image", request.image);
 
-    return axios.put("/api/post/" + postId, formData);
-  });
+      return axios.put("/api/post/" + postId, formData);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("post-" + postId);
+      },
+    }
+  );
 }

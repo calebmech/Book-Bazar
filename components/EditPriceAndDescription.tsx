@@ -9,21 +9,21 @@ import {
   Text,
   Textarea,
 } from "@chakra-ui/react";
-import { ChangeEvent } from "react";
-import { PostWithBookWithUser } from "@lib/services/post";
 
 export interface EditPriceAndDescriptionProps {
   description: string | null;
-  handlePriceChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  handleDescriptionChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
-  post: PostWithBookWithUser;
+  price: number | null;
+  campusStorePrice: number | null;
+  onPriceChange: (price: string) => void;
+  onDescriptionChange: (description: string) => void;
 }
 
 export default function EditPriceAndDescription({
   description,
-  handlePriceChange,
-  handleDescriptionChange,
-  post,
+  price,
+  campusStorePrice,
+  onPriceChange,
+  onDescriptionChange,
 }: EditPriceAndDescriptionProps) {
   return (
     <SimpleGrid
@@ -41,7 +41,7 @@ export default function EditPriceAndDescription({
           value={description || ""}
           id="description"
           backgroundColor="secondaryBackground"
-          onChange={(e) => handleDescriptionChange(e)}
+          onChange={(e) => onDescriptionChange(e.target.value)}
         />
       </Box>
 
@@ -58,27 +58,21 @@ export default function EditPriceAndDescription({
             id="price"
             type="number"
             backgroundColor="secondaryBackground"
-            onChange={(e) => handlePriceChange(e)}
-            placeholder={(post.price / 100).toFixed(2)}
+            onChange={(e) => onPriceChange(e.target.value.trim())}
+            value={price || ""}
           />
         </InputGroup>
       </Box>
 
       {/* Row 3 */}
       <Box>{/* empty */}</Box>
-      <Box>
-        <Flex direction="column">
-          <SimpleGrid columns={2} paddingBottom={3}>
-            <Text color="captionText" textAlign="left">
-              {`Original asking of $${post.price / 100}`}
-            </Text>{" "}
-            <Text color="captionText" textAlign="right">
-              {post.book.campusStorePrice
-                ? `Sold new for $${post.book.campusStorePrice / 100}`
-                : "Not available from the campus store"}
-            </Text>
-          </SimpleGrid>
-        </Flex>
+
+      <Box paddingBottom={2}>
+        <Text color="captionText" textAlign="right">
+          {campusStorePrice
+            ? `Sold new for $${(campusStorePrice / 100).toFixed(2)}`
+            : "Not available from the campus store"}
+        </Text>
       </Box>
     </SimpleGrid>
   );

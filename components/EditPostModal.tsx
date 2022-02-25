@@ -11,13 +11,11 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { RefreshIcon } from "@heroicons/react/outline";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useEditPostMutation } from "@lib/hooks/post";
 import { getFloatStringPriceAsNumber } from "@lib/helpers/priceHelpers";
 import { PostWithBookWithUser } from "@lib/services/post";
 import UploadTextbookCover from "./create-post-page/UploadTextbookCover";
-import { useRouter } from "next/router";
-import { v4 as uuid } from "uuid";
 import ViewTextbookCover from "./create-post-page/ViewTextbookCover";
 import EditPriceAndDescription from "./EditPriceAndDescription";
 import { handleRawImage } from "@lib/helpers/frontend/handle-raw-image";
@@ -39,7 +37,6 @@ export default function EditPostModal({
     onClose: onEditImageClose,
   } = useDisclosure();
 
-  const router = useRouter();
   const mutation = useEditPostMutation(post.id);
 
   const [description, setDescription] = useState<string | null>(
@@ -52,27 +49,24 @@ export default function EditPostModal({
 
   const [imageUrl, setImageUrl] = useState<string | null>(post.imageUrl);
   const [image, setImage] = useState<Blob | null>(null);
-  const [imageUploadModalKey, setImageUploadModalKey] = useState("");
 
-  const handleDescriptionChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setDescription(e.target.value);
+  const onDescriptionChange = (description: string) => {
+    setDescription(description);
   };
 
-  const handlePriceChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const newPrice = getFloatStringPriceAsNumber(e.target.value.trim());
+  const onPriceChange = (price: string) => {
+    const newPrice = getFloatStringPriceAsNumber(price);
     setPrice(newPrice);
     newPrice ? setValid(true) : setValid(false);
   };
 
-  const handleEditImageClick = () => {
-    // Reset edit post modal each time it is opened
-    setImageUploadModalKey(uuid());
-    onOpenEditImage();
+  const onImageBlobChange = (value: string) => {
+    setImageUrl(value);
   };
 
-  const onImageUploaded = (inputimage: Blob) => {
-    setImage(inputimage);
-    handleRawImage(inputimage, setImageUrl);
+  const onImageUploaded = (blob: Blob) => {
+    setImage(blob);
+    handleRawImage(blob, onImageBlobChange);
     onEditImageClose();
   };
 
@@ -86,26 +80,12 @@ export default function EditPostModal({
     event.preventDefault();
   };
 
-  const handleClose = () => {
-    mutation.isSuccess ? router.reload() : onClose();
-  };
-
-  if (mutation.isSuccess) {
-    if (description) post.description = description;
-    if (price && valid) {
-      const newPrice = getFloatStringPriceAsNumber((price * 100).toFixed(2));
-      if (newPrice) {
-        post.price = newPrice;
-      }
-    }
-    if (imageUrl) post.imageUrl = imageUrl;
-    setValid(false);
-
-    mutation.reset();
-  }
-
   return !isEditImageOpen ? (
-    <Modal isOpen={isOpen} onClose={onClose ?? (() => {})} size="xl">
+    <Modal
+      isOpen={!mutation.isSuccess && isOpen}
+      onClose={onClose ?? (() => {})}
+      size="xl"
+    >
       <ModalOverlay />
       <ModalContent pt={5} pb={4}>
         <FormControl>
@@ -113,21 +93,29 @@ export default function EditPostModal({
             <ModalBody>
               <VStack spacing={7}>
                 <ViewTextbookCover
-                  onOpen={handleEditImageClick}
+                  onOpen={onOpenEditImage}
                   imageUrl={imageUrl}
                 />
                 <EditPriceAndDescription
                   description={description}
-                  handlePriceChange={handlePriceChange}
-                  handleDescriptionChange={handleDescriptionChange}
-                  post={post}
+                  price={price}
+                  campusStorePrice={post.book.campusStorePrice}
+                  onPriceChange={onPriceChange}
+                  onDescriptionChange={onDescriptionChange}
                 ></EditPriceAndDescription>
               </VStack>
             </ModalBody>
             <ModalFooter mr={2}>
               <Button
-                type="submit"
+                variant="outline"
+                onClick={onClose}
+                colorScheme="teal"
                 mr={2}
+              >
+                Close
+              </Button>
+              <Button
+                type="submit"
                 colorScheme="teal"
                 isLoading={mutation.isLoading}
                 isDisabled={
@@ -141,14 +129,6 @@ export default function EditPostModal({
                 }
               >
                 Save Changes
-              </Button>
-              <Button
-                type="submit"
-                variant="outline"
-                onClick={handleClose}
-                colorScheme="teal"
-              >
-                Close
               </Button>
               {mutation.isError && (
                 <Button
@@ -167,7 +147,6 @@ export default function EditPostModal({
     </Modal>
   ) : (
     <UploadTextbookCover
-      key={imageUploadModalKey}
       onCoverPhotoUploaded={onImageUploaded}
       isOpen={isEditImageOpen}
       onClose={onEditImageClose}

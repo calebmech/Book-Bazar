@@ -15,16 +15,29 @@ import { Post } from "@prisma/client";
 import { useRef } from "react";
 import { useRouter } from "next/router";
 
-export default function DeletePostForm({ post }: { post: Post }) {
+export interface DeletPostFormProps {
+  post: Post;
+  isAccountPage?: boolean;
+}
+
+export default function DeletePostForm({
+  post,
+  isAccountPage,
+}: DeletPostFormProps) {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const router = useRouter();
   const cancelRef = useRef(null);
 
-  const mutation = useDeletePostMutation(post.id);
+  // user.Id must be passed in to invalidate user-userId query
+  const mutation = useDeletePostMutation(post.id, post.userId);
 
   const handleDeleteSubmit = () => {
     mutation.mutate();
   };
+
+  if (mutation.isSuccess && !isAccountPage) {
+    router.push("/");
+  }
 
   return (
     <>
@@ -32,12 +45,12 @@ export default function DeletePostForm({ post }: { post: Post }) {
         onClick={() => onOpen()}
         colorScheme="red"
         leftIcon={<Icon as={TrashIcon} />}
-        width={router.asPath == "/account" ? "240px" : "fit-content"}
+        width={isAccountPage ? "240px" : "fit-content"}
       >
         Delete post
       </Button>
       <AlertDialog
-        isOpen={isOpen}
+        isOpen={!mutation.isSuccess && isOpen}
         leastDestructiveRef={cancelRef}
         onClose={onClose}
       >
