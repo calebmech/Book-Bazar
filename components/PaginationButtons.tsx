@@ -38,7 +38,7 @@ export function PaginationButtons({
       <Link href={url + "?page=" + (page + 1)} passHref shallow>
         <IconButton
           aria-label="next-page"
-          disabled={!morePosts}
+          disabled={!morePosts || isLoadingNextPage}
           icon={<Icon as={ChevronRightIcon} />}
           isLoading={isLoadingNextPage}
         />
