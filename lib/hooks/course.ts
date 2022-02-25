@@ -36,6 +36,7 @@ export function useCoursePostsQuery(
         .get<PostWithBookWithUser[]>(
           "/api/course/" +
             courseCode +
+            "/posts/" +
             (page || length ? "/?" + parameters.toString() : "")
         )
         .then((res) => res.data),
