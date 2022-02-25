@@ -60,14 +60,14 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
         fontSize="sm"
         p={{ base: "2", sm: "4" }}
       >
-        <Box mb="3">
+        <Box >
           <Skeleton isLoaded={!isBookLoading}>
             <Text fontSize="lg" fontWeight="semibold" isTruncated>
               {resolveBookTitle(populatedBook ?? book)}
             </Text>
           </Skeleton>
           <Skeleton isLoaded={!isBookLoading}>
-            <Text mt="1" color="secondaryText" isTruncated>
+            <Text color="secondaryText" isTruncated>
               {authors}
             </Text>
           </Skeleton>
