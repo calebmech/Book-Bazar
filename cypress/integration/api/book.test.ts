@@ -138,14 +138,14 @@ describe("test book api", () => {
     });
   });
 
-  it("should return a default result of 4 posts for an invalid page input", () => {
+  it("should return a default result of the first page for an invalid page input", () => {
     cy.request({
       method: HttpMethod.GET,
       url: `/api/book/${TEST_BOOK_1_ISBN}/?length=1&page=a`,
     }).then((response) => {
       expect(response.status).to.equal(StatusCodes.OK);
 
-      expect(response.body.posts.length).to.equal(4);
+      expect(response.body.posts.length).to.equal(1);
     });
   });
 });

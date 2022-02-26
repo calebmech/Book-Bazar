@@ -11,9 +11,10 @@ import {
 type BookCardProps = {
   book: Book;
   isLinkActive: boolean;
+  width?: string;
 };
 
-export default function BookCard({ book, isLinkActive }: BookCardProps) {
+export default function BookCard({ book, isLinkActive, width }: BookCardProps) {
   const { isbn } = book;
   const { isLoading, data: populatedBook } = useBookQuery(isbn);
   let authorString: string = "-";
@@ -24,17 +25,15 @@ export default function BookCard({ book, isLinkActive }: BookCardProps) {
 
   const card = (
     <Box
+      maxW={width ?? "auto"}
       overflow="hidden"
-      maxW="128px"
-      mb="3"
-      mx="3"
       shadow="md"
       borderRadius="lg"
       background="secondaryBackground"
       fontSize="xs"
-      _hover={{ shadow: "xl" }}
+      _hover={{ shadow: isLinkActive ? "xl" : "md" }}
       transition="0.3s"
-      as={isLinkActive ? "a" : "div"}
+      cursor={isLinkActive ? "pointer" : "cursor"}
     >
       <Box
         width="100%"

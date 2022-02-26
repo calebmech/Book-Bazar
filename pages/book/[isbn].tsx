@@ -10,7 +10,6 @@ import {
   VStack,
   Wrap,
 } from "@chakra-ui/react";
-import { PostCardList } from "@components/CardList";
 import Layout from "@components/Layout";
 import {
   AcademicCapIcon,
@@ -27,18 +26,31 @@ import {
 } from "@lib/helpers/frontend/resolve-book-data";
 import { formatIntPrice } from "@lib/helpers/priceHelpers";
 import { useBookQuery } from "@lib/hooks/book";
+import { MAX_NUM_POSTS, PostCardGrid } from "@components/CardList";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import ErrorPage from "next/error";
 import { useRouter } from "next/router";
+import { PaginationButtons } from "@components/PaginationButtons";
+import { parsePageString } from "@lib/helpers/frontend/parse-page-string";
 
 const BookPage: NextPage = () => {
   const router = useRouter();
-  const { isbn } = router.query;
-  const { data: book } = useBookQuery(isbn);
+  const { isbn, page: pageString } = router.query;
+  const page = parsePageString(pageString);
+  const { data: book, isLoading } = useBookQuery(isbn, page, MAX_NUM_POSTS);
+  const { data: bookSecondData, isPreviousData } = useBookQuery(
+    isbn,
+    page + 1,
+    MAX_NUM_POSTS
+  );
+  const morePosts = bookSecondData ? bookSecondData.posts.length !== 0 : false;
+
   if (!book) {
-    return null;
+    if (isLoading) return null;
+    return <ErrorPage statusCode={404} />;
   }
   const { googleBook, posts } = book;
 
@@ -181,7 +193,18 @@ const BookPage: NextPage = () => {
         <title>{pageTitle(resolveBookTitle(book))}</title>
       </Head>
       <Layout extendedHeader={bookInfo}>
-        <PostCardList posts={postsWithBookIncluded} isLinkActive={true} />
+        <Text mt="10" fontSize="2xl">
+          {posts.length !== 0 ? "Active Listings" : "No Active Listings For This Book"}
+        </Text>
+        <PostCardGrid posts={postsWithBookIncluded} />
+        {(page === 0 ? posts.length === MAX_NUM_POSTS : posts.length !== 0) && (
+          <PaginationButtons
+            page={page}
+            url={"/book/" + isbn}
+            morePosts={morePosts}
+            isLoadingNextPage={isPreviousData}
+          />
+        )}
 
         {book.isCampusStoreBook && (
           <>

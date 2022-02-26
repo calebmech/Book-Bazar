@@ -1,14 +1,10 @@
-import { Box, Flex, Skeleton, Text } from "@chakra-ui/react";
-import {
-  resolveBookTitle,
-  resolveImageUrl,
-} from "@lib/helpers/frontend/resolve-book-data";
+import { Box, Flex, Grid, Skeleton, Text } from "@chakra-ui/react";
+import { resolveBookTitle, resolveImageUrl } from "@lib/helpers/frontend/resolve-book-data";
 import { formatIntPrice } from "@lib/helpers/priceHelpers";
 import { useBookQuery } from "@lib/hooks/book";
 import { PostWithBookWithUser } from "@lib/services/post";
 import Image from "next/image";
 import Link from "next/link";
-import { TEXTBOOK_ASPECT_RATIO } from "./create-post-page/UploadTextbookCover";
 import UserWithAvatar from "./UserWithAvatar";
 
 type PostCardProps = {
@@ -24,44 +20,46 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
   const authors = populatedBook?.googleBook?.authors?.join(", ") || "-";
 
   const card = (
-    <Flex
-      w="490px"
+    <Grid
+      templateColumns={{
+        base: "120px minmax(0, 1fr)",
+        sm: "165px minmax(0, 1fr)",
+      }}
+      templateRows={{
+        base: "160px",
+        sm: "220px",
+      }}
+      templateAreas="'image info'"
       background="secondaryBackground"
       overflow="hidden"
       borderRadius="lg"
-      mb="3"
-      mx="3"
-      direction="row"
       shadow="md"
       _hover={{ shadow: "xl" }}
       transition="0.3s"
-      as={isLinkActive ? "a" : "div"}
+      cursor={isLinkActive ? "pointer" : "cursor"}
     >
-      <Flex
-        flex="1"
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        background="tertiaryBackground"
-        overflow="hidden"
+      <Box
+        height={{ base: "160px", sm: "220px" }}
+        width={{ base: "120px", sm: "165px" }}
+        gridArea="image"
         position="relative"
+        display="flex"
       >
         <Image
-          height={300}
-          width={300 * TEXTBOOK_ASPECT_RATIO}
+          layout="fill"
           src={imageUrl || resolveImageUrl(populatedBook)}
           alt="book-image"
         />
-      </Flex>
+      </Box>
 
       <Flex
-        flex="2"
+        gridArea="info"
         direction="column"
         justify="space-between"
         fontSize="sm"
-        p="4"
+        p={{ base: "2", sm: "4" }}
       >
-        <Box mb="3">
+        <Box >
           <Skeleton isLoaded={!isBookLoading}>
             <Text fontSize="lg" fontWeight="semibold" isTruncated>
               {resolveBookTitle(populatedBook ?? book)}
@@ -75,13 +73,13 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
           <Text my="1" fontWeight="bold" fontSize="xl">
             ${formatIntPrice(price)}
           </Text>
-          <Text color="secondaryText" noOfLines={3}>
+          <Text color="secondaryText" noOfLines={{ base: 1, sm: 3 }}>
             {description}
           </Text>
         </Box>
         <UserWithAvatar user={user} />
       </Flex>
-    </Flex>
+    </Grid>
   );
 
   if (isLinkActive) {

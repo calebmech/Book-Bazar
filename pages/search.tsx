@@ -1,5 +1,5 @@
-import { Heading, Text } from "@chakra-ui/react";
-import { BookCardList, CourseCardList } from "@components/CardList";
+import { Heading, HStack, Text } from "@chakra-ui/react";
+import { BookCardGrid, CourseCardList } from "@components/CardList";
 import Layout from "@components/Layout";
 import Loading from "@components/Loading";
 import pageTitle from "@lib/helpers/frontend/page-title";
@@ -42,10 +42,25 @@ const Search: NextPage = () => {
 
     return (
       <>
-        {courses.length > 0 && (
-          <CourseCardList courses={courses} isLinkActive={true} />
-        )}
-        {books.length > 0 && <BookCardList books={books} isLinkActive={true} />}
+        <HStack mt="10" fontSize="2xl">
+          <Text>{courses.length > 0 && "Courses"}</Text>
+          <Text color="tertiaryText">
+            {courses.length > 0
+              ? "(" + courses.length + " matching)"
+              : "No books found."}
+          </Text>
+        </HStack>
+        <CourseCardList courses={courses} />
+
+        <HStack mt="10" fontSize="2xl">
+          <Text>{books.length > 0 && "Books"}</Text>
+          <Text color="tertiaryText">
+            {books.length > 0
+              ? "(" + books.length + " matching)"
+              : "No books found."}
+          </Text>
+        </HStack>
+        <BookCardGrid books={books} />
       </>
     );
   };

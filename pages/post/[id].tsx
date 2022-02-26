@@ -11,7 +11,6 @@ import {
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
-import { PostCardList } from "@components/CardList";
 import { TEXTBOOK_ASPECT_RATIO } from "@components/create-post-page/UploadTextbookCover";
 import Layout from "@components/Layout";
 import LoginModal from "@components/LoginModal";
@@ -34,6 +33,7 @@ import { timeSinceDateString } from "@lib/helpers/frontend/time-between-dates";
 import { formatIntPrice } from "@lib/helpers/priceHelpers";
 import { useBookQuery } from "@lib/hooks/book";
 import { usePostQuery } from "@lib/hooks/post";
+import { MAX_NUM_POSTS, PostCardGrid } from "@components/CardList";
 import { useUserQuery } from "@lib/hooks/user";
 import type { NextPage } from "next";
 import ErrorPage from "next/error";
@@ -41,13 +41,23 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { parsePageString } from "@lib/helpers/frontend/parse-page-string";
+import { PaginationButtons } from "@components/PaginationButtons";
 
 const PostPage: NextPage = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { id, page: pageString } = router.query;
+  const page = parsePageString(pageString);
   const { data: post, isLoading: postIsLoading } = usePostQuery(id);
   const { data: book, isLoading: bookIsLoading } = useBookQuery(
-    post?.book.isbn
+    post?.book.isbn,
+    page,
+    MAX_NUM_POSTS
+  );
+  const { data: bookSecondData, isPreviousData } = useBookQuery(
+    post?.book.isbn,
+    page + 1,
+    MAX_NUM_POSTS
   );
   const { user } = useUserQuery();
 
@@ -72,17 +82,26 @@ const PostPage: NextPage = () => {
     return <ErrorPage statusCode={404} />;
   }
 
-  const timeSincePost = timeSinceDateString(new Date(post.createdAt));
-  const postHasUser = "user" in post;
-  const isPostOwnedByUser = postHasUser ? user?.id === post.user.id : false;
-  const otherPostsForBook = book?.posts
-    .filter((p) => p.id !== post.id)
+  if (!book) {
+    if (bookIsLoading) return null;
+    return <ErrorPage statusCode={404} />;
+  }
+
+  const { posts } = book;
+
+  const postsWithBookIncluded = posts
     .map((p) => {
       return {
         ...p,
         book: book,
       };
-    });
+    })
+    .filter((p) => post.id !== p.id);
+
+  const timeSincePost = timeSinceDateString(new Date(post.createdAt));
+  const postHasUser = "user" in post;
+  const isPostOwnedByUser = postHasUser ? user?.id === post.user.id : false;
+  const morePosts = bookSecondData ? bookSecondData.posts.length !== 0 : false;
 
   const ActionButtons = () => {
     if (isPostOwnedByUser) {
@@ -257,11 +276,18 @@ const PostPage: NextPage = () => {
         <title>{pageTitle()}</title>
       </Head>
       <Layout extendedHeader={postInfo}>
-        <PostCardList
-          posts={otherPostsForBook ?? []}
-          isLinkActive
-          itemName="Similar Post"
-        />
+        <Text mt="10" fontSize="2xl">
+          Other Active Listings For This Book
+        </Text>
+        <PostCardGrid posts={postsWithBookIncluded} />
+        {(page === 0 ? posts.length === MAX_NUM_POSTS : posts.length !== 0) && (
+          <PaginationButtons
+            page={page}
+            url={"/post/" + id}
+            morePosts={morePosts}
+            isLoadingNextPage={isPreviousData}
+          />
+        )}
         <LoginModal
           isOpen={isLoginModalOpen}
           onClose={onLoginModalClose}

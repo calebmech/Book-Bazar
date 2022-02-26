@@ -28,8 +28,10 @@ async function getPopulatedBookHandler(
   // Store the results of the query
   let lengthInt: number = parseInt(length);
   let pageInt: number = parseInt(page);
-  if (!(lengthInt >= 0 && pageInt >= 0)) {
+  if (!(lengthInt >= 0)) {
     lengthInt = 20;
+  }
+  if (!(pageInt >= 0)) {
     pageInt = 0;
   }
 
