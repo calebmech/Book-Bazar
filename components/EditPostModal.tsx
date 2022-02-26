@@ -67,7 +67,6 @@ export default function EditPostModal({
   const onImageUploaded = (blob: Blob) => {
     setImage(blob);
     handleRawImage(blob, onImageBlobChange);
-    onEditImageClose();
   };
 
   const handleSave = (event: FormEvent) => {

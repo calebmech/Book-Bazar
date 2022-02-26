@@ -66,10 +66,14 @@ export default function ImageUploadModal({
     if (!croppedImage) return;
 
     setUploadStatus("uploading");
-    onUpload(croppedImage).catch((error) => {
-      console.error(error);
-      setUploadStatus("error");
-    });
+    onUpload(croppedImage)
+      .then(() => {
+        onClose();
+      })
+      .catch((error) => {
+        console.error(error);
+        setUploadStatus("error");
+      });
   };
 
   const handleImageCropChange = useCallback(

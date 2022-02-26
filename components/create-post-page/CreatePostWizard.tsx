@@ -109,14 +109,6 @@ export default function CreatePostingWizard() {
     setCoverPhoto(inputCoverPhoto);
     handleRawImage(inputCoverPhoto, setImageUrl);
     setPageNumber(pageNumber + 1);
-    onClose();
-  };
-
-  const onCoverPhotoClose = () => {
-    if (!coverPhoto) {
-      setPageNumber(pageNumber - 1);
-    }
-    onClose();
   };
 
   const onSubmitPressed = async (
@@ -207,7 +199,7 @@ export default function CreatePostingWizard() {
               <UploadTextbookCover
                 onCoverPhotoUploaded={onCoverPhotoUploaded}
                 isOpen={isOpen}
-                onClose={onCoverPhotoClose}
+                onClose={onClose}
               />
             </>
           ),
