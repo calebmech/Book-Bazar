@@ -56,8 +56,8 @@ export default function SafeInteractionTipsModal({
         <ModalCloseButton />
         <ModalBody>
           <Text>
-            It&rsquo;s important to keep safety in mind when meeting up with
-            anyone new you meet online. Here are a few tips!
+            It&rsquo;s important to keep safety in mind when meeting anyone that
+            you&rsquo;ve met online. Here are a few tips from us!
           </Text>
           <List mt="6" mb="1" spacing="6">
             <ListItem display="flex" align="start" fontWeight="500">
@@ -71,8 +71,8 @@ export default function SafeInteractionTipsModal({
                 color="blue.600"
                 backgroundColor="blue.100"
               />
-              Decide on a busy and well lit location to meet such as Thode or
-              MUSC
+              Agree to meet at a busy, well lit location such as a library or
+              the student center (MUSC)
             </ListItem>
             <ListItem display="flex" align="start" fontWeight="500">
               <ListIcon
@@ -85,8 +85,8 @@ export default function SafeInteractionTipsModal({
                 color="green.600"
                 backgroundColor="green.100"
               />
-              Don&rsquo;t send money before you have a chance to see the
-              textbook with your own eyes
+              Don&rsquo;t pay until you&rsquo;ve gotten the opportunity to
+              examine the book yourself
             </ListItem>
             <ListItem display="flex" align="start" fontWeight="500">
               <ListIcon
@@ -99,7 +99,7 @@ export default function SafeInteractionTipsModal({
                 color="pink.600"
                 backgroundColor="pink.100"
               />
-              All Book Bazar users are part of the McMaster community, so rest
+              Book Bazar users are part of the McMaster community, so rest
               assured!
             </ListItem>
           </List>
