@@ -16,7 +16,7 @@ export function PaginationButtons({
   isLoadingNextPage,
 }: PaginationButtonsProps) {
   return (
-    <Flex w="100%" justify="center" mt="4">
+    <Flex w="100%" justify="center" mt="8">
       <Link href={url + "?page=" + (page - 1)} passHref shallow>
         <IconButton
           aria-label="previous-page"

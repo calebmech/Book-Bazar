@@ -1,12 +1,14 @@
 import {
   Avatar,
+  Box,
+  forwardRef,
   HStack,
-  Image,
   Skeleton,
   Text,
   Tooltip,
 } from "@chakra-ui/react";
 import { User } from "@prisma/client";
+import Image from "next/image";
 
 interface UserWithAvatarProps {
   user: User | null;
@@ -16,22 +18,29 @@ export default function UserWithAvatar({
   user,
   hideName = false,
 }: UserWithAvatarProps) {
-  const ProfilePicture = () => {
+  const ProfilePicture = forwardRef((_, ref) => {
     if (user?.imageUrl) {
       return (
-        <Image
-          src={user?.imageUrl}
+        <Box
+          ref={ref}
           borderRadius="full"
-          alt=""
-          width="32px"
-          height="32px"
-          priority
-        />
+          overflow="hidden"
+          width="8"
+          height="8"
+        >
+          <Image
+            src={user?.imageUrl}
+            alt=""
+            width="32px"
+            height="32px"
+            priority
+          />
+        </Box>
       );
     }
 
-    return <Avatar size="sm" />;
-  };
+    return <Avatar ref={ref} size="sm" />;
+  });
 
   return (
     <HStack>

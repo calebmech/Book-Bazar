@@ -7,12 +7,11 @@ export type PostWithUser = Post & {
   user: User;
 };
 
-export type BookWithPostWithUserWithCourseWithDept = Book & {
+export type BookWithUserWithCourseWithDept = Book & {
   courses: CourseWithDept[];
-  posts: PostWithUser[];
 };
 
-export type PopulatedBook = BookWithPostWithUserWithCourseWithDept & {
+export type PopulatedBook = BookWithUserWithCourseWithDept & {
   googleBook: GoogleBook | null;
 };
 
@@ -22,26 +21,14 @@ export type PopulatedBook = BookWithPostWithUserWithCourseWithDept & {
  * @returns {Promise<PopulatedBook | null> } A promise containing book information and relevant posts
  */
 export async function getPopulatedBook(
-  isbn: string,
-  includeUser: boolean,
-  length: number,
-  page: number
+  isbn: string
 ): Promise<PopulatedBook | null> {
-  const populatedBookPrisma: BookWithPostWithUserWithCourseWithDept | null =
-    await prisma.book.findFirst({
+  const populatedBookPrisma: BookWithUserWithCourseWithDept | null =
+    await prisma.book.findUnique({
       where: {
         isbn: isbn,
       },
       include: {
-        posts: {
-          // Post pagnation parameters
-          skip: length * page,
-          take: length,
-          // Select fields needed from the database for the post
-          include: {
-            user: includeUser,
-          },
-        },
         // Select courses for the book and include the department
         courses: {
           include: {
@@ -64,4 +51,40 @@ export async function getPopulatedBook(
   };
 
   return populatedBook;
+}
+
+/**
+ * Returns posts belonging to the book with the given isbn.
+ *
+ * @param isbn isbn of the book
+ * @param length the number of posts on one page
+ * @param page the index of the page to return
+ * @param includeUser whether or not the user associated with the post should be returned in the data
+ * @returns an array of posts for the book with the given isbn that is paginated, or null if the book with the given id cannot be found
+ */
+export async function getPostsForBook(
+  isbn: string,
+  length: number,
+  page: number,
+  includeUser: boolean
+) {
+  const book = await prisma.book.findUnique({
+    where: { isbn },
+  });
+
+  if (!book) {
+    return null;
+  }
+
+  return prisma.post.findMany({
+    skip: page * length,
+    take: length,
+    include: {
+      book: true,
+      user: includeUser,
+    },
+    where: {
+      book: { isbn },
+    },
+  });
 }

@@ -21,7 +21,9 @@ export const NextApiResponseType: Type = {
 export const BufferType: Type = {
   name: "Buffer",
   kind: TypeKind.EXTERNAL,
-  customRef: new URL("https://nodejs.org/dist/latest-v16.x/docs/api/buffer.html#class-buffer")
+  customRef: new URL(
+    "https://nodejs.org/dist/latest-v16.x/docs/api/buffer.html#class-buffer"
+  ),
 };
 
 export const BlobType: Type = {
@@ -167,19 +169,6 @@ export const PopulatedBookType: Type = {
     {
       kind: TypeKind.TUPLE,
       values: {
-        posts: {
-          kind: TypeKind.OR,
-          types: [
-            {
-              kind: TypeKind.SET,
-              values: new Set([PostType]),
-            },
-            {
-              kind: TypeKind.SET,
-              values: new Set([PostWithUserType]),
-            },
-          ],
-        },
         courses: {
           kind: TypeKind.SET,
           values: new Set([CourseWithDeptType]),

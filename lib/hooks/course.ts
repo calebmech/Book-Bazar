@@ -7,16 +7,19 @@ import { UseQueryResult, useQuery } from "react-query";
 // to wait for the router before sending a request
 
 export function useCourseQuery(
-  courseCode: string | string[] | undefined
+  courseCode?: string | string[],
+  initialData?: CourseWithBooks
 ): UseQueryResult<CourseWithBooks> {
   return useQuery(
-    "course-" + courseCode,
+    ["course", courseCode],
     () =>
       axios
         .get<CourseWithBooks>(`/api/course/${courseCode}/`)
         .then((res) => res.data),
     {
       enabled: !(courseCode == undefined || Array.isArray(courseCode)),
+      initialData,
+      staleTime: 1000 * 60 * 60, // 1 hour
     }
   );
 }
@@ -30,7 +33,7 @@ export function useCoursePostsQuery(
   if (page) parameters.set("page", page.toString());
   if (length) parameters.set("length", length.toString());
   return useQuery(
-    "course-posts-" + courseCode + "-" + page,
+    ["course", courseCode, "posts", page],
     () =>
       axios
         .get<PostWithBookWithUser[]>(

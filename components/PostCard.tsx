@@ -2,18 +2,19 @@ import { Box, Flex, Grid, Skeleton, Text } from "@chakra-ui/react";
 import { resolveBookTitle, resolveImageUrl } from "@lib/helpers/frontend/resolve-book-data";
 import { formatIntPrice } from "@lib/helpers/priceHelpers";
 import { useBookQuery } from "@lib/hooks/book";
-import { PostWithBookWithUser } from "@lib/services/post";
+import { PostWithBook, PostWithBookWithUser } from "@lib/services/post";
 import Image from "next/image";
 import Link from "next/link";
 import UserWithAvatar from "./UserWithAvatar";
 
 type PostCardProps = {
-  post: PostWithBookWithUser;
+  post: PostWithBook | PostWithBookWithUser;
   isLinkActive: boolean;
 };
 
 export default function PostCard({ post, isLinkActive }: PostCardProps) {
-  const { id, price, description, user, book, imageUrl } = post;
+  const { id, price, description, book, imageUrl } = post;
+  const user = "user" in post ? post.user : null;
   const { isLoading: isBookLoading, data: populatedBook } = useBookQuery(
     book.isbn
   );

@@ -7,12 +7,14 @@ import {
   HStack,
   Icon,
   Skeleton,
+  Spacer,
   Text,
   useDisclosure,
   VStack,
 } from "@chakra-ui/react";
 import { TEXTBOOK_ASPECT_RATIO } from "@components/create-post-page/UploadTextbookCover";
 import Layout from "@components/Layout";
+import LoadingPage from "@components/LoadingPage";
 import LoginModal from "@components/LoginModal";
 import DeletePostForm from "@components/post-page/DeletePostForm";
 import SafeInteractionTipsModal from "@components/SafeInteractionTipsModal";
@@ -31,11 +33,14 @@ import {
 } from "@lib/helpers/frontend/resolve-book-data";
 import { timeSinceDateString } from "@lib/helpers/frontend/time-between-dates";
 import { formatIntPrice } from "@lib/helpers/priceHelpers";
-import { useBookQuery } from "@lib/hooks/book";
+import { createResponseObject } from "@lib/helpers/type-utilities";
+import { useBookPostsQuery, useBookQuery } from "@lib/hooks/book";
 import { usePostQuery } from "@lib/hooks/post";
 import { MAX_NUM_POSTS, PostCardGrid } from "@components/CardList";
 import { useUserQuery } from "@lib/hooks/user";
-import type { NextPage } from "next";
+import { getPopulatedBook, PopulatedBook } from "@lib/services/book";
+import { getPost, PostWithBook } from "@lib/services/post";
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import ErrorPage from "next/error";
 import Head from "next/head";
 import Image from "next/image";
@@ -44,17 +49,33 @@ import { useRouter } from "next/router";
 import { parsePageString } from "@lib/helpers/frontend/parse-page-string";
 import { PaginationButtons } from "@components/PaginationButtons";
 
-const PostPage: NextPage = () => {
+interface PostPageProps {
+  initialPost: PostWithBook;
+  initialBook: PopulatedBook;
+}
+
+const PostPage: NextPage<Partial<PostPageProps>> = ({
+  initialPost,
+  initialBook,
+}) => {
   const router = useRouter();
   const { id, page: pageString } = router.query;
   const page = parsePageString(pageString);
-  const { data: post, isLoading: postIsLoading } = usePostQuery(id);
-  const { data: book, isLoading: bookIsLoading } = useBookQuery(
+
+  const { data: post, isSuccess: isPostSuccess } = usePostQuery(
+    id,
+    initialPost
+  );
+  const { data: book, isSuccess: isBookSuccess } = useBookQuery(
+    post?.book.isbn,
+    initialBook
+  );
+  const { data: posts } = useBookPostsQuery(
     post?.book.isbn,
     page,
     MAX_NUM_POSTS
   );
-  const { data: bookSecondData, isPreviousData } = useBookQuery(
+  const { data: bookSecondData, isPreviousData } = useBookPostsQuery(
     post?.book.isbn,
     page + 1,
     MAX_NUM_POSTS
@@ -77,31 +98,28 @@ const PostPage: NextPage = () => {
     onOpen: openEmailSafetyModal,
   } = useDisclosure();
 
-  if (!post) {
-    if (postIsLoading) return null;
-    return <ErrorPage statusCode={404} />;
+  if (!post || !book) {
+    if (isPostSuccess && isBookSuccess) {
+      return <ErrorPage statusCode={404} />;
+    }
+
+    return <LoadingPage />;
   }
 
-  if (!book) {
-    if (bookIsLoading) return null;
-    return <ErrorPage statusCode={404} />;
-  }
+  const timeSincePost = timeSinceDateString(new Date(post.createdAt));
+  const postHasUser = "user" in post;
+  const postUserDataLoading = user && !postHasUser;
+  const isPostOwnedByUser = postHasUser ? user?.id === post.user.id : false;
+  const hasMorePosts = bookSecondData?.length !== 0;
 
-  const { posts } = book;
-
-  const postsWithBookIncluded = posts
+  const otherPostsForBook = posts
+    ?.filter((p) => p.id !== post.id)
     .map((p) => {
       return {
         ...p,
         book: book,
       };
-    })
-    .filter((p) => post.id !== p.id);
-
-  const timeSincePost = timeSinceDateString(new Date(post.createdAt));
-  const postHasUser = "user" in post;
-  const isPostOwnedByUser = postHasUser ? user?.id === post.user.id : false;
-  const morePosts = bookSecondData ? bookSecondData.posts.length !== 0 : false;
+    });
 
   const ActionButtons = () => {
     if (isPostOwnedByUser) {
@@ -179,27 +197,25 @@ const PostPage: NextPage = () => {
       <Flex flex="auto" direction="column" justifyContent="space-between">
         <Box>
           <HStack spacing="3" mb="1" align="start">
-            <Skeleton isLoaded={!bookIsLoading}>
-              <Heading
-                as="h1"
-                size="lg"
-                fontWeight="500"
-                fontFamily="title"
-                display="inline"
+            <Heading
+              as="h1"
+              size="lg"
+              fontWeight="500"
+              fontFamily="title"
+              display="inline"
+            >
+              {book ? resolveBookTitle(book) : "Placeholder for Skeleton"}{" "}
+              <Text
+                as="span"
+                ml="1"
+                color="accent"
+                fontFamily="body"
+                fontSize="0.9em"
+                fontWeight="semibold"
               >
-                {book ? resolveBookTitle(book) : "Placeholder for Skeleton"}{" "}
-                <Text
-                  as="span"
-                  ml="1"
-                  color="accent"
-                  fontFamily="body"
-                  fontSize="0.9em"
-                  fontWeight="semibold"
-                >
-                  ${formatIntPrice(post.price)}
-                </Text>
-              </Heading>
-            </Skeleton>
+                ${formatIntPrice(post.price)}
+              </Text>
+            </Heading>
           </HStack>
           <Link href={"/book/" + book?.isbn} passHref>
             <Button
@@ -215,12 +231,7 @@ const PostPage: NextPage = () => {
 
           <Divider mt="5" mb="6" />
 
-          <VStack
-            width="min(100%, var(--chakra-sizes-lg))"
-            maxWidth="xl"
-            align="start"
-            display="inline-flex"
-          >
+          <VStack maxWidth="xl" align="start" display="inline-flex">
             <HStack
               width="100%"
               justifyContent="space-between"
@@ -235,15 +246,19 @@ const PostPage: NextPage = () => {
                   user={postHasUser ? post.user : null}
                   hideName
                 />
-                <Text color="secondaryText" fontWeight="500">
-                  {postHasUser && post.user.name
-                    ? `${post.user.name}  posted ${timeSincePost} ago`
-                    : `Posted ${timeSincePost} ago`}
-                </Text>
+                <Skeleton isLoaded={!postUserDataLoading}>
+                  <Text color="secondaryText" fontWeight="500">
+                    {postHasUser && post.user.name
+                      ? `${post.user.name}  posted ${timeSincePost} ago`
+                      : `Posted ${timeSincePost} ago`}
+                  </Text>
+                </Skeleton>
               </HStack>
-              <HStack>
-                <ActionButtons />
-              </HStack>
+              <Skeleton isLoaded={!postUserDataLoading}>
+                <HStack>
+                  <ActionButtons />
+                </HStack>
+              </Skeleton>
             </HStack>
             {/* max ~390 characters for description*/}
             {post.description && (
@@ -272,22 +287,28 @@ const PostPage: NextPage = () => {
   return (
     <>
       <Head>
-        {/* TODO: Add proper page title */}
-        <title>{pageTitle()}</title>
+        <title>
+          {pageTitle(
+            `${resolveBookTitle(book)} ($${formatIntPrice(post.price)})`
+          )}
+        </title>
       </Head>
       <Layout extendedHeader={postInfo}>
-        <Text mt="10" fontSize="2xl">
-          Other Active Listings For This Book
+        <Text fontFamily="title" fontWeight="500" fontSize="2xl" mt="10" mb="4">
+          Similar Posts
         </Text>
-        <PostCardGrid posts={postsWithBookIncluded} />
-        {(page === 0 ? posts.length === MAX_NUM_POSTS : posts.length !== 0) && (
+        <PostCardGrid posts={otherPostsForBook ?? []} />
+        {(page === 0
+          ? posts?.length === MAX_NUM_POSTS
+          : posts?.length !== 0) && (
           <PaginationButtons
             page={page}
             url={"/post/" + id}
-            morePosts={morePosts}
+            morePosts={hasMorePosts}
             isLoadingNextPage={isPreviousData}
           />
         )}
+        <Spacer height="6" />
         <LoginModal
           isOpen={isLoginModalOpen}
           onClose={onLoginModalClose}
@@ -314,6 +335,34 @@ const PostPage: NextPage = () => {
       </Layout>
     </>
   );
+};
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const id = context.params?.id;
+  if (typeof id !== "string") return { notFound: true };
+
+  const post = await getPost(id, false);
+  if (!post) return { notFound: true };
+
+  const book = await getPopulatedBook(post?.book.isbn);
+  if (!book) return { notFound: true };
+
+  return {
+    props: {
+      initialPost: createResponseObject(post),
+      initialBook: book,
+    },
+    // Page is force-revalidated by API on update/delete
+    // All other static data is only updated after an index
+    revalidate: 60 * 60 * 24, // 1 day
+  };
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: true,
+  };
 };
 
 export default PostPage;

@@ -422,16 +422,40 @@ const BookServiceModule: Module = {
           name: "getPopulatedBook",
           in: {
             isbn: "string",
+          },
+          out: [PopulatedBookType],
+          semantics: [
+            `Gets a book from the database by ISBN and populates its` +
+              ` courses and Google books data (using ${moduleReference(
+                GoogleBooksSearchModule
+              )})`,
+          ],
+        },
+        {
+          name: "getPostsForBook",
+          in: {
+            isbn: "string",
             includeUsers: "boolean",
             postsLength: "integer",
             postsPage: "integer",
           },
-          out: [PopulatedBookType],
+          out: [
+            {
+              kind: TypeKind.OR,
+              types: [
+                {
+                  kind: TypeKind.SET,
+                  values: new Set([PostType]),
+                },
+                {
+                  kind: TypeKind.SET,
+                  values: new Set([PostWithUserType]),
+                },
+              ],
+            },
+          ],
           semantics: [
-            `Gets a book from the database by ISBN and populates its posts,` +
-              ` courses, and Google books data (using ${moduleReference(
-                GoogleBooksSearchModule
-              )})`,
+            "Gets posts for a book from the database by ISBN",
             "The number of posts to return is determined by postsLength",
             "The offset of posts to return is determined by postsPage",
             "The user tuples inside posts are only populated if includeUsers is true",

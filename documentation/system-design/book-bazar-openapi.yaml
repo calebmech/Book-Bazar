@@ -136,7 +136,31 @@ paths:
     get:
       tags:
         - Book
-      summary: Get a book by ISBN, including posts for it
+      summary: Get a book by ISBN
+      parameters:
+        - name: isbn
+          in: path
+          description: ISBN of book to return
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PopulatedBook"
+        404:
+          description: Book was not found
+      security:
+        - {}
+        - auth: []
+  /book/{isbn}/posts:
+    get:
+      tags:
+        - Book
+      summary: Get posts for a book by ISBN
       parameters:
         - name: isbn
           in: path
@@ -165,7 +189,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/PopulatedBook"
+                oneOf:
+                  - type: array
+                    items:
+                      $ref: "#/components/schemas/Post"
+                  - type: array
+                    items:
+                      $ref: "#/components/schemas/PostWithUser"
         404:
           description: Book was not found
       security:
@@ -421,14 +451,6 @@ components:
       allOf:
         - $ref: "#/components/schemas/Book"
       properties:
-        posts:
-          oneOf:
-            - type: array
-              items:
-                $ref: "#/components/schemas/Post"
-            - type: array
-              items:
-                $ref: "#/components/schemas/PostWithUser"
         courses:
           type: array
           items:
