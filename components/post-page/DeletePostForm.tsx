@@ -45,7 +45,7 @@ export default function DeletePostForm({
         onClick={() => onOpen()}
         colorScheme="red"
         leftIcon={<Icon as={TrashIcon} />}
-        width={isAccountPage ? "240px" : "sm"}
+        width="100%"
       >
         Delete post
       </Button>

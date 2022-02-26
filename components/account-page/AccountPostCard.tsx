@@ -1,4 +1,4 @@
-import { Button, HStack, Icon, Stack, useDisclosure } from "@chakra-ui/react";
+import { Button, Grid, GridItem, Icon, useDisclosure } from "@chakra-ui/react";
 import EditPostModal from "../EditPostModal";
 import { v4 as uuid } from "uuid";
 import { useState } from "react";
@@ -29,27 +29,34 @@ export default function AccountPostCard({
   };
 
   const card = postsWithBookWithUser ? (
-    <Stack align={"center"} paddingBottom={2}>
-      <PostCard post={postsWithBookWithUser} isLinkActive={isLinkActive} />
-      <HStack>
-        <Button
-          w="240px"
-          colorScheme={"teal"}
-          type={"button"}
-          onClick={handleEditPostClick}
-          leftIcon={<Icon as={PencilAltIcon} />}
-        >
-          Edit
-        </Button>
-        <DeletePostForm post={post} isAccountPage={true} />
-      </HStack>
-      <EditPostModal
-        key={editPostModalKey}
-        isOpen={isOpen}
-        onClose={onClose}
-        post={postsWithBookWithUser}
-      />
-    </Stack>
+    <>
+      <Grid templateColumns="repeat(2, 1fr)" rowGap={1} columnGap={2}>
+        <GridItem colSpan={2}>
+          <PostCard post={postsWithBookWithUser} isLinkActive={isLinkActive} />
+        </GridItem>
+
+        <GridItem colSpan={1}>
+          <Button
+            colorScheme={"teal"}
+            type={"button"}
+            onClick={handleEditPostClick}
+            leftIcon={<Icon as={PencilAltIcon} />}
+            width="100%"
+          >
+            Edit
+          </Button>
+        </GridItem>
+        <GridItem colSpan={1}>
+          <DeletePostForm post={post} isAccountPage={true} />
+        </GridItem>
+        <EditPostModal
+          key={editPostModalKey}
+          isOpen={isOpen}
+          onClose={onClose}
+          post={postsWithBookWithUser}
+        />
+      </Grid>
+    </>
   ) : (
     <></>
   );
