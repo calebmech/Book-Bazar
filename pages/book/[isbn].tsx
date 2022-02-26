@@ -214,19 +214,25 @@ const BookPage: NextPage<Partial<BookPageProps>> = ({ initialBook }) => {
         <title>{pageTitle(resolveBookTitle(book))}</title>
       </Head>
       <Layout extendedHeader={bookInfo}>
-        <Text fontFamily="title" fontWeight="500" fontSize="2xl" mt="10" mb="4">
-          Active Listings
-        </Text>
         {isLoadingPosts ? (
           <Flex width="100%" height="56" align="center" justifyContent="center">
             <Spinner />
           </Flex>
         ) : !posts || posts.length === 0 ? (
-          <Text my="10" fontSize="lg">
-            No active listings found.
+          <Text my="20" fontSize="lg" textAlign="center">
+            No active listings found
           </Text>
         ) : (
           <>
+            <Text
+              fontFamily="title"
+              fontWeight="500"
+              fontSize="2xl"
+              mt="10"
+              mb="4"
+            >
+              Active Listings
+            </Text>
             <PostCardGrid posts={postsWithBookIncluded ?? []} />
             {(page === 0
               ? posts.length === MAX_NUM_POSTS
