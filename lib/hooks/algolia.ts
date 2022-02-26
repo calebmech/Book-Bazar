@@ -9,7 +9,7 @@ export type SearchItem =
   | { type: "course"; entry: CourseWithDept };
 
 export function useAlgolia(
-  search: string
+  query: string
 ): UseQueryResult<SearchResponse<SearchItem>> {
-  return useQuery(`${search} search`, () => queryAlgolia(search));
+  return useQuery(["search", query], () => queryAlgolia(query));
 }

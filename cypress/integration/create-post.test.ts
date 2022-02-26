@@ -44,6 +44,6 @@ describe("create post flow", () => {
 
     cy.findByText("There are sticky notes in it").should("exist");
     cy.findByText(/algorithms/i).should("exist");
-    cy.findByText("$240.00").should("exist");
+    cy.findByText("$240").should("exist");
   });
 });

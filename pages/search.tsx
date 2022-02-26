@@ -1,19 +1,14 @@
-import { useRouter } from "next/router";
-import type { NextPage } from "next";
-import { useAlgolia } from "@lib/hooks/algolia";
-import { Book } from "@prisma/client";
-import { CourseWithDept } from "@lib/services/course";
-import { BookCardList, CourseCardList } from "@components/CardList";
-import { Flex, Heading, Text } from "@chakra-ui/react";
+import { Heading, HStack, Text } from "@chakra-ui/react";
+import { CourseCardList, BookCardGrid } from "@components/CardList";
 import Layout from "@components/Layout";
-import Loading from "@components/Loading";
-
-enum HEADER {
-  RESULTS_AVAILABLE = "Results for ",
-  NO_RESULTS_AVAILABLE = "No results for ",
-  COURSES = "Courses",
-  BOOKS = "Books",
-}
+import LoadingPage from "@components/LoadingPage";
+import pageTitle from "@lib/helpers/frontend/page-title";
+import { useAlgolia } from "@lib/hooks/algolia";
+import { CourseWithDept } from "@lib/services/course";
+import { Book } from "@prisma/client";
+import type { NextPage } from "next";
+import Head from "next/head";
+import { useRouter } from "next/router";
 
 const Search: NextPage = () => {
   const { query } = useRouter();
@@ -21,9 +16,8 @@ const Search: NextPage = () => {
 
   const { isLoading, data: algoliaSearchResponse } = useAlgolia(search);
 
-  // TODO Replace with something to indicate loading
   if (isLoading) {
-    return <Loading />;
+    return <LoadingPage />;
   }
 
   const hits = algoliaSearchResponse?.hits || [];
@@ -36,32 +30,70 @@ const Search: NextPage = () => {
     .filter((hit) => hit.type === "book")
     .map((book) => book.entry as Book);
 
+  const SearchResults = () => {
+    if (courses.length === 0 && books.length === 0) {
+      return (
+        <Text mt="10" fontSize="xl" color="secondaryText">
+          No courses or books found.
+        </Text>
+      );
+    }
+
+    return (
+      <>
+        <HStack mt="10" mb="4">
+          <Text fontFamily="title" fontWeight="500" fontSize="2xl">
+            Courses
+          </Text>
+          <Text fontSize="xl" color="tertiaryText">
+            ({courses.length} matching)
+          </Text>
+        </HStack>
+
+        {courses.length === 0 ? (
+          <Text fontSize="lg" color="secondaryText">
+            No courses found
+          </Text>
+        ) : (
+          <CourseCardList courses={courses} />
+        )}
+
+        <HStack mt="10" mb="4">
+          <Text fontFamily="title" fontWeight="500" fontSize="2xl">
+            Books
+          </Text>
+          <Text fontSize="xl" color="tertiaryText">
+            ({books.length} matching)
+          </Text>
+        </HStack>
+        {books.length === 0 ? (
+          <Text fontSize="lg" color="secondaryText">
+            No books found
+          </Text>
+        ) : (
+          // TODO: Add back in when Algolia stores PopulatedBook
+          // <BookCardGrid books={books} />
+          "WIP"
+        )}
+      </>
+    );
+  };
+
   return (
-    <Layout>
-      <Flex marginY={8} marginX={10} direction="column">
-        <Heading size="lg">
-          {courses.length > 0 || books.length > 0
-            ? `${HEADER.RESULTS_AVAILABLE}"${search}"`
-            : `${HEADER.NO_RESULTS_AVAILABLE}"${search}"`}
-        </Heading>
-
-        {courses.length > 0 ? (
-          <CourseCardList courses={courses} isLinkActive={true} />
-        ) : (
-          <Text mt="10" fontSize="2xl" color="secondaryText">
-            No courses found.
-          </Text>
-        )}
-
-        {books.length > 0 ? (
-          <BookCardList books={books} isLinkActive={true} />
-        ) : (
-          <Text mt="10" fontSize="2xl" color="secondaryText">
-            No books found.
-          </Text>
-        )}
-      </Flex>
-    </Layout>
+    <>
+      <Head>
+        <title>{pageTitle(`Results for “${search}”`)}</title>
+      </Head>
+      <Layout
+        extendedHeader={
+          <Heading as="h1" size="lg" fontWeight="500" fontFamily="title">
+            Results for “{search}”
+          </Heading>
+        }
+      >
+        <SearchResults />
+      </Layout>
+    </>
   );
 };
 

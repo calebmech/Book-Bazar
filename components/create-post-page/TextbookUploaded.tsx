@@ -4,13 +4,13 @@ import {
   Container,
   HStack,
   Icon,
-  Link,
   Spacer,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import { UserIcon } from "@heroicons/react/solid";
 import { PostWithBookWithUser } from "@lib/services/post";
+import Link from "next/link";
 import PostCard from "../PostCard";
 
 interface Props {

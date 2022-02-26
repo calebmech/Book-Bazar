@@ -8,6 +8,7 @@ import {
   MenuDivider,
   MenuItem,
   MenuList,
+  Skeleton,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -19,7 +20,7 @@ import { v4 as uuid } from "uuid";
 import LoginModal from "./LoginModal";
 
 export default function HeaderUserInfo() {
-  const { user } = useUserQuery();
+  const { user, isLoading } = useUserQuery();
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const [loginModalKey, setLoginModalKey] = useState("");
@@ -51,7 +52,9 @@ export default function HeaderUserInfo() {
                 },
               }}
             >
-              Login
+              <Skeleton as="span" isLoaded={!isLoading}>
+                Login
+              </Skeleton>
             </Text>
             <Avatar size="sm" />
           </HStack>
@@ -98,7 +101,7 @@ export default function HeaderUserInfo() {
             )}
           </HStack>
         </MenuButton>
-        <MenuList>
+        <MenuList zIndex="3">
           <Link href="/account" passHref>
             <MenuItem as="a">Account</MenuItem>
           </Link>

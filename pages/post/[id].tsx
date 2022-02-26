@@ -1,53 +1,119 @@
 import {
   Box,
   Button,
+  Divider,
   Flex,
-  Grid,
+  Heading,
   HStack,
   Icon,
   Skeleton,
+  Spacer,
   Text,
-  Link as ChakraLink,
+  useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
-import {
-  PencilAltIcon,
-  MailIcon,
-  ChatIcon,
-  BookOpenIcon,
-} from "@heroicons/react/solid";
-import Image from "next/image";
-import ErrorPage from "next/error";
+import { TEXTBOOK_ASPECT_RATIO } from "@components/create-post-page/UploadTextbookCover";
 import Layout from "@components/Layout";
-import UserWithAvatar from "@components/UserWithAvatar";
-import { useBookQuery } from "@lib/hooks/book";
-import { usePostQuery } from "@lib/hooks/post";
-import type { NextPage } from "next";
-import { useRouter } from "next/router";
-import { PostCardList } from "@components/CardList";
-import { useUserQuery } from "@lib/hooks/user";
+import LoadingPage from "@components/LoadingPage";
+import LoginModal from "@components/LoginModal";
 import DeletePostForm from "@components/post-page/DeletePostForm";
-import { resolveImageUrl } from "@lib/helpers/frontend/resolve-image-url";
+import SafeInteractionTipsModal from "@components/SafeInteractionTipsModal";
+import UserWithAvatar from "@components/UserWithAvatar";
+import {
+  BookOpenIcon,
+  MailIcon,
+  PencilAltIcon,
+  UsersIcon,
+} from "@heroicons/react/solid";
+import createTeamsContactUrl from "@lib/helpers/frontend/create-teams-contact-url";
+import pageTitle from "@lib/helpers/frontend/page-title";
+import {
+  resolveBookTitle,
+  resolveImageUrl,
+} from "@lib/helpers/frontend/resolve-book-data";
 import { timeSinceDateString } from "@lib/helpers/frontend/time-between-dates";
+import { formatIntPrice } from "@lib/helpers/priceHelpers";
+import { createResponseObject } from "@lib/helpers/type-utilities";
+import { useBookPostsQuery, useBookQuery } from "@lib/hooks/book";
+import { usePostQuery } from "@lib/hooks/post";
+import { MAX_NUM_POSTS, PostCardGrid } from "@components/CardList";
+import { useUserQuery } from "@lib/hooks/user";
+import { getPopulatedBook, PopulatedBook } from "@lib/services/book";
+import { getPost, PostWithBook } from "@lib/services/post";
+import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import ErrorPage from "next/error";
+import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { parsePageString } from "@lib/helpers/frontend/parse-page-string";
+import { PaginationButtons } from "@components/PaginationButtons";
 
-const PostPage: NextPage = () => {
+interface PostPageProps {
+  initialPost: PostWithBook;
+  initialBook: PopulatedBook;
+}
+
+const PostPage: NextPage<Partial<PostPageProps>> = ({
+  initialPost,
+  initialBook,
+}) => {
   const router = useRouter();
-  const { id } = router.query;
-  const { data: post, isLoading: postIsLoading } = usePostQuery(id);
-  const { data: book, isLoading: bookIsLoading } = useBookQuery(
-    post?.book.isbn
+  const { id, page: pageString } = router.query;
+  const page = parsePageString(pageString);
+
+  const { data: post, isSuccess: isPostSuccess } = usePostQuery(
+    id,
+    initialPost
+  );
+  const { data: book, isSuccess: isBookSuccess } = useBookQuery(
+    post?.book.isbn,
+    initialBook
+  );
+  const { data: posts } = useBookPostsQuery(
+    post?.book.isbn,
+    page,
+    MAX_NUM_POSTS
+  );
+  const { data: bookSecondData, isPreviousData } = useBookPostsQuery(
+    post?.book.isbn,
+    page + 1,
+    MAX_NUM_POSTS
   );
   const { user } = useUserQuery();
 
-  if (!post) {
-    if (postIsLoading) return null;
-    return <ErrorPage statusCode={404} />;
+  const {
+    onOpen: openLoginModal,
+    isOpen: isLoginModalOpen,
+    onClose: onLoginModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isTeamsSafetyModalOpen,
+    onClose: onTeamsSafetyModalClose,
+    onOpen: openTeamsSafetyModal,
+  } = useDisclosure();
+  const {
+    isOpen: isEmailSafetyModalOpen,
+    onClose: onEmailSafetyModalClose,
+    onOpen: openEmailSafetyModal,
+  } = useDisclosure();
+
+  if (!post || !book) {
+    if (isPostSuccess && isBookSuccess) {
+      return <ErrorPage statusCode={404} />;
+    }
+
+    return <LoadingPage />;
   }
 
   const timeSincePost = timeSinceDateString(new Date(post.createdAt));
-  const isPostOwnedByUser = post.user ? user?.id === post.user.id : false;
-  const otherPostsForBook = book?.posts
-    .filter((p) => p.id !== post.id)
+  const postHasUser = "user" in post;
+  const postUserDataLoading = user && !postHasUser;
+  const isPostOwnedByUser = postHasUser ? user?.id === post.user.id : false;
+  const hasMorePosts = bookSecondData?.length !== 0;
+
+  const otherPostsForBook = posts
+    ?.filter((p) => p.id !== post.id)
     .map((p) => {
       return {
         ...p,
@@ -55,143 +121,248 @@ const PostPage: NextPage = () => {
       };
     });
 
-  var buttonText: string;
-  var buttonFragment: React.ReactNode;
-  if (isPostOwnedByUser) {
-    buttonText = "Post Options";
-    buttonFragment = (
-      <>
-        <Button leftIcon={<Icon as={PencilAltIcon} />} colorScheme="teal">
-          Edit Post
-        </Button>
-        <DeletePostForm post={post} />
-      </>
-    );
-  } else if (user) {
-    const cannedMessage =
-      "Hi " +
-      post.user.name +
-      '! I am interested in the book you posted on Book Bazar "' +
-      post.book.name +
-      '". \n' +
-      window.location.href +
-      "\nIs it still available?";
-    const users = encodeURIComponent(post.user.email);
-    const message = encodeURIComponent(cannedMessage);
-    const parameters = `?users=${users}&message=${message}`;
-    const teamsDeepLink = "https://teams.microsoft.com/l/chat/0/0" + parameters;
+  const ActionButtons = () => {
+    if (isPostOwnedByUser) {
+      return (
+        <>
+          <Button leftIcon={<Icon as={PencilAltIcon} />} size="sm">
+            Edit Post
+          </Button>
+          <DeletePostForm post={post} size="sm" />
+        </>
+      );
+    }
 
-    buttonText = "Contact Seller";
-    buttonFragment = (
+    return (
       <>
-        <ChakraLink
-          href={teamsDeepLink}
-          _hover={{ textDecoration: "none" }}
-          isExternal
+        <Button
+          leftIcon={<Icon as={UsersIcon} />}
+          colorScheme="microsoftTeams"
+          size="sm"
+          onClick={() => {
+            if (postHasUser) {
+              openTeamsSafetyModal();
+            } else {
+              openLoginModal();
+            }
+          }}
         >
-          <Button
-            leftIcon={<Icon as={ChatIcon} />}
-            colorScheme="microsoftTeams"
-          >
-            Microsoft Teams
-          </Button>
-        </ChakraLink>
-        <ChakraLink
-          href={"mailto:" + post.user.email}
-          _hover={{ textDecoration: "none" }}
-          isExternal
+          Microsoft Teams
+        </Button>
+        <Button
+          leftIcon={<Icon as={MailIcon} />}
+          colorScheme="blue"
+          size="sm"
+          onClick={() => {
+            if (postHasUser) {
+              openEmailSafetyModal();
+            } else {
+              openLoginModal();
+            }
+          }}
         >
-          <Button leftIcon={<Icon as={MailIcon} />} colorScheme="blue">
-            Email
-          </Button>
-        </ChakraLink>
+          Email
+        </Button>
       </>
     );
-  } else {
-    buttonText = "Sign in to interact with the owner of this post.";
-  }
+  };
 
   const postInfo = (
-    <Grid
-      width="100%"
-      templateColumns={{
-        base: "256px 1fr",
-      }}
-      templateRows={{
-        base: "300px",
-      }}
-      templateAreas={{
-        base: `'image image' 'info info'`,
-        md: `'image info'`,
-      }}
+    <Flex
+      direction={{ base: "column", md: "row" }}
       gap={{
         base: 4,
         md: 8,
       }}
     >
-      <Box gridArea="image">
+      <Box>
         <Flex
           direction="row"
-          h="100%"
-          w="100%"
           justifyContent="center"
           alignItems="center"
           background="tertiaryBackground"
           borderRadius="lg"
           overflow="hidden"
         >
-          <Box width="110%" height="110%" position='relative'>
-            <Image
-              alt="post-image"
-              src={post.imageUrl || resolveImageUrl(book)}
-              layout="fill"
-              objectFit="contain"
-            />
-          </Box>
+          <Image
+            alt="post-image"
+            src={post.imageUrl || resolveImageUrl(book)}
+            height={300}
+            width={300 * TEXTBOOK_ASPECT_RATIO}
+            layout="intrinsic"
+          />
         </Flex>
       </Box>
 
-      <Flex gridArea="info" direction="column" justifyContent="space-between">
+      <Flex flex="auto" direction="column" justifyContent="space-between">
         <Box>
-          <HStack fontSize="2xl" fontWeight="bold">
-            <Skeleton isLoaded={!bookIsLoading}>
-              <Text>{book?.name ?? "Placeholder for Skeleton"}</Text>
-            </Skeleton>
-            <Text color="teal">${post.price / 100}</Text>
-          </HStack>
-
-          <HStack>
-            <UserWithAvatar user={post.user} />
-            <Text>Posted {timeSincePost} ago</Text>
-            <Link href={"/book/" + book?.isbn} passHref>
-              <Button
-                size="xs"
-                mt="2"
-                leftIcon={<Icon as={BookOpenIcon} />}
-                colorScheme="teal"
+          <HStack spacing="3" mb="1" align="start">
+            <Heading
+              as="h1"
+              size="lg"
+              fontWeight="500"
+              fontFamily="title"
+              display="inline"
+            >
+              {book ? resolveBookTitle(book) : "Placeholder for Skeleton"}{" "}
+              <Text
+                as="span"
+                ml="1"
+                color="accent"
+                fontFamily="body"
+                fontSize="0.9em"
+                fontWeight="semibold"
               >
-                Book Page
-              </Button>
-            </Link>
+                ${formatIntPrice(post.price)}
+              </Text>
+            </Heading>
           </HStack>
-          {/* max ~390 characters for description*/}
-          <Text mt="2" noOfLines={6}>
-            {post.description}
-          </Text>
-        </Box>
-        <Box>
-          <Text fontWeight="bold">{buttonText}</Text>
-          <HStack>{buttonFragment}</HStack>
+          <Link href={"/book/" + book?.isbn} passHref>
+            <Button
+              size="xs"
+              mt="2"
+              variant="outline"
+              leftIcon={<Icon as={BookOpenIcon} />}
+              colorScheme="teal"
+            >
+              Book details
+            </Button>
+          </Link>
+
+          <Divider mt="5" mb="6" />
+
+          <VStack maxWidth="xl" align="start" display="inline-flex">
+            <HStack
+              width="100%"
+              justifyContent="space-between"
+              align="start"
+              flexWrap="wrap"
+              gap="3"
+              spacing="0"
+              mb="3"
+            >
+              <HStack mr="2" spacing="3">
+                <UserWithAvatar
+                  user={postHasUser ? post.user : null}
+                  hideName
+                />
+                <Skeleton isLoaded={!postUserDataLoading}>
+                  <Text color="secondaryText" fontWeight="500">
+                    {postHasUser && post.user.name
+                      ? `${post.user.name}  posted ${timeSincePost} ago`
+                      : `Posted ${timeSincePost} ago`}
+                  </Text>
+                </Skeleton>
+              </HStack>
+              <Skeleton isLoaded={!postUserDataLoading}>
+                <HStack>
+                  <ActionButtons />
+                </HStack>
+              </Skeleton>
+            </HStack>
+            {/* max ~390 characters for description*/}
+            {post.description && (
+              <Text
+                noOfLines={6}
+                padding="6"
+                width="100%"
+                border="1px"
+                borderRadius="lg"
+                background="gray.100"
+                borderColor="gray.200"
+                _dark={{
+                  background: "gray.800",
+                  borderColor: "whiteAlpha.300",
+                }}
+              >
+                {post.description}
+              </Text>
+            )}
+          </VStack>
         </Box>
       </Flex>
-    </Grid>
+    </Flex>
   );
 
   return (
-    <Layout extendedHeader={postInfo}>
-      <PostCardList posts={otherPostsForBook ?? []} isLinkActive />
-    </Layout>
+    <>
+      <Head>
+        <title>
+          {pageTitle(
+            `${resolveBookTitle(book)} ($${formatIntPrice(post.price)})`
+          )}
+        </title>
+      </Head>
+      <Layout extendedHeader={postInfo}>
+        <Text fontFamily="title" fontWeight="500" fontSize="2xl" mt="10" mb="4">
+          Similar Posts
+        </Text>
+        <PostCardGrid posts={otherPostsForBook ?? []} />
+        {(page === 0
+          ? posts?.length === MAX_NUM_POSTS
+          : posts?.length !== 0) && (
+          <PaginationButtons
+            page={page}
+            url={"/post/" + id}
+            morePosts={hasMorePosts}
+            isLoadingNextPage={isPreviousData}
+          />
+        )}
+        <Spacer height="6" />
+        <LoginModal
+          isOpen={isLoginModalOpen}
+          onClose={onLoginModalClose}
+          message="To contact the seller please login with your MacID below."
+        />
+        <SafeInteractionTipsModal
+          isOpen={isTeamsSafetyModalOpen}
+          onClose={onTeamsSafetyModalClose}
+          onAccept={() => {
+            if (postHasUser) {
+              window.open(createTeamsContactUrl(post), "_blank")?.focus();
+            }
+          }}
+        />
+        <SafeInteractionTipsModal
+          isOpen={isEmailSafetyModalOpen}
+          onClose={onEmailSafetyModalClose}
+          onAccept={() => {
+            if (postHasUser) {
+              window.open("mailto:" + post.user.email);
+            }
+          }}
+        />
+      </Layout>
+    </>
   );
+};
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const id = context.params?.id;
+  if (typeof id !== "string") return { notFound: true };
+
+  const post = await getPost(id, false);
+  if (!post) return { notFound: true };
+
+  const book = await getPopulatedBook(post?.book.isbn);
+  if (!book) return { notFound: true };
+
+  return {
+    props: {
+      initialPost: createResponseObject(post),
+      initialBook: book,
+    },
+    // Page is force-revalidated by API on update/delete
+    // All other static data is only updated after an index
+    revalidate: 60 * 60 * 24, // 1 day
+  };
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: true,
+  };
 };
 
 export default PostPage;

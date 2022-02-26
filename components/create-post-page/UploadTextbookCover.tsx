@@ -1,5 +1,7 @@
 import ImageUploadModal from "@components/ImageUpload/ImageUploadModal";
 
+export const TEXTBOOK_ASPECT_RATIO = 4 / 5;
+
 interface Props {
   onCoverPhotoUploaded: (coverPhoto: Blob) => void;
   isOpen: boolean;

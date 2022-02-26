@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["extendedIndexes"]
 }
 
 generator dbml {
@@ -22,15 +23,17 @@ model Dept {
 }
 
 model Course {
-  id     String @id @default(uuid())
+  id     String  @id @default(uuid())
   name   String?
   code   String
   term   String
-  dept   Dept   @relation(fields: [deptId], references: [id])
+  dept   Dept    @relation(fields: [deptId], references: [id])
   deptId String
   books  Book[]
 
   @@unique([code, deptId], name: "courseIdentifier")
+  @@index([code], type: Hash)
+  @@index([deptId], type: Hash)
 }
 
 model Book {
@@ -43,6 +46,8 @@ model Book {
   campusStorePrice  Int?
   courses           Course[]
   posts             Post[]
+
+  @@index([isbn], type: Hash)
 }
 
 model Post {
@@ -73,6 +78,8 @@ model User {
   imageUrl  String?
   posts     Post[]
   sessions  Session[]
+
+  @@index([email], type: Hash)
 }
 
 model Session {
@@ -82,6 +89,8 @@ model Session {
   userId         String
   hashedToken    String   @unique
   expirationDate DateTime
+
+  @@index([hashedToken], type: Hash)
 }
 
 model VerificationEmail {

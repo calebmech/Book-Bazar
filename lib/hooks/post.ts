@@ -1,4 +1,4 @@
-import { PostWithBookWithUser } from "@lib/services/post";
+import { PostWithBook, PostWithBookWithUser } from "@lib/services/post";
 import axios from "axios";
 import {
   UseQueryResult,
@@ -8,16 +8,18 @@ import {
 } from "react-query";
 
 export function usePostQuery(
-  postId: string | string[] | undefined
-): UseQueryResult<PostWithBookWithUser> {
+  postId: string | string[] | undefined,
+  initialData?: PostWithBook
+): UseQueryResult<PostWithBookWithUser | PostWithBook> {
   return useQuery(
-    "post-" + postId,
+    ["post", postId],
     () =>
       axios
         .get<PostWithBookWithUser>(`/api/post/${postId}/`)
         .then((res) => res.data),
     {
       enabled: !(postId == undefined || Array.isArray(postId)),
+      initialData,
     }
   );
 }

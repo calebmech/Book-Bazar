@@ -3,12 +3,11 @@ import DeleteAccountForm from "@components/account-page/DeleteAccountForm";
 import EditImageWidget from "@components/account-page/EditImageWidget";
 import UpdateNameForm from "@components/account-page/UpdateNameForm";
 import Layout from "@components/Layout";
+import LoadingPage from "@components/LoadingPage";
 import LoginModal from "@components/LoginModal";
-import { getCurrentUser } from "@lib/helpers/backend/user-helpers";
 import pageTitle from "@lib/helpers/frontend/page-title";
-import { CreateResponseObject } from "@lib/helpers/type-utilities";
-import { User, useUserQuery } from "@lib/hooks/user";
-import { GetServerSideProps, NextPage } from "next";
+import { useUserQuery } from "@lib/hooks/user";
+import { NextPage } from "next";
 import Head from "next/head";
 import { Post } from "@prisma/client";
 import { AccountPostCardList } from "@components/CardList";
@@ -16,31 +15,31 @@ import { useUserIdQuery } from "@lib/hooks/user";
 
 const PAGE_TITLE = pageTitle("Account");
 
-interface AccountPageProps {
-  initialUser: User | null;
-}
-
-const AccountPage: NextPage<AccountPageProps> = ({ initialUser }) => {
-  const { user } = useUserQuery(initialUser ?? undefined);
+const AccountPage: NextPage = () => {
+  const { user, isSuccess } = useUserQuery();
 
   const { data: userWithPosts } = useUserIdQuery(user?.id);
 
   const posts: Post[] = userWithPosts?.posts || [];
 
   if (!user) {
-    return (
-      <>
-        <Head>
-          <title>{PAGE_TITLE}</title>
-        </Head>
-        <Layout>
-          <LoginModal
-            isOpen={true}
-            message="To access the account page you must be signed in. Please login with your MacID below."
-          />
-        </Layout>
-      </>
-    );
+    if (isSuccess) {
+      return (
+        <>
+          <Head>
+            <title>{PAGE_TITLE}</title>
+          </Head>
+          <Layout>
+            <LoginModal
+              isOpen={true}
+              message="To access the account page you must be signed in. Please login with your MacID below."
+            />
+          </Layout>
+        </>
+      );
+    }
+
+    return <LoadingPage />;
   }
 
   const PageHeader = (
@@ -53,7 +52,7 @@ const AccountPage: NextPage<AccountPageProps> = ({ initialUser }) => {
     >
       <EditImageWidget user={user} display={{ base: "none", md: "initial" }} />
       <VStack align="start" width="100%">
-        <Heading as="h1" size="lg" fontWeight="semibold" fontFamily="title">
+        <Heading as="h1" size="lg" fontWeight="500" fontFamily="title">
           Your Account
         </Heading>
         <Text color="tertiaryText" fontWeight="semibold">
@@ -87,19 +86,6 @@ const AccountPage: NextPage<AccountPageProps> = ({ initialUser }) => {
       </Layout>
     </>
   );
-};
-
-export const getServerSideProps: GetServerSideProps<AccountPageProps> = async ({
-  req,
-  res,
-}) => {
-  const user = await getCurrentUser(req, res);
-
-  return {
-    props: {
-      initialUser: CreateResponseObject(user),
-    },
-  };
 };
 
 export default AccountPage;

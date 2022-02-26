@@ -14,7 +14,7 @@ import { RefreshIcon } from "@heroicons/react/outline";
 import { FormEvent, useState } from "react";
 import { useEditPostMutation } from "@lib/hooks/post";
 import { getFloatStringPriceAsNumber } from "@lib/helpers/priceHelpers";
-import { PostWithBookWithUser } from "@lib/services/post";
+import { PostWithBook, PostWithBookWithUser } from "@lib/services/post";
 import UploadTextbookCover from "./create-post-page/UploadTextbookCover";
 import ViewTextbookCover from "./create-post-page/ViewTextbookCover";
 import EditPriceAndDescription from "./EditPriceAndDescription";
@@ -23,7 +23,7 @@ import { handleRawImage } from "@lib/helpers/frontend/handle-raw-image";
 export interface EditPostProps {
   isOpen: boolean;
   onClose: VoidFunction;
-  post: PostWithBookWithUser;
+  post: PostWithBook | PostWithBookWithUser;
 }
 
 export default function EditPostModal({

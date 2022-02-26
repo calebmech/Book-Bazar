@@ -91,6 +91,13 @@ async function putHandler(
   }
 
   const updatedPost: Post = await updatePost(postId, updatablePost);
+
+  try {
+    await res.unstable_revalidate("/post/" + postId);
+  } catch (error) {
+    console.error(error);
+  }
+
   res //
     .status(StatusCodes.OK) //
     .json(updatedPost);
@@ -111,6 +118,13 @@ async function deleteHandler(
   }
 
   await deletePost(postId);
+
+  try {
+    await res.unstable_revalidate("/post/" + postId);
+  } catch (error) {
+    console.error(error);
+  }
+
   res.status(StatusCodes.OK).end();
 }
 

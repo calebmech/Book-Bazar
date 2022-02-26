@@ -1,26 +1,39 @@
-import { Box, Flex, Skeleton, Text } from "@chakra-ui/react";
-import { resolveImageUrl } from "@lib/helpers/frontend/resolve-image-url";
+import { Box, Flex, Grid, Skeleton, Text } from "@chakra-ui/react";
+import {
+  resolveBookTitle,
+  resolveImageUrl,
+} from "@lib/helpers/frontend/resolve-book-data";
+import { formatIntPrice } from "@lib/helpers/priceHelpers";
 import { useBookQuery } from "@lib/hooks/book";
-import { PostWithBookWithUser } from "@lib/services/post";
+import { PostWithBook, PostWithBookWithUser } from "@lib/services/post";
 import Image from "next/image";
 import Link from "next/link";
 import UserWithAvatar from "./UserWithAvatar";
 
 type PostCardProps = {
-  post: PostWithBookWithUser;
+  post: PostWithBook | PostWithBookWithUser;
   isLinkActive: boolean;
 };
 
 export default function PostCard({ post, isLinkActive }: PostCardProps) {
-  const { id, price, description, user, book, imageUrl } = post;
+  const { id, price, description, book, imageUrl } = post;
+  const user = "user" in post ? post.user : null;
   const { isLoading: isBookLoading, data: populatedBook } = useBookQuery(
     book.isbn
   );
   const authors = populatedBook?.googleBook?.authors?.join(", ") || "-";
 
   const card = (
-    <Flex
-      w="490px"
+    <Grid
+      templateColumns={{
+        base: "120px minmax(0, 1fr)",
+        sm: "165px minmax(0, 1fr)",
+      }}
+      templateRows={{
+        base: "160px",
+        sm: "220px",
+      }}
+      templateAreas="'image info'"
       background="secondaryBackground"
       overflow="hidden"
       borderRadius="lg"
@@ -30,45 +43,56 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
       transition="0.3s"
       cursor={isLinkActive ? "pointer" : "cursor"}
     >
-      <Image
-        height="220px"
-        width="160px"
-        src={imageUrl || resolveImageUrl(populatedBook)}
-        alt="book-image"
-      />
+      <Box
+        height={{ base: "160px", sm: "220px" }}
+        width={{ base: "120px", sm: "165px" }}
+        gridArea="image"
+        position="relative"
+        display="flex"
+      >
+        <Image
+          layout="fill"
+          src={imageUrl || resolveImageUrl(populatedBook)}
+          alt="book-image"
+        />
+      </Box>
 
       <Flex
-        w="330px"
+        gridArea="info"
         direction="column"
         justify="space-between"
         fontSize="sm"
-        p="4"
+        p={{ base: "2", sm: "4" }}
       >
         <Box>
           <Skeleton isLoaded={!isBookLoading}>
-            <Text fontWeight="semibold" isTruncated>
-              {book.name}
+            <Text fontSize="lg" fontWeight="semibold" isTruncated>
+              {resolveBookTitle(populatedBook ?? book)}
             </Text>
           </Skeleton>
           <Skeleton isLoaded={!isBookLoading}>
-            <Text mt="1" color="secondaryText" isTruncated>
+            <Text color="secondaryText" isTruncated>
               {authors}
             </Text>
           </Skeleton>
-          <Text fontWeight="bold" fontSize="xl">
-            ${(price / 100).toFixed(2)}
+          <Text my="1" fontWeight="bold" fontSize="xl">
+            ${formatIntPrice(price)}
           </Text>
-          <Text color="secondaryText" noOfLines={3}>
+          <Text color="secondaryText" noOfLines={{ base: 1, sm: 3 }}>
             {description}
           </Text>
         </Box>
         <UserWithAvatar user={user} />
       </Flex>
-    </Flex>
+    </Grid>
   );
 
   if (isLinkActive) {
-    return <Link href={"/post/" + id}>{card}</Link>;
+    return (
+      <Link href={"/post/" + id} passHref>
+        {card}
+      </Link>
+    );
   }
   return card;
 }

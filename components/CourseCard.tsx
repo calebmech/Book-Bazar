@@ -2,9 +2,10 @@
  * This file returns the course card displayed in the search page.
  */
 
-import { Text, Box, Heading, Link } from "@chakra-ui/react";
+import { Text, Box, Heading } from "@chakra-ui/react";
 import React from "react";
 import { CourseWithDept } from "@lib/services/course";
+import Link from "next/link";
 
 type CourseCardProps = {
   course: CourseWithDept;
@@ -25,20 +26,21 @@ export default function CourseCard({ course, isLinkActive }: CourseCardProps) {
       shadow="md"
       _hover={{ shadow: "xl" }}
       transition="0.3s"
-      cursor={isLinkActive ? "pointer" : "cursor"}
+      as={isLinkActive ? "a" : "div"}
+      p="5"
     >
-      <Heading m="5" mb="0" as="h4" size="md">
+      <Heading mb="1" as="h4" size="md">
         {`${dept.abbreviation} ${code}`}
       </Heading>
-      <Text m="5" mt="0">
-        {truncatedName || "-"}
-      </Text>
+      <Text>{truncatedName || "\u2013"}</Text>
     </Box>
   );
 
   if (isLinkActive) {
     return (
-      <Link href={"/course/" + dept.abbreviation + "-" + code}>{card}</Link>
+      <Link href={"/course/" + dept.abbreviation + "-" + code} passHref>
+        {card}
+      </Link>
     );
   }
 

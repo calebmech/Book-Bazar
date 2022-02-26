@@ -92,7 +92,7 @@
 \begin{tabular}{| l | c | p{2.8cm}| p{3.5cm} |}
 \hline
  \rowcolor{lightgray}
-\textbf{Version} & \textbf{Date(dd.mm.yyy)} &\textbf{Author(s)} &\textbf{Description}\\
+\textbf{Version} & \textbf{Date(dd.mm.yyyy)} &\textbf{Author(s)} &\textbf{Description}\\
 \hline
 0 & 16.11.2021 &  Harsh Mahajan & First version compiled. Inputs received from the entire team and \LaTeX~ doc compiled.\\
 \hline
@@ -101,6 +101,8 @@
 2 & 26.11.2021 & David Thompson & Fixed some spelling, grammar, and formatting errors in the document. \\
 \hline
 3 & 26.11.2021 & Harsh Mahajan & Added onto the Safety Requirements and edited hazard 2.2\\
+\hline
+4& 17.02.2022& All team members & Edited the document to reflect an FMEA approach to Hazard Analysis on TA's feedback.\\
 \hline
 \end{tabular}
 \caption{Table of Revisions}
@@ -113,7 +115,10 @@ The hazards for Book Bazar were identified by recognizing the vulnerabilities of
 
 Our system shall be authenticating users using their McMaster emails. As well, users may share their contact information with each other to buy or sell textbooks. In such scenarios, we've assumed the security of the systems that are providing the services. For example, when we authenticate users via their McMaster emails, we assume that the emails we send cannot be read by a third party.
 
-Below are the hazards that we have identified and our means to mitigate them.
+\section{Hazard Analysis Approach}
+The team adopted a ``bottom-up,'' \textbf{Failure Modes and Effects Analysis (FMEA)}, approach in analysing hazards of Book Bazar.
+Minor failures and their implications were identified and documented.
+Below are the major implications that we found and our means to mitigate them.
 
 \section{Book Bazar Hazards}
 
@@ -128,7 +133,7 @@ This event occurs when there are malicious users using Book Bazar.
 Safety tips for meeting strangers via Book Bazar will be provided when a user makes a post to sell a textbook or contacts a seller. Tips may include links to awareness tools, like the McMaster Safety App, that could be used to improve safety. Furthermore, a means of reporting malicious users may be created if deemed necessary.
 
 \subsubsection*{Safety Requirements}
-Section 11.9 of our System Requirements Rev0 document covers this hazard.
+Section 11.9 of the team's System Requirements Rev0 document covers this hazard.
 
 \subsection{User's Magic Link Gets Leaked}
 
@@ -141,7 +146,8 @@ One of the means via which an attacker may acquire a user's magic link is by bru
 \subsubsection*{Mitigation}
 We shall ensure that the magic links generated are sufficiently random and long to avoid someone viewing a screen from noting down the magic link. Furthermore the magic link will also have a short-enough lifespan to prevent any brute-force attempts.
 \subsubsection*{Safety Requirements}
-\emph{A system requirement mitigating this hazard shall be added to the next revision of the System Requirements document.}
+
+\textbf{SR1:} A malicious user shall not be able to act on behalf of another user.
 
 \subsection{User's Personal Information Gets Leaked}
 
@@ -155,7 +161,7 @@ Misconfigured access levels to data or providing access to data without requirin
 To mitigate leaking users’ personal information, we will only store personal information required to operate Book Bazar, such as the user’s McMaster email, their name, and photos of the textbooks that they intend to sell. Furthermore, we shall require users to sign in before viewing personal information related to textbook postings. This means that only individuals affiliated with McMaster may access the contact information of sellers.
 
 \subsubsection*{Safety Requirements}
-\emph{A system requirement mitigating this hazard shall be added to the next revision of the System Requirements document.}
+\textbf{NFR12} of Section 11.6 of the team's System Requirements Rev0 document covers this hazard.
 
 \subsection{Cross-Site Scripting (XSS)}
 
@@ -169,7 +175,7 @@ What follows is an example of an XSS attack. An attacker sets their name on Book
 Input fields will be sanitized such that text with HTML or JavaScript content that is input into textboxes gets transformed into a form that, when displayed on another user's computer, will be interpreted as plain text instead of code or marked up text.
 
 \subsubsection*{Safety Requirements}
-\emph{A system requirement mitigating this hazard shall be added to the next revision of the System Requirements document.}
+\textbf{SR2: }Attackers should be incapable of running arbitrary code on any of the user's computer(s) accessing the application.
 
 \subsection{SQL Injection}
 
@@ -185,7 +191,7 @@ We will use an object-relational mapping library (ORM) to interact with the data
 Another approach we shall take to mitigate the effects of an SQL injection is by creating backups of the database. If we detect that the integrity of the data has been compromised, then we can restore the backup of the database.
 
 \subsubsection*{Safety Requirements}
-\emph{A system requirement mitigating this hazard shall be added to the next revision of the System Requirements document.}
+\textbf{SR3: }An attacker shall be unable to perform arbitrary database operations.
 
 \begin{comment}
 \begin{thebibliography}{9}
