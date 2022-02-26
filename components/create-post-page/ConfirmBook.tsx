@@ -11,7 +11,7 @@ interface Props {
 export default function ConfirmBook({ book, onClickYes, onClickNo }: Props) {
   return (
     <VStack spacing={3}>
-      <BookCard book={book} isLinkActive={false} width={"140px"} />
+      <BookCard book={book} isLinkActive={false} width="140px" />
       <HStack spacing={7}>
         <Button colorScheme="red" onClick={onClickNo}>
           No
