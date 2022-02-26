@@ -38,7 +38,7 @@ export interface EditablePostClient {
   image?: Blob;
 }
 
-export function useEditPostMutation(postId: string) {
+export function useEditPostMutation(postId: string, userId: string) {
   const queryClient = useQueryClient();
   return useMutation(
     (request: EditablePostClient) => {
@@ -57,6 +57,7 @@ export function useEditPostMutation(postId: string) {
     {
       onSuccess: () => {
         queryClient.invalidateQueries("post-" + postId);
+        queryClient.invalidateQueries("user-" + userId);
       },
     }
   );

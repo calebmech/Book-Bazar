@@ -37,7 +37,7 @@ export default function EditPostModal({
     onClose: onEditImageClose,
   } = useDisclosure();
 
-  const mutation = useEditPostMutation(post.id);
+  const mutation = useEditPostMutation(post.id, post.userId);
 
   const [description, setDescription] = useState<string | null>(
     post.description
