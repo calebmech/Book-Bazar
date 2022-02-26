@@ -26,6 +26,7 @@ import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import ErrorPage from "next/error";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { prisma } from "@lib/services/db";
 
 interface CoursePageProps {
   initialCourse: CourseWithBooks;
@@ -161,8 +162,31 @@ export const getStaticProps: GetStaticProps<CoursePageProps> = async (
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  // Prerender course pages related to most recent posts
+  const recentPosts = await prisma.post.findMany({
+    take: 50,
+    orderBy: {
+      updatedAt: "desc",
+    },
+    distinct: ["bookId"],
+    select: {
+      book: {
+        select: {
+          courses: {
+            distinct: ["id"],
+            include: { dept: true },
+          },
+        },
+      },
+    },
+  });
+
+  const recentCourses = recentPosts.flatMap((post) => post.book.courses);
+
   return {
-    paths: [],
+    paths: recentCourses.map((course) => ({
+      params: { code: course.dept.abbreviation + "-" + course.code },
+    })),
     fallback: true,
   };
 };

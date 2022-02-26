@@ -32,6 +32,7 @@ import {
 import { formatIntPrice } from "@lib/helpers/priceHelpers";
 import { useBookPostsQuery, useBookQuery } from "@lib/hooks/book";
 import { getPopulatedBook, PopulatedBook } from "@lib/services/book";
+import { prisma } from "@lib/services/db";
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import ErrorPage from "next/error";
 import Head from "next/head";
@@ -297,8 +298,26 @@ export const getStaticProps: GetStaticProps<BookPageProps> = async (
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
+  // Prerender book pages related to most recent posts
+  const recentPosts = await prisma.post.findMany({
+    take: 50,
+    orderBy: {
+      updatedAt: "desc",
+    },
+    distinct: ["bookId"],
+    select: {
+      book: {
+        select: {
+          isbn: true,
+        },
+      },
+    },
+  });
+
+  const recentISBNs = recentPosts.map((post) => post.book.isbn);
+
   return {
-    paths: [],
+    paths: recentISBNs.map((isbn) => ({ params: { isbn } })),
     fallback: true,
   };
 };
