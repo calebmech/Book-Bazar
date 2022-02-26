@@ -28,16 +28,21 @@ export default function DeletePostForm({
   const router = useRouter();
   const cancelRef = useRef(null);
 
+  const onMutationSuccess = () => {
+    if (!isAccountPage) router.push("/");
+    onClose();
+  };
+
   // user.Id must be passed in to invalidate user-userId query
-  const mutation = useDeletePostMutation(post.id, post.userId);
+  const mutation = useDeletePostMutation({
+    postId: post.id,
+    userId: post.userId,
+    onMutationSuccess,
+  });
 
   const handleDeleteSubmit = () => {
     mutation.mutate();
   };
-
-  if (mutation.isSuccess && !isAccountPage) {
-    router.push("/");
-  }
 
   return (
     <>
@@ -50,7 +55,7 @@ export default function DeletePostForm({
         Delete post
       </Button>
       <AlertDialog
-        isOpen={!mutation.isSuccess && isOpen}
+        isOpen={isOpen}
         leastDestructiveRef={cancelRef}
         onClose={onClose}
       >

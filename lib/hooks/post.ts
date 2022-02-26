@@ -24,12 +24,23 @@ export function usePostQuery(
   );
 }
 
-export function useDeletePostMutation(postId: string, userId?: string) {
+export interface DeleteMutationProps {
+  postId: string;
+  userId: string;
+  onMutationSuccess: () => void;
+}
+
+export function useDeletePostMutation({
+  postId,
+  onMutationSuccess,
+  userId,
+}: DeleteMutationProps) {
   const queryClient = useQueryClient();
   return useMutation(() => axios.delete("/api/post/" + postId), {
     onSuccess: () => {
       queryClient.invalidateQueries([`post-${postId}`]);
       queryClient.invalidateQueries([`user-${userId}`]);
+      onMutationSuccess();
     },
   });
 }

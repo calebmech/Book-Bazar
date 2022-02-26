@@ -30,11 +30,10 @@ export default function AccountPostCard({
 
   const card = postsWithBookWithUser ? (
     <>
-      <Grid templateColumns="repeat(2, 1fr)" rowGap={1} columnGap={2}>
+      <Grid templateColumns="repeat(2, 1fr)" rowGap={1} columnGap={1}>
         <GridItem colSpan={2}>
           <PostCard post={postsWithBookWithUser} isLinkActive={isLinkActive} />
         </GridItem>
-
         <GridItem colSpan={1}>
           <Button
             colorScheme={"teal"}
