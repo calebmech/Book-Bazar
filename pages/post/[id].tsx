@@ -15,6 +15,7 @@ import { TEXTBOOK_ASPECT_RATIO } from "@components/create-post-page/UploadTextbo
 import Layout from "@components/Layout";
 import LoginModal from "@components/LoginModal";
 import DeletePostForm from "@components/post-page/DeletePostForm";
+import SafeInteractionTipsModal from "@components/SafeInteractionTipsModal";
 import UserWithAvatar from "@components/UserWithAvatar";
 import {
   BookOpenIcon,
@@ -65,6 +66,16 @@ const PostPage: NextPage = () => {
     isOpen: isLoginModalOpen,
     onClose: onLoginModalClose,
   } = useDisclosure();
+  const {
+    isOpen: isTeamsSafetyModalOpen,
+    onClose: onTeamsSafetyModalClose,
+    onOpen: openTeamsSafetyModal,
+  } = useDisclosure();
+  const {
+    isOpen: isEmailSafetyModalOpen,
+    onClose: onEmailSafetyModalClose,
+    onOpen: openEmailSafetyModal,
+  } = useDisclosure();
 
   if (!post) {
     if (postIsLoading) return null;
@@ -112,7 +123,7 @@ const PostPage: NextPage = () => {
           size="sm"
           onClick={() => {
             if (postHasUser) {
-              window.open(createTeamsContactUrl(post), "_blank")?.focus();
+              openTeamsSafetyModal();
             } else {
               openLoginModal();
             }
@@ -126,7 +137,7 @@ const PostPage: NextPage = () => {
           size="sm"
           onClick={() => {
             if (postHasUser) {
-              window.open("mailto:" + post.user.email);
+              openEmailSafetyModal();
             } else {
               openLoginModal();
             }
@@ -281,6 +292,24 @@ const PostPage: NextPage = () => {
           isOpen={isLoginModalOpen}
           onClose={onLoginModalClose}
           message="To contact the seller please login with your MacID below."
+        />
+        <SafeInteractionTipsModal
+          isOpen={isTeamsSafetyModalOpen}
+          onClose={onTeamsSafetyModalClose}
+          onAccept={() => {
+            if (postHasUser) {
+              window.open(createTeamsContactUrl(post), "_blank")?.focus();
+            }
+          }}
+        />
+        <SafeInteractionTipsModal
+          isOpen={isEmailSafetyModalOpen}
+          onClose={onEmailSafetyModalClose}
+          onAccept={() => {
+            if (postHasUser) {
+              window.open("mailto:" + post.user.email);
+            }
+          }}
         />
       </Layout>
     </>
