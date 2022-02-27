@@ -1,8 +1,9 @@
 import { HttpMethod } from "@lib/http-method";
 import { StatusCodes } from "http-status-codes";
 import {
-  TEST_BOOK_UUID,
   TEST_BOOK_1_ISBN,
+  TEST_BOOK,
+  TEST_BOOK_UUID,
   TEST_COURSE_UUID,
 } from "../../support/constants";
 
@@ -21,13 +22,11 @@ describe("test book api", () => {
       url: `/api/book/${TEST_BOOK_1_ISBN}`,
     }).then((response) => {
       expect(response.status).equal(StatusCodes.OK);
-
       expect(response.body.id).equal(TEST_BOOK_UUID);
-      expect(response.body.name).equal("Algorithms");
-      expect(response.body.imageUrl).equal("https://localhost:1000/image.jpg");
-      expect(response.body.campusStorePrice).equal(4000);
-      expect(response.body.isCampusStoreBook).equal(true);
-
+      expect(response.body.name).equal(TEST_BOOK.name);
+      expect(response.body.imageUrl).equal(TEST_BOOK.imageUrl);
+      expect(response.body.campusStorePrice).equal(TEST_BOOK.campusStorePrice);
+      expect(response.body.isCampusStoreBook).equal(TEST_BOOK.isCampusStoreBook);
       expect(response.body.courses.length).to.equal(1);
       expect(response.body.courses[0].id).equal(TEST_COURSE_UUID);
     });
@@ -41,11 +40,11 @@ describe("test book api", () => {
     }).then((response) => {
       expect(response.status).equal(StatusCodes.OK);
 
-      expect(response.body.length).to.equal(4);
+      expect(response.body.length).to.equal(18);
       expect(response.body[0].user.name).to.be.oneOf(["Test User", "Other"]);
       expect(response.body[1].user.name).to.be.oneOf(["Test User", "Other"]);
       expect(response.body[2].user.name).to.be.oneOf(["Test User", "Other"]);
-      expect(response.body[3].user.name).to.be.oneOf(["Test User", "Other"]);
+      expect(response.body[17].user.name).to.be.oneOf(["Test User", "Other"]);
     });
   });
 
@@ -59,32 +58,32 @@ describe("test book api", () => {
     });
   });
 
-  it("should include the first 3 of 4 posts when GETting posts for a book with a length of 3", () => {
+  it("should include the first first 10 of 18 posts when GETting posts for a book with a length of 10", () => {
     cy.request({
       method: HttpMethod.GET,
-      url: `/api/book/${TEST_BOOK_1_ISBN}/posts?length=3&page=0`,
+      url: `/api/book/${TEST_BOOK_1_ISBN}/posts?length=10`,
     }).then((response) => {
       expect(response.status).to.equal(StatusCodes.OK);
 
-      expect(response.body.length).to.equal(3);
+      expect(response.body.length).to.equal(10);
     });
   });
 
-  it("should include the last post of 4 when GETting posts for a book with a length of 3 and page of 1", () => {
+  it("should include the last 8 of 18 posts with a length of 10 and page of 1", () => {
     cy.request({
       method: HttpMethod.GET,
-      url: `/api/book/${TEST_BOOK_1_ISBN}/posts?length=3&page=1`,
+      url: `/api/book/${TEST_BOOK_1_ISBN}/posts?length=10&page=1`,
     }).then((response) => {
       expect(response.status).to.equal(StatusCodes.OK);
 
-      expect(response.body.length).to.equal(1);
+      expect(response.body.length).to.equal(8);
     });
   });
 
-  it("should include zero posts when GETting posts for a book with a length of 3 and page of 2", () => {
+  it("should include zero posts when GETting posts for a book with a length of 10 and page of 2", () => {
     cy.request({
       method: HttpMethod.GET,
-      url: `/api/book/${TEST_BOOK_1_ISBN}/posts?length=3&page=2`,
+      url: `/api/book/${TEST_BOOK_1_ISBN}/posts?length=10&page=2`,
     }).then((response) => {
       expect(response.status).to.equal(StatusCodes.OK);
 
@@ -99,7 +98,7 @@ describe("test book api", () => {
     }).then((response) => {
       expect(response.status).to.equal(StatusCodes.OK);
 
-      expect(response.body.length).to.equal(4);
+      expect(response.body.length).to.equal(18);
     });
   });
 
@@ -121,11 +120,11 @@ describe("test book api", () => {
     }).then((response) => {
       expect(response.status).equal(StatusCodes.OK);
 
-      expect(response.body.length).to.equal(4);
+      expect(response.body.length).to.equal(18);
       expect(response.body[0].user).equal(undefined);
       expect(response.body[1].user).equal(undefined);
       expect(response.body[2].user).equal(undefined);
-      expect(response.body[3].user).equal(undefined);
+      expect(response.body[17].user).equal(undefined);
     });
   });
 

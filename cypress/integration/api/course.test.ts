@@ -34,7 +34,7 @@ describe("test course api", () => {
       url: `/api/course/${TEST_COURSE_QUERY}/posts`,
     }).then((response) => {
       expect(response.status).to.equal(StatusCodes.OK);
-      expect(response.body.length).to.equal(4);
+      expect(response.body.length).to.equal(18);
       expect(response.body[0].user).to.equal(undefined);
       expect(response.body[1].user).to.equal(undefined);
       expect(response.body[2].user).to.equal(undefined);
@@ -49,38 +49,38 @@ describe("test course api", () => {
       url: `/api/course/${TEST_COURSE_QUERY}/posts`,
     }).then((response) => {
       expect(response.status).to.equal(StatusCodes.OK);
-      expect(response.body.length).to.equal(4);
+      expect(response.body.length).to.equal(18);
       expect(response.body[0].user.name).to.be.oneOf(["Test User", "Other"]);
       expect(response.body[1].user.name).to.be.oneOf(["Test User", "Other"]);
       expect(response.body[2].user.name).to.be.oneOf(["Test User", "Other"]);
-      expect(response.body[3].user.name).to.be.oneOf(["Test User", "Other"]);
+      expect(response.body[17].user.name).to.be.oneOf(["Test User", "Other"]);
     });
   });
 
-  it("should include first 3 of 4 posts when GETting posts for an existing course with a length of 3", () => {
+  it("should include first 10 of 18 posts when GETting posts for an existing course with a length of 10", () => {
     cy.request({
       method: HttpMethod.GET,
-      url: `/api/course/${TEST_COURSE_QUERY}/posts?length=3&page=0`,
+      url: `/api/course/${TEST_COURSE_QUERY}/posts?length=10`,
     }).then((response) => {
       expect(response.status).to.equal(StatusCodes.OK);
-      expect(response.body.length).to.equal(3);
+      expect(response.body.length).to.equal(10);
     });
   });
 
-  it("should include last post of 4 when GETting posts for an existing course with a length of 3 and page of 1", () => {
+  it("should include last 8 of 18 posts when GETting posts for an existing course with a length of 3 and page of 1", () => {
     cy.request({
       method: HttpMethod.GET,
-      url: `/api/course/${TEST_COURSE_QUERY}/posts?length=3&page=1`,
+      url: `/api/course/${TEST_COURSE_QUERY}/posts?length=10&page=1`,
     }).then((response) => {
       expect(response.status).to.equal(StatusCodes.OK);
-      expect(response.body.length).to.equal(1);
+      expect(response.body.length).to.equal(8);
     });
   });
 
   it("should include zero posts when GETting posts for an existing course with a length of 3 and page of 2", () => {
     cy.request({
       method: HttpMethod.GET,
-      url: `/api/course/${TEST_COURSE_QUERY}/posts?length=3&page=2`,
+      url: `/api/course/${TEST_COURSE_QUERY}/posts?length=10&page=2`,
     }).then((response) => {
       expect(response.status).to.equal(StatusCodes.OK);
       expect(response.body.length).to.equal(0);
