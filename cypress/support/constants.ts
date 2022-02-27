@@ -626,3 +626,5 @@ export const ALGOLIA_RESPONSE_0_RESULTS = {
     },
   ],
 };
+
+export const TEST_COURSE_CODE = TEST_DEPARTMENT.abbreviation + "-" + TEST_COURSE.code;
