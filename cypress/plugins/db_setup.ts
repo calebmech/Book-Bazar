@@ -13,6 +13,7 @@ import {
   TEST_COURSE,
   TEST_DEPARTMENT,
   TEST_BOOK,
+  TEST_POSTS,
 } from "../../cypress/support/constants";
 
 export default async () => {
@@ -51,7 +52,8 @@ export default async () => {
         },
         description: "This is my book, please buy :D",
         price: 42,
-        imageUrl: "https://localhost:1000/image.jpg",
+        imageUrl:
+          "https://book-bazar-images.s3.us-east-2.amazonaws.com/77498c29-6771-4786-a5b7-fcfeea506d11",
         id: TEST_POST_UUID,
       },
     });
@@ -75,7 +77,8 @@ export default async () => {
         },
         description: "This is not my book D:",
         price: 42,
-        imageUrl: "https://localhost:1000/image.jpg",
+        imageUrl:
+          "https://book-bazar-images.s3.us-east-2.amazonaws.com/77498c29-6771-4786-a5b7-fcfeea506d11",
         id: TEST_OTHER_PERSON_POST_UUID,
       },
     });
@@ -94,7 +97,8 @@ export default async () => {
         },
         description: "This is my book :O",
         price: 21,
-        imageUrl: "https://localhost:1000/image.jpg",
+        imageUrl:
+          "https://book-bazar-images.s3.us-east-2.amazonaws.com/77498c29-6771-4786-a5b7-fcfeea506d11",
         id: TEST_POST_1_UUID,
       },
     });
@@ -113,10 +117,13 @@ export default async () => {
         },
         description: "Wow another one",
         price: 51,
-        imageUrl: "https://localhost:1000/image.jpg",
+        imageUrl:
+          "https://book-bazar-images.s3.us-east-2.amazonaws.com/77498c29-6771-4786-a5b7-fcfeea506d11",
         id: TEST_POST_2_UUID,
       },
     });
+
+    await prisma.post.createMany({ data: TEST_POSTS });
 
     return null;
   } catch (e) {

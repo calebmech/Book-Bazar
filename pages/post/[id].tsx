@@ -31,7 +31,7 @@ import { formatIntPrice } from "@lib/helpers/priceHelpers";
 import { createResponseObject } from "@lib/helpers/type-utilities";
 import { useBookPostsQuery, useBookQuery } from "@lib/hooks/book";
 import { usePostQuery } from "@lib/hooks/post";
-import { MAX_NUM_POSTS, PostCardGrid } from "@components/CardList";
+import { PostCardGrid } from "@components/CardList";
 import { useUserQuery } from "@lib/hooks/user";
 import { getPopulatedBook, PopulatedBook } from "@lib/services/book";
 import { getPost, PostWithBook } from "@lib/services/post";
@@ -44,6 +44,7 @@ import { useRouter } from "next/router";
 import { parsePageString } from "@lib/helpers/frontend/parse-page-string";
 import { PaginationButtons } from "@components/PaginationButtons";
 import ActionButtons from "@components/post-page/ActionButtons";
+import { MAX_NUM_POSTS } from "@lib/helpers/constants";
 
 interface PostPageProps {
   initialPost: PostWithBook;

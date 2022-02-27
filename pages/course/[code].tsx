@@ -7,11 +7,6 @@ import {
   Spinner,
   Text,
 } from "@chakra-ui/react";
-import {
-  BookCardGrid,
-  MAX_NUM_POSTS,
-  PostCardGrid,
-} from "@components/CardList";
 import Layout from "@components/Layout";
 import LoadingPage from "@components/LoadingPage";
 import { PaginationButtons } from "@components/PaginationButtons";
@@ -27,6 +22,8 @@ import ErrorPage from "next/error";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { prisma } from "@lib/services/db";
+import { BookCardGrid, PostCardGrid } from "@components/CardList";
+import { MAX_NUM_POSTS } from "@lib/helpers/constants";
 
 interface CoursePageProps {
   initialCourse: CourseWithBooks;

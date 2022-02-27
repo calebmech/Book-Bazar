@@ -11,7 +11,7 @@ import {
   VStack,
   Wrap,
 } from "@chakra-ui/react";
-import { MAX_NUM_POSTS, PostCardGrid } from "@components/CardList";
+import { PostCardGrid } from "@components/CardList";
 import Layout from "@components/Layout";
 import LoadingPage from "@components/LoadingPage";
 import { PaginationButtons } from "@components/PaginationButtons";
@@ -23,6 +23,7 @@ import {
   OfficeBuildingIcon,
   ViewListIcon,
 } from "@heroicons/react/solid";
+import { MAX_NUM_POSTS } from "@lib/helpers/constants";
 import pageTitle from "@lib/helpers/frontend/page-title";
 import { parsePageString } from "@lib/helpers/frontend/parse-page-string";
 import {

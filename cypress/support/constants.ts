@@ -1,4 +1,4 @@
-import { Course, Dept, User } from ".prisma/client";
+import { Course, Dept, Prisma, User } from ".prisma/client";
 
 export const TEST_USER_UUID = "e8b7ad6d-7086-4d8d-b831-079d5be7caa8";
 export const TEST_USER: Partial<User> = {
@@ -43,7 +43,21 @@ export const TEST_BOOK = {
   id: TEST_BOOK_UUID,
   isbn: TEST_BOOK_1_ISBN,
   name: "Algorithms",
-  imageUrl: "https://localhost:1000/image.jpg",
+  imageUrl:
+    "https://book-bazar-images.s3.us-east-2.amazonaws.com/77498c29-6771-4786-a5b7-fcfeea506d11",
   campusStorePrice: 4000,
   isCampusStoreBook: true,
 };
+
+export const TEST_POSTS: Prisma.PostCreateManyInput[] = [
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+].map((price) => {
+  return {
+    bookId: TEST_BOOK_UUID,
+    userId: TEST_USER_UUID,
+    description: "TEST POST " + price,
+    price: price,
+    imageUrl:
+      "https://book-bazar-images.s3.us-east-2.amazonaws.com/77498c29-6771-4786-a5b7-fcfeea506d11",
+  };
+});
