@@ -25,7 +25,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout minimalHeader>
-        <VStack mt={{ base: "20", md: "36" }} spacing="12">
+        <VStack mt={{ base: "20", md: "36" }} spacing="14">
           <VStack spacing="4" width="100%">
             <HStack
               spacing={{ base: 3, md: 5 }}

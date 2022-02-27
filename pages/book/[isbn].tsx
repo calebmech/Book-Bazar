@@ -21,12 +21,13 @@ import {
   CalendarIcon,
   ExternalLinkIcon,
   OfficeBuildingIcon,
-  ViewBoardsIcon,
+  ViewListIcon,
 } from "@heroicons/react/solid";
 import pageTitle from "@lib/helpers/frontend/page-title";
 import { parsePageString } from "@lib/helpers/frontend/parse-page-string";
 import {
   resolveBookTitle,
+  resolveCampusStoreLink,
   resolveImageUrl,
 } from "@lib/helpers/frontend/resolve-book-data";
 import { formatIntPrice } from "@lib/helpers/priceHelpers";
@@ -151,7 +152,8 @@ const BookPage: NextPage<Partial<BookPageProps>> = ({ initialBook }) => {
           <CourseBadges />
 
           <Box
-            my="4"
+            mt="4"
+            mb="2"
             maxWidth={{
               base: "100%",
               md: "sm",
@@ -164,7 +166,7 @@ const BookPage: NextPage<Partial<BookPageProps>> = ({ initialBook }) => {
               </HStack>
               <HStack>
                 <Icon as={CalendarIcon} />
-                <Text> Published Date </Text>
+                <Text> Published </Text>
               </HStack>
             </HStack>
             <HStack justify="space-between">
@@ -173,7 +175,7 @@ const BookPage: NextPage<Partial<BookPageProps>> = ({ initialBook }) => {
             </HStack>
             <HStack justify="space-between" color="tertiaryText" mt="2">
               <HStack direction="row">
-                <Icon as={ViewBoardsIcon} />
+                <Icon as={ViewListIcon} transform={"rotate(90deg)"} />
                 <Text> ISBN </Text>
               </HStack>
               <HStack>
@@ -187,23 +189,41 @@ const BookPage: NextPage<Partial<BookPageProps>> = ({ initialBook }) => {
             </HStack>
           </Box>
         </Flex>
-        {googleBook && (
+
+        <HStack mt="2">
           <Button
             width={{
               base: "100%",
               sm: "min-content",
             }}
-            size="sm"
+            size="xs"
             variant="outline"
-            colorScheme="teal"
+            colorScheme="mcmaster"
             as="a"
-            href={googleBook.infoLink}
+            href={resolveCampusStoreLink(book)}
             target="_blank"
             rightIcon={<Icon as={ExternalLinkIcon} />}
           >
-            View on Google Books
+            Campus Store
           </Button>
-        )}
+          {googleBook && (
+            <Button
+              width={{
+                base: "100%",
+                sm: "min-content",
+              }}
+              size="xs"
+              variant="outline"
+              colorScheme="blue"
+              as="a"
+              href={googleBook.infoLink}
+              target="_blank"
+              rightIcon={<Icon as={ExternalLinkIcon} />}
+            >
+              Google Books
+            </Button>
+          )}
+        </HStack>
       </Flex>
     </Flex>
   );
@@ -265,11 +285,11 @@ const BookPage: NextPage<Partial<BookPageProps>> = ({ initialBook }) => {
               }}
               spacing="5"
             >
-              <Text>Can&apos;t find your book being sold?</Text>
+              <Text>Can&apos;t find this book being sold?</Text>
               <Button
                 colorScheme="teal"
                 as="a"
-                href="https://textbooks.mcmaster.ca"
+                href={resolveCampusStoreLink(book)}
                 target="_blank"
                 rightIcon={<Icon as={ExternalLinkIcon} />}
               >

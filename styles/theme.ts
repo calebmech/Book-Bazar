@@ -12,6 +12,11 @@ const config: ThemeOverride = {
       500: "#505AC9",
       600: "#464EB8",
     },
+    mcmaster: {
+      50: "#ffebf4",
+      100: "#ffccdc",
+      600: "#850044",
+    },
   },
   semanticTokens: {
     colors: {
