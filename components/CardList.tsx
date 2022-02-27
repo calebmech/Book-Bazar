@@ -1,12 +1,43 @@
 import { Grid, GridItem, Wrap } from "@chakra-ui/react";
 import { PopulatedBook } from "@lib/services/book";
 import { CourseWithDept } from "@lib/services/course";
+import AccountPostCard from "./account-page/AccountPostCard";
+import { Post } from "@prisma/client";
 import { PostWithBook, PostWithBookWithUser } from "@lib/services/post";
 import BookCard from "./BookCard";
 import CourseCard from "./CourseCard";
 import PostCard from "./PostCard";
 
 export const MAX_NUM_POSTS = 10;
+
+interface AccountPostCardListProps {
+  posts: Post[];
+  isLinkActive: boolean;
+}
+export function AccountPostCardList({
+  posts,
+  isLinkActive,
+}: AccountPostCardListProps) {
+  return (
+    <Grid
+      mt="3"
+      templateColumns={{
+        base: "repeat(auto-fill, minmax(250px, 1fr))",
+        sm: "repeat(auto-fill, minmax(350px, 1fr))",
+        md: "repeat(auto-fill, minmax(380px, 1fr))",
+      }}
+      gap={4}
+    >
+      {posts.map((post, i) => {
+        return (
+          <GridItem key={i}>
+            <AccountPostCard post={post} isLinkActive={isLinkActive} />
+          </GridItem>
+        );
+      })}
+    </Grid>
+  );
+}
 
 interface PostCardListProps {
   posts: (PostWithBook | PostWithBookWithUser)[];

@@ -4,6 +4,7 @@ import {
   Icon,
   IconButton,
   Spacer,
+  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import Quagga from "@ericblade/quagga2";
@@ -13,12 +14,14 @@ import { PopulatedBook } from "@lib/services/book";
 import { PostWithBookWithUser } from "@lib/services/post";
 import axios from "axios";
 import { useState } from "react";
+import { handleRawImage } from "@lib/helpers/frontend/handle-raw-image";
 import ChooseScanOrType from "./ChooseScanOrType";
 import ConfirmBook from "./ConfirmBook";
 import ScanBarcode from "./ScanBarcode";
 import SetPriceAndDescription from "./SetPriceAndDescription";
 import TextbookUploaded from "./TextbookUploaded";
 import UploadTextbookCover from "./UploadTextbookCover";
+import ViewTextbookCover from "./ViewTextbookCover";
 
 export default function CreatePostingWizard() {
   const NUMBER_PAGES = 6;
@@ -30,15 +33,26 @@ export default function CreatePostingWizard() {
 
   const toast = useToast();
 
+  // Image upload modal values
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+  const clearUploadedPhoto = () => {
+    setCoverPhoto(null);
+    setImageUrl(null);
+  };
+
   const createPostMutation = useCreatePostMutation();
 
   const onIsbnTyped = (book: PopulatedBook) => {
     setBook(book);
     setPageNumber(2);
+    clearUploadedPhoto();
   };
 
   const onScanSelected = () => {
     setPageNumber(1);
+    clearUploadedPhoto();
   };
 
   const onBackButton = () => {
@@ -48,6 +62,8 @@ export default function CreatePostingWizard() {
       Quagga.stop();
       setPageNumber(pageNumber - 1);
     }
+
+    if (pageNumber == 0) clearUploadedPhoto();
   };
 
   const onScanIsbn = async (isbn: string) => {
@@ -79,14 +95,19 @@ export default function CreatePostingWizard() {
 
   const onConfirmIsBook = () => {
     setPageNumber(pageNumber + 1);
+    if (!coverPhoto) {
+      onOpen();
+    }
   };
 
   const onConfirmIsNotBook = () => {
+    clearUploadedPhoto();
     setPageNumber(0);
   };
 
   const onCoverPhotoUploaded = (inputCoverPhoto: Blob) => {
     setCoverPhoto(inputCoverPhoto);
+    handleRawImage(inputCoverPhoto, setImageUrl);
     setPageNumber(pageNumber + 1);
   };
 
@@ -173,7 +194,14 @@ export default function CreatePostingWizard() {
             />
           ),
           "3": (
-            <UploadTextbookCover onCoverPhotoUploaded={onCoverPhotoUploaded} />
+            <>
+              <ViewTextbookCover onOpen={onOpen} imageUrl={imageUrl} />
+              <UploadTextbookCover
+                onCoverPhotoUploaded={onCoverPhotoUploaded}
+                isOpen={isOpen}
+                onClose={onClose}
+              />
+            </>
           ),
           "4": book && (
             <SetPriceAndDescription
@@ -182,7 +210,11 @@ export default function CreatePostingWizard() {
               isLoading={createPostMutation.isLoading}
             />
           ),
-          "5": <TextbookUploaded post={createPostMutation.data as PostWithBookWithUser} />,
+          "5": (
+            <TextbookUploaded
+              post={createPostMutation.data as PostWithBookWithUser}
+            />
+          ),
         }[pageNumber]
       }
     </>

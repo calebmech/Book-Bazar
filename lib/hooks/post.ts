@@ -1,6 +1,5 @@
 import { PostWithBook, PostWithBookWithUser } from "@lib/services/post";
 import axios from "axios";
-import { useRouter } from "next/router";
 import {
   UseQueryResult,
   useQuery,
@@ -25,13 +24,54 @@ export function usePostQuery(
   );
 }
 
-export function useDeletePostMutation(postId: string) {
+export interface DeleteMutationProps {
+  postId: string;
+  userId: string;
+  onMutationSuccess: () => void;
+}
+
+export function useDeletePostMutation({
+  postId,
+  onMutationSuccess,
+  userId,
+}: DeleteMutationProps) {
   const queryClient = useQueryClient();
-  const router = useRouter();
   return useMutation(() => axios.delete("/api/post/" + postId), {
     onSuccess: () => {
-      queryClient.invalidateQueries(["post", postId]);
-      router.push("/");
+      queryClient.invalidateQueries([`post-${postId}`]);
+      queryClient.invalidateQueries([`user-${userId}`]);
+      onMutationSuccess();
     },
   });
+}
+
+export interface EditablePostClient {
+  description?: string;
+  price?: number;
+  image?: Blob;
+}
+
+export function useEditPostMutation(postId: string, userId: string) {
+  const queryClient = useQueryClient();
+  return useMutation(
+    (request: EditablePostClient) => {
+      const formData = new FormData();
+
+      if (request.description)
+        formData.append("description", request.description);
+
+      if (request.price)
+        formData.append("price", request.price.toFixed(2).replace(".", ""));
+
+      if (request.image) formData.append("image", request.image);
+
+      return axios.put("/api/post/" + postId, formData);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries([`post-${postId}`]);
+        queryClient.invalidateQueries([`user-${userId}`]);
+      },
+    }
+  );
 }

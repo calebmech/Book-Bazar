@@ -6,7 +6,6 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
   Button,
-  ButtonProps,
   Icon,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -14,15 +13,32 @@ import { TrashIcon } from "@heroicons/react/outline";
 import { useDeletePostMutation } from "@lib/hooks/post";
 import { Post } from "@prisma/client";
 import { useRef } from "react";
+import { useRouter } from "next/router";
+
+export interface DeletPostFormProps {
+  post: Post;
+  isAccountPage?: boolean;
+}
 
 export default function DeletePostForm({
   post,
-  ...props
-}: { post: Post } & ButtonProps) {
+  isAccountPage,
+}: DeletPostFormProps) {
   const { isOpen, onClose, onOpen } = useDisclosure();
+  const router = useRouter();
   const cancelRef = useRef(null);
 
-  const mutation = useDeletePostMutation(post.id);
+  const onMutationSuccess = () => {
+    if (!isAccountPage) router.push("/");
+    onClose();
+  };
+
+  // user.Id must be passed in to invalidate user-userId query
+  const mutation = useDeletePostMutation({
+    postId: post.id,
+    userId: post.userId,
+    onMutationSuccess,
+  });
 
   const handleDeleteSubmit = () => {
     mutation.mutate();
@@ -34,7 +50,7 @@ export default function DeletePostForm({
         onClick={() => onOpen()}
         colorScheme="red"
         leftIcon={<Icon as={TrashIcon} />}
-        {...props}
+        width="100%"
       >
         Delete post
       </Button>
