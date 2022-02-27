@@ -30,3 +30,14 @@ export function resolveBookTitle(book: Book | PopulatedBook): string {
   }
   return book.name;
 }
+
+export function resolveCampusStoreLink(book: PopulatedBook): string {
+  return (
+    "https://campusstore.mcmaster.ca/cgi-mcm/ws/txsub.pl?" +
+    book.courses.reduce((params, course, i) => {
+      params.set("wsDEPTG" + (i + 1), course.dept.abbreviation);
+      params.set("wsCOURSEG" + (i + 1), course.code);
+      return params;
+    }, new URLSearchParams())
+  );
+}

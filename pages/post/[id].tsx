@@ -8,6 +8,7 @@ import {
   Icon,
   Skeleton,
   Spacer,
+  Spinner,
   Text,
   useDisclosure,
   VStack,
@@ -70,7 +71,7 @@ const PostPage: NextPage<Partial<PostPageProps>> = ({
     post?.book.isbn,
     initialBook
   );
-  const { data: posts } = useBookPostsQuery(
+  const { data: posts, isLoading: isLoadingPosts } = useBookPostsQuery(
     post?.book.isbn,
     page,
     MAX_NUM_POSTS
@@ -112,7 +113,7 @@ const PostPage: NextPage<Partial<PostPageProps>> = ({
   const isPostOwnedByUser = postHasUser ? user?.id === post.user.id : false;
   const hasMorePosts = bookSecondData?.length !== 0;
 
-  const otherPostsForBook = posts
+  const similarPosts = posts
     ?.filter((p) => p.id !== post.id)
     .map((p) => {
       return {
@@ -297,17 +298,30 @@ const PostPage: NextPage<Partial<PostPageProps>> = ({
         <Text fontFamily="title" fontWeight="500" fontSize="2xl" mt="10" mb="4">
           Similar Posts
         </Text>
-        <PostCardGrid posts={otherPostsForBook ?? []} />
-        {(page === 0
-          ? posts?.length === MAX_NUM_POSTS
-          : posts?.length !== 0) && (
-          <PaginationButtons
-            page={page}
-            url={"/post/" + id}
-            morePosts={hasMorePosts}
-            isLoadingNextPage={isPreviousData}
-          />
+        {isLoadingPosts ? (
+          <Flex width="100%" height="56" align="center" justifyContent="center">
+            <Spinner />
+          </Flex>
+        ) : !similarPosts || similarPosts.length === 0 ? (
+          <Text fontSize="lg" color="secondaryText">
+            No similar posts found
+          </Text>
+        ) : (
+          <>
+            <PostCardGrid posts={similarPosts} />
+            {(page === 0
+              ? posts?.length === MAX_NUM_POSTS
+              : posts?.length !== 0) && (
+              <PaginationButtons
+                page={page}
+                url={"/post/" + id}
+                morePosts={hasMorePosts}
+                isLoadingNextPage={isPreviousData}
+              />
+            )}
+          </>
         )}
+
         <Spacer height="6" />
         <LoginModal
           isOpen={isLoginModalOpen}
