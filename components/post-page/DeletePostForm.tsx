@@ -6,6 +6,7 @@ import {
   AlertDialogHeader,
   AlertDialogOverlay,
   Button,
+  ButtonProps,
   Icon,
   useDisclosure,
 } from "@chakra-ui/react";
@@ -23,7 +24,8 @@ export interface DeletPostFormProps {
 export default function DeletePostForm({
   post,
   isAccountPage,
-}: DeletPostFormProps) {
+  ...props
+}: DeletPostFormProps & ButtonProps) {
   const { isOpen, onClose, onOpen } = useDisclosure();
   const router = useRouter();
   const cancelRef = useRef(null);
@@ -50,7 +52,7 @@ export default function DeletePostForm({
         onClick={() => onOpen()}
         colorScheme="red"
         leftIcon={<Icon as={TrashIcon} />}
-        width="100%"
+        {...props}
       >
         Delete post
       </Button>

@@ -128,7 +128,7 @@ const PostPage: NextPage<Partial<PostPageProps>> = ({
           <Button leftIcon={<Icon as={PencilAltIcon} />} size="sm">
             Edit Post
           </Button>
-          <DeletePostForm post={post} />
+          <DeletePostForm post={post} size="sm" />
         </>
       );
     }

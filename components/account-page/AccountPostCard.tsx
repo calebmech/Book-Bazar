@@ -46,7 +46,7 @@ export default function AccountPostCard({
           </Button>
         </GridItem>
         <GridItem colSpan={1}>
-          <DeletePostForm post={post} isAccountPage={true} />
+          <DeletePostForm post={post} isAccountPage={true} width="100%" />
         </GridItem>
         <EditPostModal
           key={editPostModalKey}
