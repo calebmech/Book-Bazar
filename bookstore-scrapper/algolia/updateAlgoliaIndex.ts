@@ -1,6 +1,19 @@
 import algoliasearch, { SearchIndex } from "algoliasearch";
-import { Book, Course } from "@prisma/client";
+import { Book, Course, Dept } from "@prisma/client";
 import { prisma } from "../prisma-client/prismaClient";
+import { getGoogleBooksData, GoogleBook } from "../helpers/getGoogleBooksData";
+
+export type CourseWithDept = Course & {
+  dept: Dept;
+};
+
+export type BookWithUserWithCourseWithDept = Book & {
+  courses: CourseWithDept[];
+};
+
+export type PopulatedBook = BookWithUserWithCourseWithDept & {
+  googleBook: GoogleBook | null;
+};
 
 enum EntryType {
   BOOK = "book",
@@ -9,13 +22,7 @@ enum EntryType {
 
 interface AlgoliaEntry {
   type: EntryType;
-  entry: Book | Course;
-}
-
-enum UNWANTED_ENTRY_KEYWORD {
-  ISBN_ENDING_WITH_B = "B",
-  ETEXT = "ETEXT",
-  LAB_MANUAL = "LAB MANUAL",
+  entry: PopulatedBook | Course;
 }
 
 const searchableAttributes: string[] = [
@@ -39,7 +46,15 @@ const rankings: string[] = [
 ];
 
 export const getAlgoliaObject = async (): Promise<AlgoliaEntry[]> => {
-  const dbBooks: Book[] = await prisma.book.findMany();
+  const dbBooks: BookWithUserWithCourseWithDept[] = await prisma.book.findMany({
+    include: {
+      courses: {
+        include: {
+          dept: true,
+        },
+      },
+    },
+  });
 
   const dbCourses: Course[] = await prisma.course.findMany({
     include: {
@@ -47,25 +62,16 @@ export const getAlgoliaObject = async (): Promise<AlgoliaEntry[]> => {
     },
   });
 
-  const algoliaBookEntries: AlgoliaEntry[] = dbBooks
-    .filter((book) => {
-      return (
-        /* Remove campus store entries that are not related to physical books
-        or provide a note to users. */
-        !(
-          book.isbn.endsWith(UNWANTED_ENTRY_KEYWORD.ISBN_ENDING_WITH_B) ||
-          book.name.startsWith(UNWANTED_ENTRY_KEYWORD.ETEXT) ||
-          book.name.includes(UNWANTED_ENTRY_KEYWORD.LAB_MANUAL)
-        )
-      );
-    })
-    .map((book: Book) => {
-      const algoliaBookEntry: AlgoliaEntry = {
-        type: EntryType.BOOK,
-        entry: book,
-      };
-      return algoliaBookEntry;
-    });
+  const algoliaBookEntries: AlgoliaEntry[] = [];
+
+  for (const book of dbBooks) {
+    const googleBooksData = await getGoogleBooksData(book.isbn);
+    const algoliaBookEntry: AlgoliaEntry = {
+      type: EntryType.BOOK,
+      entry: { ...book, ...{ googleBook: googleBooksData } },
+    };
+    algoliaBookEntries.push(algoliaBookEntry);
+  }
 
   const algoliaCourseEntries: AlgoliaEntry[] = dbCourses.map(
     (course: Course) => {

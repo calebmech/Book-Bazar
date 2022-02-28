@@ -41,7 +41,6 @@ model Book {
   isbn              String   @unique
   name              String
   imageUrl          String?
-  googleBooksId     String?
   isCampusStoreBook Boolean
   campusStorePrice  Int?
   courses           Course[]

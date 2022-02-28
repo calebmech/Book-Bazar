@@ -4,8 +4,8 @@ import Layout from "@components/Layout";
 import LoadingPage from "@components/LoadingPage";
 import pageTitle from "@lib/helpers/frontend/page-title";
 import { useAlgolia } from "@lib/hooks/algolia";
+import { PopulatedBook } from "@lib/services/book";
 import { CourseWithDept } from "@lib/services/course";
-import { Book } from "@prisma/client";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -28,7 +28,7 @@ const Search: NextPage = () => {
 
   const books = hits
     .filter((hit) => hit.type === "book")
-    .map((book) => book.entry as Book);
+    .map((book) => book.entry as PopulatedBook);
 
   const SearchResults = () => {
     if (courses.length === 0 && books.length === 0) {
@@ -71,9 +71,7 @@ const Search: NextPage = () => {
             No books found
           </Text>
         ) : (
-          // TODO: Add back in when Algolia stores PopulatedBook
-          // <BookCardGrid books={books} />
-          "WIP"
+          <BookCardGrid books={books} />
         )}
       </>
     );

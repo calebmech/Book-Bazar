@@ -24,6 +24,20 @@ const storeDomain = "https://campusstore.mcmaster.ca";
 const storeBookPath = "/cgi-mcm/ws";
 const storeCourseMaterialPath = "/txhome.pl?wsgm=coursematerial";
 
+export enum UNWANTED_ENTRY_KEYWORD {
+  ISBN_ENDING_WITH_B = "B",
+  ETEXT = "ETEXT",
+  LAB_MANUAL = "LAB MANUAL",
+}
+
+const isWantedEntry = (entry: CampusStoreEntry): boolean => {
+  return !(
+    entry.book.isbn.endsWith(UNWANTED_ENTRY_KEYWORD.ISBN_ENDING_WITH_B) ||
+    entry.book.name.startsWith(UNWANTED_ENTRY_KEYWORD.ETEXT) ||
+    entry.book.name.includes(UNWANTED_ENTRY_KEYWORD.LAB_MANUAL)
+  );
+};
+
 const indexTextbooks = async () => {
   const courseMaterialHTML: string = await axiosRequest(
     `${storeDomain}${storeBookPath}${storeCourseMaterialPath}`
@@ -31,12 +45,18 @@ const indexTextbooks = async () => {
 
   const campusStoreData: CampusStoreEntry[] = await getBookData(
     courseMaterialHTML
-  );
+  ).then((data) => data.filter((entry) => isWantedEntry(entry)));
+
+  console.log("Finished scrapping process");
 
   let data = JSON.stringify(campusStoreData);
-  await fs.writeFile("data.json", '{ "Data":' + data + "}");
+  await fs.writeFile("bookstore-scrapper/data.json", '{ "Data":' + data + "}");
+
+  console.log("Written to JSON");
 
   await updateDatabase(campusStoreData);
+
+  console.log("Updated database");
 
   const algoliaObject = await getAlgoliaObject();
 
@@ -46,6 +66,7 @@ const indexTextbooks = async () => {
     algoliaIndexName,
     algoliaObject
   );
+  console.log("Updated Algolia");
 };
 
 indexTextbooks();

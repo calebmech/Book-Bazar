@@ -28,7 +28,6 @@ Table Book {
   isbn String [unique, not null]
   name String [not null]
   imageUrl String
-  googleBooksId String
   isCampusStoreBook Boolean [not null]
   campusStorePrice Int
   courses Course [not null]
