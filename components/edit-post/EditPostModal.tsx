@@ -83,6 +83,7 @@ export default function EditPostModal({
     <Modal
       isOpen={!mutation.isSuccess && isOpen}
       onClose={onClose ?? (() => {})}
+      size="xl"
     >
       <ModalOverlay />
       <ModalContent pt={5} pb={4}>
