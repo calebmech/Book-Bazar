@@ -17,15 +17,11 @@ import { TEXTBOOK_ASPECT_RATIO } from "@components/create-post-page/UploadTextbo
 import Layout from "@components/Layout";
 import LoadingPage from "@components/LoadingPage";
 import LoginModal from "@components/LoginModal";
+import EditPostForm from "@components/edit-post/EditPostForm";
 import DeletePostForm from "@components/post-page/DeletePostForm";
 import SafeInteractionTipsModal from "@components/SafeInteractionTipsModal";
 import UserWithAvatar from "@components/UserWithAvatar";
-import {
-  BookOpenIcon,
-  MailIcon,
-  PencilAltIcon,
-  UsersIcon,
-} from "@heroicons/react/solid";
+import { BookOpenIcon, MailIcon, UsersIcon } from "@heroicons/react/solid";
 import createTeamsContactUrl from "@lib/helpers/frontend/create-teams-contact-url";
 import pageTitle from "@lib/helpers/frontend/page-title";
 import {
@@ -126,9 +122,9 @@ const PostPage: NextPage<Partial<PostPageProps>> = ({
     if (isPostOwnedByUser) {
       return (
         <>
-          <Button leftIcon={<Icon as={PencilAltIcon} />} size="sm">
+          <EditPostForm post={post} size="sm">
             Edit Post
-          </Button>
+          </EditPostForm>
           <DeletePostForm post={post} size="sm" />
         </>
       );
