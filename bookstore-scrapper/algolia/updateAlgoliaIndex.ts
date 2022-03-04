@@ -3,6 +3,23 @@ import { Book, Course, Dept } from "@prisma/client";
 import { prisma } from "../prisma-client/prismaClient";
 import { getGoogleBooksData, GoogleBook } from "../helpers/getGoogleBooksData";
 
+// If node env is not provided in command line, default to values in env.development
+if (!process.env.NODE_ENV) process.env.NODE_ENV = "development";
+require("dotenv").config({ path: `../.env.${process.env.NODE_ENV}` });
+
+export const ALGOLIA_APP_ID = process.env.NEXT_PUBLIC_ALGOLIA_APP_ID;
+export const ALGOLIA_API_KEY = process.env.ADMIN_ALGOLIA_API_KEY;
+export const ALGOLIA_INDEX_NAME = process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME;
+export const GOOGLE_BOOKS_API_KEY = process.env.GOOGLE_BOOKS_API_KEY;
+
+if (!ALGOLIA_APP_ID) throw Error("Please set Algolia App ID");
+
+if (!ALGOLIA_API_KEY) throw Error("Please set Algolia API Key");
+
+if (!ALGOLIA_INDEX_NAME) throw Error("Please set Algolia Index Name");
+
+if (!GOOGLE_BOOKS_API_KEY) throw Error("Please set Google Books API Key");
+
 export type CourseWithDept = Course & {
   dept: Dept;
 };
@@ -65,7 +82,10 @@ export const getAlgoliaObject = async (): Promise<AlgoliaEntry[]> => {
   const algoliaBookEntries: AlgoliaEntry[] = [];
 
   for (const book of dbBooks) {
-    const googleBooksData = await getGoogleBooksData(book.isbn);
+    const googleBooksData = await getGoogleBooksData(
+      book.isbn,
+      GOOGLE_BOOKS_API_KEY
+    );
     const algoliaBookEntry: AlgoliaEntry = {
       type: EntryType.BOOK,
       entry: { ...book, ...{ googleBook: googleBooksData } },
@@ -99,15 +119,10 @@ const updateAlgoliaSettings = async (index: SearchIndex) => {
   });
 };
 
-export const updateAlgoliaIndex = async (
-  appId: string,
-  apiKey: string,
-  indexName: string,
-  algoliaData: AlgoliaEntry[]
-) => {
-  const client = algoliasearch(appId, apiKey);
+export const updateAlgoliaIndex = async (algoliaData: AlgoliaEntry[]) => {
+  const client = algoliasearch(ALGOLIA_APP_ID, ALGOLIA_API_KEY);
 
-  const index = client.initIndex(indexName);
+  const index = client.initIndex(ALGOLIA_INDEX_NAME);
 
   await updateAlgoliaObjects(index, algoliaData);
 

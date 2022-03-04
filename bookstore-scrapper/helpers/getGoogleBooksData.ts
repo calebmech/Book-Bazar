@@ -11,20 +11,17 @@ const book = google.books({
   version: "v1",
 });
 
-const timeout = (ms: number) => {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-};
-
 export const getGoogleBooksData = async (
-  isbn: string
+  isbn: string,
+  key: string
 ): Promise<GoogleBook | null> => {
   /* Waiting on Google to provide us with a higher request/minute quota (currently capped at 100).
      For now, it is doing a timeout for each request. */
-  await timeout(500);
 
   const googleBooksAPIJSON: GaxiosResponse<GoogleBooksVolume> =
     await book.volumes.list({
       q: `isbn:${isbn}`,
+      key,
     });
 
   const googleBook: GoogleBooksItems = googleBooksAPIJSON?.data?.items;

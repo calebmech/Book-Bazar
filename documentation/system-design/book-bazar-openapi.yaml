@@ -442,8 +442,6 @@ components:
         imageUrl:
           type: string
           format: uri
-        googleBooksId:
-          type: string
         isCampusStoreBook:
           type: boolean
     PopulatedBook:
