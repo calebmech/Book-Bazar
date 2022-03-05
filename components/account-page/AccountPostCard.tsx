@@ -23,10 +23,7 @@ export default function AccountPostCard({
           <PostCard post={postsWithBookWithUser} isLinkActive={isLinkActive} />
         </GridItem>
         <GridItem colSpan={1}>
-          <EditPostForm
-            post={postsWithBookWithUser}
-            width="100%"
-          ></EditPostForm>
+          <EditPostForm post={postsWithBookWithUser} width="100%" />
         </GridItem>
         <GridItem colSpan={1}>
           <DeletePostForm post={post} isAccountPage={true} width="100%" />
