@@ -45,6 +45,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { parsePageString } from "@lib/helpers/frontend/parse-page-string";
 import { PaginationButtons } from "@components/PaginationButtons";
+import ActionButtons from "@components/post-page/ActionButtons";
 
 interface PostPageProps {
   initialPost: PostWithBook;
@@ -117,52 +118,6 @@ const PostPage: NextPage<Partial<PostPageProps>> = ({
         book: book,
       };
     });
-
-  const ActionButtons = () => {
-    if (isPostOwnedByUser) {
-      return (
-        <>
-          <EditPostForm post={post} size="sm">
-            Edit Post
-          </EditPostForm>
-          <DeletePostForm post={post} size="sm" />
-        </>
-      );
-    }
-
-    return (
-      <>
-        <Button
-          leftIcon={<Icon as={UsersIcon} />}
-          colorScheme="microsoftTeams"
-          size="sm"
-          onClick={() => {
-            if (postHasUser) {
-              openTeamsSafetyModal();
-            } else {
-              openLoginModal();
-            }
-          }}
-        >
-          Microsoft Teams
-        </Button>
-        <Button
-          leftIcon={<Icon as={MailIcon} />}
-          colorScheme="blue"
-          size="sm"
-          onClick={() => {
-            if (postHasUser) {
-              openEmailSafetyModal();
-            } else {
-              openLoginModal();
-            }
-          }}
-        >
-          Email
-        </Button>
-      </>
-    );
-  };
 
   const postInfo = (
     <Flex
@@ -253,7 +208,14 @@ const PostPage: NextPage<Partial<PostPageProps>> = ({
               </HStack>
               <Skeleton isLoaded={!postUserDataLoading}>
                 <HStack>
-                  <ActionButtons />
+                  <ActionButtons
+                    post={post}
+                    isPostOwnedByUser={isPostOwnedByUser}
+                    postHasUser={postHasUser}
+                    openTeamsSafetyModal={openTeamsSafetyModal}
+                    openEmailSafetyModal={openEmailSafetyModal}
+                    openLoginModal={openLoginModal}
+                  />
                 </HStack>
               </Skeleton>
             </HStack>
