@@ -17,8 +17,6 @@ import { TEXTBOOK_ASPECT_RATIO } from "@components/create-post-page/UploadTextbo
 import Layout from "@components/Layout";
 import LoadingPage from "@components/LoadingPage";
 import LoginModal from "@components/LoginModal";
-import EditPostForm from "@components/edit-post/EditPostForm";
-import DeletePostForm from "@components/post-page/DeletePostForm";
 import SafeInteractionTipsModal from "@components/SafeInteractionTipsModal";
 import UserWithAvatar from "@components/UserWithAvatar";
 import { BookOpenIcon, MailIcon, UsersIcon } from "@heroicons/react/solid";
