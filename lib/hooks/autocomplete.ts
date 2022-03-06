@@ -14,15 +14,15 @@ import {
 import { getAlgoliaResults } from "@algolia/autocomplete-preset-algolia";
 import { searchClient, indexName } from "@lib/services/algolia";
 import { Hit } from "@algolia/client-search";
-import { SearchItem } from "./algolia";
+import { SearchItem, SearchItemType } from "./algolia";
 
 const sourceId = "campus-store-data-source-id";
 const hitsPerPage = 5;
 
 export type AutocompleteItem = Hit<SearchItem>;
 
-function getItemUrlPath(item: AutocompleteItem): string {
-  if (item.type === "course")
+export function getItemUrlPath(item: AutocompleteItem): string {
+  if (item.type === SearchItemType.COURSE)
     return `/course/${item.entry.dept.abbreviation}-${item.entry.code}`;
   return `/book/${item.entry.isbn}`;
 }
@@ -31,7 +31,8 @@ export function useAutocomplete(
   props: Partial<AutocompleteOptions<AutocompleteItem>>,
   setAutocompleteState: React.Dispatch<
     React.SetStateAction<AutocompleteState<AutocompleteItem>>
-  >
+  >,
+  type?: SearchItemType
 ) {
   return React.useMemo(
     () =>
@@ -57,6 +58,7 @@ export function useAutocomplete(
                       query,
                       params: {
                         hitsPerPage,
+                        facetFilters: type ? [`type:${type}`] : undefined,
                       },
                     },
                   ],
@@ -70,6 +72,6 @@ export function useAutocomplete(
         },
         ...props,
       }),
-    [props, setAutocompleteState]
+    [props, setAutocompleteState, type]
   );
 }

@@ -69,7 +69,7 @@ const PostPage: NextPage<Partial<PostPageProps>> = ({
   );
   const { data: book, isSuccess: isBookSuccess } = useBookQuery(
     post?.book.isbn,
-    initialBook
+    { initialData: initialBook }
   );
   const { data: posts, isLoading: isLoadingPosts } = useBookPostsQuery(
     post?.book.isbn,

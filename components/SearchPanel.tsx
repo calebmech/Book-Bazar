@@ -9,6 +9,7 @@ import { AutocompleteApi, AutocompleteState } from "@algolia/autocomplete-core";
 import { AutocompleteItem } from "@lib/hooks/autocomplete";
 import SuggestionCard from "./SuggestionCard";
 import { Box } from "@chakra-ui/react";
+import { SearchItem } from "@lib/hooks/algolia";
 
 export interface SearchPanelProps {
   autocomplete: AutocompleteApi<
@@ -19,6 +20,7 @@ export interface SearchPanelProps {
   >;
   autocompleteState: AutocompleteState<AutocompleteItem>;
   overlay: boolean;
+  onSelectItem?: (item: SearchItem) => void;
 }
 
 /* The search input component takes the autocomplete hook and it's current state
@@ -30,6 +32,7 @@ export const SearchPanel = ({
   autocomplete,
   autocompleteState,
   overlay,
+  onSelectItem,
 }: SearchPanelProps) => {
   if (autocompleteState.query != "" && autocompleteState.isOpen) {
     return (
@@ -63,7 +66,11 @@ export const SearchPanel = ({
                                 source,
                               })}
                             >
-                              <SuggestionCard key={item.objectID} item={item} />
+                              <SuggestionCard
+                                key={item.objectID}
+                                item={item}
+                                onSelectItem={onSelectItem}
+                              />
                             </div>
                           );
                         })}

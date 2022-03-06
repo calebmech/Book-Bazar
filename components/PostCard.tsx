@@ -63,6 +63,7 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
         justify="space-between"
         fontSize="sm"
         p={{ base: "2", sm: "4" }}
+        ml="2"
       >
         <Box>
           <Skeleton isLoaded={!isBookLoading}>

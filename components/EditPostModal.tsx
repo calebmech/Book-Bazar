@@ -11,14 +11,15 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { RefreshIcon } from "@heroicons/react/outline";
-import { FormEvent, useState } from "react";
-import { useEditPostMutation } from "@lib/hooks/post";
+import { handleRawImage } from "@lib/helpers/frontend/handle-raw-image";
 import { getFloatStringPriceAsNumber } from "@lib/helpers/priceHelpers";
+import { useEditPostMutation } from "@lib/hooks/post";
 import { PostWithBook, PostWithBookWithUser } from "@lib/services/post";
-import UploadTextbookCover from "./create-post-page/UploadTextbookCover";
+import { FormEvent, useState } from "react";
+import { TEXTBOOK_ASPECT_RATIO } from "./create-post-page/UploadTextbookCover";
 import ViewTextbookCover from "./create-post-page/ViewTextbookCover";
 import EditPriceAndDescription from "./EditPriceAndDescription";
-import { handleRawImage } from "@lib/helpers/frontend/handle-raw-image";
+import ImageUploadModal from "./ImageUpload/ImageUploadModal";
 
 export interface EditPostProps {
   isOpen: boolean;
@@ -145,9 +146,11 @@ export default function EditPostModal({
       </ModalContent>
     </Modal>
   ) : (
-    <UploadTextbookCover
-      onCoverPhotoUploaded={onImageUploaded}
+    <ImageUploadModal
+      onUpload={async (blob) => onImageUploaded(blob)}
       isOpen={isEditImageOpen}
+      aspectRatio={TEXTBOOK_ASPECT_RATIO}
+      shape="rect"
       onClose={onEditImageClose}
     />
   );

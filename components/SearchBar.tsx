@@ -17,6 +17,7 @@ import { SearchPanel, SearchPanelProps } from "./SearchPanel";
 import { useAutocomplete } from "@lib/hooks/autocomplete";
 import { AutocompleteItem } from "@lib/hooks/autocomplete";
 import { Box } from "@chakra-ui/react";
+import { SearchItem, SearchItemType } from "@lib/hooks/algolia";
 
 const initialAutocompleteState: AutocompleteState<AutocompleteItem> = {
   collections: [],
@@ -28,28 +29,35 @@ const initialAutocompleteState: AutocompleteState<AutocompleteItem> = {
   status: "idle",
 };
 
+export type SearchBarProps = {
+  overlay: boolean;
+  type?: SearchItemType;
+  onSelectItem?: (item: SearchItem) => void;
+} & Partial<AutocompleteOptions<AutocompleteItem>>;
+
 // Returns the search bar displayed in the header and the home page
-export function SearchBar(
-  props: Partial<AutocompleteOptions<AutocompleteItem>> & { overlay: boolean }
-) {
+export const SearchBar: React.FC<SearchBarProps> = ({
+  overlay,
+  type,
+  onSelectItem,
+  ...props
+}) => {
   const [autocompleteState, setAutocompleteState] = useState<
     AutocompleteState<AutocompleteItem>
   >(initialAutocompleteState);
 
   // Autocomplete hook used to retrieve data from Algolia while searching
-  const autocomplete = useAutocomplete(props, setAutocompleteState);
-
-  // Props for the search panel (containing)
-  const searchPanelProps: SearchPanelProps = {
-    autocomplete,
-    autocompleteState,
-    overlay: props.overlay,
-  };
+  const autocomplete = useAutocomplete(props, setAutocompleteState, type);
 
   return (
     <Box className="aa-Autocomplete" width="100%" position="relative">
-      <SearchInput {...autocomplete}></SearchInput>
-      <SearchPanel {...searchPanelProps}></SearchPanel>
+      <SearchInput {...autocomplete} />
+      <SearchPanel
+        autocomplete={autocomplete}
+        autocompleteState={autocompleteState}
+        overlay={overlay}
+        onSelectItem={onSelectItem}
+      />
     </Box>
   );
-}
+};

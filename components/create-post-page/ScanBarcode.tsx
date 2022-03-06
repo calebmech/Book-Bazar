@@ -1,7 +1,6 @@
-/// <reference path="@lib/types/quagga.d.ts">
-import { Container } from "@chakra-ui/react";
+import { Box, Container } from "@chakra-ui/react";
 import { gtin } from "cdigit";
-import Quagga from "@ericblade/quagga2";
+import Quagga, { QuaggaJSResultObject } from "@ericblade/quagga2";
 import React, { useEffect, useRef } from "react";
 
 interface Props {
@@ -10,15 +9,7 @@ interface Props {
 }
 
 const ScanBarcode = ({ onDetected, onNoCamera }: Props) => {
-
   const scannerContainer = useRef(null);
-
-  const updateBarcode = (result: any) => {
-    if (result.codeResult && gtin.validate(result.codeResult.code)) {
-      Quagga.stop();
-      onDetected(result.codeResult.code);
-    }
-  };
 
   useEffect(() => {
     Quagga.init(
@@ -32,7 +23,6 @@ const ScanBarcode = ({ onDetected, onNoCamera }: Props) => {
           halfSample: true,
         },
         numOfWorkers: 2,
-        frequency: 10,
         decoder: {
           readers: ["ean_reader"],
         },
@@ -40,7 +30,9 @@ const ScanBarcode = ({ onDetected, onNoCamera }: Props) => {
       },
       (err: any) => {
         if (err) {
-          console.error(`Error while initializing Quagga (barcode scanner): ${err}`);
+          console.error(
+            `Error while initializing Quagga (barcode scanner): ${err}`
+          );
           onNoCamera();
         } else {
           try {
@@ -52,20 +44,33 @@ const ScanBarcode = ({ onDetected, onNoCamera }: Props) => {
       }
     );
 
+    const updateBarcode = (result: QuaggaJSResultObject) => {
+      if (
+        result.codeResult &&
+        result.codeResult.code?.length === 13 &&
+        // https://www.gs1.org/standards/id-keys/company-prefix
+        (result.codeResult.code.startsWith("978") ||
+          result.codeResult.code.startsWith("979")) &&
+        gtin.validate(result.codeResult.code)
+      ) {
+        Quagga.stop();
+        onDetected(result.codeResult.code);
+      }
+    };
+
     Quagga.onDetected(updateBarcode);
 
     return () => {
       Quagga.offDetected(updateBarcode);
       Quagga.stop();
     };
-  }, []);
+  }, [onNoCamera, onDetected]);
 
   return (
-    <Container>
+    <Box sx={{ canvas: { display: "none" } }}>
       <div ref={scannerContainer} />
-    </Container>
+    </Box>
   );
 };
 
-// Copied from POC
 export default ScanBarcode;

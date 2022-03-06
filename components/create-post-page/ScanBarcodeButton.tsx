@@ -1,27 +1,30 @@
-import { Box, Icon, Text, VStack } from "@chakra-ui/react";
+import { Button, ButtonProps, Icon, Text, VStack } from "@chakra-ui/react";
 import { CameraIcon } from "@heroicons/react/outline";
 
-interface Props {
-  onClick: () => void;
-}
-
-export default function ScanBarcodeButton({ onClick }: Props) {
+export default function ScanBarcodeButton({ ...props }: ButtonProps) {
   return (
-    <Box
-      as="button"
-      transition="all 0.2 cubic-bezier(0.08, 0.52, 0.52, 1)"
-      onClick={onClick}
-      backgroundColor="accent"
-      rounded={10}
-      p={4}
-      _hover={{ backgroundColor: "accentHover" }}
-    >
-      <VStack>
-        <Icon as={CameraIcon} w={100} h={100} color="secondaryBackground" />
-        <Text as="i" color="secondaryBackground">
-          Scan Barcode
-        </Text>
-      </VStack>
-    </Box>
+    <>
+      <Button
+        py="6"
+        px="12"
+        colorScheme="teal"
+        height="auto"
+        borderRadius="lg"
+        size="lg"
+        boxShadow="base"
+        {...props}
+      >
+        <VStack>
+          <Icon
+            sx={{ path: { strokeWidth: "1.5 !important" } }}
+            as={CameraIcon}
+            w={14}
+            h="auto"
+            mb="1"
+          />
+          <Text>Scan Barcode</Text>
+        </VStack>
+      </Button>
+    </>
   );
 }

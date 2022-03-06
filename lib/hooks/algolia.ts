@@ -4,9 +4,14 @@ import { Book, Course } from "@prisma/client";
 import { useQuery, UseQueryResult } from "react-query";
 import { CourseWithDept } from "@lib/services/course";
 
+export enum SearchItemType {
+  BOOK = "book",
+  COURSE = "course",
+}
+
 export type SearchItem =
-  | { type: "book"; entry: Book }
-  | { type: "course"; entry: CourseWithDept };
+  | { type: SearchItemType.BOOK; entry: Book }
+  | { type: SearchItemType.COURSE; entry: CourseWithDept };
 
 export function useAlgolia(
   query: string
