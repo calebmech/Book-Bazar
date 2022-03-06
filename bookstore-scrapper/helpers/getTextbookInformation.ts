@@ -2,7 +2,6 @@
 import { axiosRequest } from "./axiosRequest";
 import { v4 } from "uuid";
 import { Dept, Course, Book } from "@prisma/client";
-import { getGoogleBooksId } from "./getGoogleBooksId";
 
 // Variables used to build links that connect to campus store
 const storeDomain = "https://campusstore.mcmaster.ca";
@@ -97,14 +96,11 @@ export const getTextbookInformation = async (
 
     const imageUrl = `${bookImagePath}${isbn}`;
 
-    const googleBooksId = await getGoogleBooksId(isbn);
-
     const bookData: Book = {
       id: v4(),
       isbn,
       name,
       imageUrl,
-      googleBooksId,
       isCampusStoreBook: true,
       campusStorePrice,
     };

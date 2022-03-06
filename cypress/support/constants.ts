@@ -44,7 +44,6 @@ export const TEST_BOOK = {
   isbn: TEST_BOOK_1_ISBN,
   name: "Algorithms",
   imageUrl: "https://localhost:1000/image.jpg",
-  googleBooksId: "MTpsAQAAQBAJ",
   campusStorePrice: 4000,
   isCampusStoreBook: true,
 };

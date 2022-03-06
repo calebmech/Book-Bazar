@@ -39,7 +39,7 @@ const updateDepartments = async (
       campusStoreEntry.course.deptId = department[0].id;
     } else {
       // If the department does not exist, create it with the UUID previously generated and move on
-      const deptPrisma = await prisma.dept.create({
+      await prisma.dept.create({
         data: campusStoreEntry.dept,
       });
 
@@ -70,7 +70,7 @@ const updateCourses = async (campusStoreData: CampusStoreEntry[]) => {
 
   // Update or create required courses
   for (const course of coursesToUpsert) {
-    const coursePrisma = await prisma.course.upsert({
+    await prisma.course.upsert({
       where: {
         courseIdentifier: {
           deptId: course.deptId,
@@ -93,7 +93,7 @@ const updateCourses = async (campusStoreData: CampusStoreEntry[]) => {
   );
 
   for (const course of coursesToDelete) {
-    const deletedCourses = await prisma.course.delete({
+    await prisma.course.delete({
       where: {
         id: course.id,
       },
@@ -126,7 +126,7 @@ const updateBooks = async (campusStoreData: CampusStoreEntry[]) => {
     };
 
     // Upsert book data
-    const bookPrisma = await prisma.book.upsert({
+    await prisma.book.upsert({
       where: {
         isbn: campusStoreEntry.book.isbn,
       },
@@ -152,7 +152,7 @@ const updateBooks = async (campusStoreData: CampusStoreEntry[]) => {
   );
 
   for (const nonCampusStoreEntry of booksNotInCampusStore) {
-    const notInCampusStorePrisma = await prisma.book.update({
+    await prisma.book.update({
       where: {
         isbn: nonCampusStoreEntry.isbn,
       },

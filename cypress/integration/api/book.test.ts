@@ -3,7 +3,6 @@ import { StatusCodes } from "http-status-codes";
 import {
   TEST_BOOK_UUID,
   TEST_BOOK_1_ISBN,
-  TEST_BOOK_2_ISBN,
   TEST_COURSE_UUID,
 } from "../../support/constants";
 
@@ -26,16 +25,11 @@ describe("test book api", () => {
       expect(response.body.id).equal(TEST_BOOK_UUID);
       expect(response.body.name).equal("Algorithms");
       expect(response.body.imageUrl).equal("https://localhost:1000/image.jpg");
-      expect(response.body.googleBooksId).equal("MTpsAQAAQBAJ");
       expect(response.body.campusStorePrice).equal(4000);
       expect(response.body.isCampusStoreBook).equal(true);
 
       expect(response.body.courses.length).to.equal(1);
       expect(response.body.courses[0].id).equal(TEST_COURSE_UUID);
-
-      expect(
-        response.body.googleBook.industryIdentifiers[0].identifier
-      ).to.equal(TEST_BOOK_1_ISBN);
     });
   });
 
@@ -52,17 +46,6 @@ describe("test book api", () => {
       expect(response.body[1].user.name).to.be.oneOf(["Test User", "Other"]);
       expect(response.body[2].user.name).to.be.oneOf(["Test User", "Other"]);
       expect(response.body[3].user.name).to.be.oneOf(["Test User", "Other"]);
-    });
-  });
-
-  it("should return null for the google book data of a book that does not exist on google books", () => {
-    cy.request({
-      method: HttpMethod.GET,
-      url: `/api/book/${TEST_BOOK_2_ISBN}`,
-    }).then((response) => {
-      expect(response.status).equal(StatusCodes.OK);
-
-      expect(response.body.googleBook).to.be.null;
     });
   });
 
