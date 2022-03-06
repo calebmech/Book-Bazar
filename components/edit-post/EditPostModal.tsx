@@ -15,9 +15,9 @@ import { FormEvent, useState } from "react";
 import { useEditPostMutation } from "@lib/hooks/post";
 import { getFloatStringPriceAsNumber } from "@lib/helpers/priceHelpers";
 import { PostWithBook, PostWithBookWithUser } from "@lib/services/post";
-import UploadTextbookCover from "./create-post-page/UploadTextbookCover";
-import ViewTextbookCover from "./create-post-page/ViewTextbookCover";
-import EditPriceAndDescription from "./EditPriceAndDescription";
+import UploadTextbookCover from "../create-post-page/UploadTextbookCover";
+import ViewTextbookCover from "../create-post-page/ViewTextbookCover";
+import EditPriceAndDescription from "../EditPriceAndDescription";
 import { handleRawImage } from "@lib/helpers/frontend/handle-raw-image";
 
 export interface EditPostProps {
@@ -113,22 +113,24 @@ export default function EditPostModal({
               >
                 Close
               </Button>
-              <Button
-                type="submit"
-                colorScheme="teal"
-                isLoading={mutation.isLoading}
-                isDisabled={
-                  (!valid ||
-                    price ==
-                      getFloatStringPriceAsNumber(
-                        (post.price / 100).toFixed(2)
-                      )) &&
-                  description == post.description &&
-                  imageUrl == post.imageUrl
-                }
-              >
-                Save Changes
-              </Button>
+              {(mutation.isIdle || mutation.isLoading) && (
+                <Button
+                  type="submit"
+                  colorScheme="teal"
+                  isLoading={mutation.isLoading}
+                  isDisabled={
+                    (!valid ||
+                      price ==
+                        getFloatStringPriceAsNumber(
+                          (post.price / 100).toFixed(2)
+                        )) &&
+                    description == post.description &&
+                    imageUrl == post.imageUrl
+                  }
+                >
+                  Save Changes
+                </Button>
+              )}
               {mutation.isError && (
                 <Button
                   type="submit"

@@ -17,15 +17,9 @@ import { TEXTBOOK_ASPECT_RATIO } from "@components/create-post-page/UploadTextbo
 import Layout from "@components/Layout";
 import LoadingPage from "@components/LoadingPage";
 import LoginModal from "@components/LoginModal";
-import DeletePostForm from "@components/post-page/DeletePostForm";
 import SafeInteractionTipsModal from "@components/SafeInteractionTipsModal";
 import UserWithAvatar from "@components/UserWithAvatar";
-import {
-  BookOpenIcon,
-  MailIcon,
-  PencilAltIcon,
-  UsersIcon,
-} from "@heroicons/react/solid";
+import { BookOpenIcon, MailIcon, UsersIcon } from "@heroicons/react/solid";
 import createTeamsContactUrl from "@lib/helpers/frontend/create-teams-contact-url";
 import pageTitle from "@lib/helpers/frontend/page-title";
 import {
@@ -49,6 +43,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { parsePageString } from "@lib/helpers/frontend/parse-page-string";
 import { PaginationButtons } from "@components/PaginationButtons";
+import ActionButtons from "@components/post-page/ActionButtons";
 
 interface PostPageProps {
   initialPost: PostWithBook;
@@ -121,52 +116,6 @@ const PostPage: NextPage<Partial<PostPageProps>> = ({
         book: book,
       };
     });
-
-  const ActionButtons = () => {
-    if (isPostOwnedByUser) {
-      return (
-        <>
-          <Button leftIcon={<Icon as={PencilAltIcon} />} size="sm">
-            Edit Post
-          </Button>
-          <DeletePostForm post={post} size="sm" />
-        </>
-      );
-    }
-
-    return (
-      <>
-        <Button
-          leftIcon={<Icon as={UsersIcon} />}
-          colorScheme="microsoftTeams"
-          size="sm"
-          onClick={() => {
-            if (postHasUser) {
-              openTeamsSafetyModal();
-            } else {
-              openLoginModal();
-            }
-          }}
-        >
-          Microsoft Teams
-        </Button>
-        <Button
-          leftIcon={<Icon as={MailIcon} />}
-          colorScheme="blue"
-          size="sm"
-          onClick={() => {
-            if (postHasUser) {
-              openEmailSafetyModal();
-            } else {
-              openLoginModal();
-            }
-          }}
-        >
-          Email
-        </Button>
-      </>
-    );
-  };
 
   const postInfo = (
     <Flex
@@ -257,7 +206,14 @@ const PostPage: NextPage<Partial<PostPageProps>> = ({
               </HStack>
               <Skeleton isLoaded={!postUserDataLoading}>
                 <HStack>
-                  <ActionButtons />
+                  <ActionButtons
+                    post={post}
+                    isPostOwnedByUser={isPostOwnedByUser}
+                    postHasUser={postHasUser}
+                    openTeamsSafetyModal={openTeamsSafetyModal}
+                    openEmailSafetyModal={openEmailSafetyModal}
+                    openLoginModal={openLoginModal}
+                  />
                 </HStack>
               </Skeleton>
             </HStack>

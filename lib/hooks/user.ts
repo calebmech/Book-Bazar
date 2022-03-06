@@ -33,8 +33,8 @@ export function useUserIdQuery(
   id: string | string[] | undefined
 ): UseQueryResult<UserWithPosts> {
   return useQuery(
-    "user-" + id,
-    () => axios.get<UserWithPosts>(`/api/user/${id}/`).then((res) => res.data),
+    ["user", id],
+    () => axios.get<UserWithPosts>(`/api/user/${id}`).then((res) => res.data),
     {
       enabled: !!id && !Array.isArray(id),
     }
