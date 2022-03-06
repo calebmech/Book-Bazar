@@ -38,8 +38,8 @@ export function useDeletePostMutation({
   const queryClient = useQueryClient();
   return useMutation(() => axios.delete("/api/post/" + postId), {
     onSuccess: () => {
-      queryClient.invalidateQueries([`post-${postId}`]);
-      queryClient.invalidateQueries([`user-${userId}`]);
+      queryClient.invalidateQueries(["post", postId]);
+      queryClient.invalidateQueries(["user", userId]);
       onMutationSuccess();
     },
   });
@@ -69,8 +69,8 @@ export function useEditPostMutation(postId: string, userId: string) {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries([`post-${postId}`]);
-        queryClient.invalidateQueries([`user-${userId}`]);
+        queryClient.invalidateQueries(["post", postId]);
+        queryClient.invalidateQueries(["user", userId]);
       },
     }
   );
