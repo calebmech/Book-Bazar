@@ -15,7 +15,13 @@ export type UserWithPosts = Prisma.PromiseReturnType<typeof getUserWithPosts>;
 export async function getUserWithPosts(id: string) {
   return prisma.user.findUnique({
     where: { id },
-    include: { posts: true },
+    include: {
+      posts: {
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
+    },
   });
 }
 
