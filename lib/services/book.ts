@@ -86,5 +86,8 @@ export async function getPostsForBook(
     where: {
       book: { isbn },
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 }

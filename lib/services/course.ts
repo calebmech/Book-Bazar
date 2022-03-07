@@ -78,5 +78,8 @@ export async function getPostsForCourse(
         },
       },
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 }
