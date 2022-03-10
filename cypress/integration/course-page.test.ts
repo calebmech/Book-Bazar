@@ -17,15 +17,29 @@ describe("Course page", () => {
     cy.task("db:teardown");
   });
 
+  it("should display course code and name", () => {
+    cy.visit("/course/" + COURSE_CODE);
+    cy.get('[test-id="CourseCode"]').should("have.text", "COMPSCI 3AC3");
+    cy.get('[test-id="CourseHeading"]').should(
+      "have.text",
+      "Algorithms and Complexity"
+    );
+  });
+
   it("should allow a user to navigate to a book page", () => {
     cy.visit("/course/" + COURSE_CODE);
-    cy.get('[href*="book/"]').first().click();
+    const firstBook = cy.get('[test-id="BookCard"]').first();
+    firstBook.should("contain", TEST_BOOK.name);
+    firstBook.click();
     cy.location("pathname").should("eq", "/book/" + TEST_BOOK.isbn);
   });
 
   it("should allow a user to navigate to a post page", () => {
     cy.visit("/course/" + COURSE_CODE);
-    cy.get('[href*="post/"]').first().click();
+    const postCards = cy.get('[test-id="PostCard"]');
+    postCards.should("have.length", MAX_NUM_POSTS);
+    postCards.first().should("contain", TEST_BOOK.name);
+    postCards.first().click();
     cy.location("pathname").should("contain", "/post/");
   });
 
@@ -38,6 +52,7 @@ describe("Course page", () => {
     cy.wait("@findPosts");
     cy.findByRole("button", { name: "Next page" }).click();
     cy.location("search").should("eq", "?page=1");
+    cy.get('[test-id="PostCard"]').first().should("be.visible");
   });
 
   it("should allow a user to navigate to the previous page of posts", () => {
@@ -49,5 +64,6 @@ describe("Course page", () => {
     cy.wait("@findPosts");
     cy.findByRole("button", { name: "Previous page" }).click();
     cy.location("search").should("eq", "?page=0");
+    cy.get('[test-id="PostCard"]').first().should("be.visible");
   });
 });

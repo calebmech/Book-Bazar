@@ -23,6 +23,7 @@ export default function BookCard({ book, isLinkActive, width }: BookCardProps) {
 
   const card = (
     <Box
+      test-id="BookCard"
       maxW={width ?? "auto"}
       overflow="hidden"
       shadow="md"

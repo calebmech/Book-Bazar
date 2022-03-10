@@ -80,10 +80,16 @@ const CoursePage: NextPage<Partial<CoursePageProps>> = ({
           <Skeleton isLoaded={Boolean(course)}>
             {course.name ? (
               <>
-                <Text fontSize="lg" fontWeight="500" textColor="secondaryText">
+                <Text
+                  test-id="CourseCode"
+                  fontSize="lg"
+                  fontWeight="500"
+                  textColor="secondaryText"
+                >
                   {course.dept.abbreviation} {course.code}
                 </Text>
                 <Heading
+                  test-id="CourseHeading"
                   as="h1"
                   mt="1"
                   fontSize="3xl"
