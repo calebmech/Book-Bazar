@@ -6,7 +6,6 @@ import {
 } from "cypress/support/constants";
 import { MAX_NUM_POSTS } from "@lib/helpers/constants";
 
-
 describe("Course page", () => {
   const COURSE_CODE = TEST_DEPARTMENT.abbreviation + "-" + TEST_COURSE.code;
 
@@ -19,16 +18,14 @@ describe("Course page", () => {
   });
 
   it("should allow a user to navigate to a book page", () => {
-    cy.visit(
-      "/course/" + TEST_DEPARTMENT.abbreviation + "-" + TEST_COURSE.code
-    );
-    cy.get('div[href*="book/"]').first().click()
+    cy.visit("/course/" + COURSE_CODE);
+    cy.get('[href*="book/"]').first().click();
     cy.location("pathname").should("eq", "/book/" + TEST_BOOK.isbn);
   });
 
   it("should allow a user to navigate to a post page", () => {
     cy.visit("/course/" + COURSE_CODE);
-    cy.get('div[href*="post/"]').first().click()
+    cy.get('[href*="post/"]').first().click();
     cy.location("pathname").should("contain", "/post/");
   });
 
@@ -39,7 +36,7 @@ describe("Course page", () => {
       "/api/course/" + COURSE_CODE + "/posts?length=" + MAX_NUM_POSTS
     ).as("findPosts");
     cy.wait("@findPosts");
-    cy.findByRole("button", { name: "next-page" }).click();
+    cy.findByRole("button", { name: "Next page" }).click();
     cy.location("search").should("eq", "?page=1");
   });
 
@@ -50,7 +47,7 @@ describe("Course page", () => {
       "/api/course/" + COURSE_CODE + "/posts?length=" + MAX_NUM_POSTS
     ).as("findPosts");
     cy.wait("@findPosts");
-    cy.findByRole("button", { name: "previous-page" }).click();
+    cy.findByRole("button", { name: "Previous page" }).click();
     cy.location("search").should("eq", "?page=0");
   });
 });

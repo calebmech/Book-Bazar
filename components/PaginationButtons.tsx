@@ -19,7 +19,7 @@ export function PaginationButtons({
     <Flex w="100%" justify="center" mt="8">
       <Link href={url + "?page=" + (page - 1)} passHref shallow>
         <IconButton
-          aria-label="previous-page"
+          aria-label="Previous page"
           disabled={page === 0}
           icon={<Icon as={ChevronLeftIcon} />}
         />
@@ -37,7 +37,7 @@ export function PaginationButtons({
       </Box>
       <Link href={url + "?page=" + (page + 1)} passHref shallow>
         <IconButton
-          aria-label="next-page"
+          aria-label="Next page"
           disabled={!morePosts || isLoadingNextPage}
           icon={<Icon as={ChevronRightIcon} />}
           isLoading={isLoadingNextPage}
