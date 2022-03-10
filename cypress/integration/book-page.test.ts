@@ -16,7 +16,7 @@ describe("Course page", () => {
     cy.task("db:teardown");
   });
 
-  it("should contain info about the book", () => {
+  it("should display info about the book", () => {
     cy.visit("/book/" + TEST_BOOK.isbn);
     cy.get('[test-id="Publisher"]').should("contain", "Addison-Wesley Professional");
     cy.get('[test-id="PublishedDate"]').should("contain", "2011");
@@ -39,8 +39,8 @@ describe("Course page", () => {
     cy.visit("/book/" + TEST_BOOK.isbn);
     cy.get('[test-id="GoogleBookButton"]').should(
       "have.attr",
-      "target",
-      "_blank"
+      "href",
+      "http://books.google.ca/books?id=MTpsAQAAQBAJ&dq=isbn:9780321573513&hl=&source=gbs_api"
     );
   });
 
@@ -48,8 +48,8 @@ describe("Course page", () => {
     cy.visit("/book/" + TEST_BOOK.isbn);
     cy.get('[test-id="GoogleBookButton"]').should(
       "have.attr",
-      "target",
-      "_blank"
+      "href",
+      "https://campusstore.mcmaster.ca/cgi-mcm/ws/txsub.pl?wsDEPTG1=SFWRENG&wsCOURSEG1=2C03"
     );
   });
 
