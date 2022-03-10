@@ -93,6 +93,7 @@ const BookPage: NextPage<Partial<BookPageProps>> = ({ initialBook }) => {
           passHref
         >
           <Button
+            test-id="CourseButton"
             size="xs"
             colorScheme="teal"
             leftIcon={<Icon as={AcademicCapIcon} />}
@@ -171,8 +172,12 @@ const BookPage: NextPage<Partial<BookPageProps>> = ({ initialBook }) => {
               </HStack>
             </HStack>
             <HStack justify="space-between">
-              <Text>{googleBook?.publisher ?? "\u2013"}</Text>
-              <Text>{googleBook?.publishedDate ?? "\u2013"}</Text>
+              <Text test-id="Publisher">
+                {googleBook?.publisher ?? "\u2013"}
+              </Text>
+              <Text test-id="PublishedDate">
+                {googleBook?.publishedDate ?? "\u2013"}
+              </Text>
             </HStack>
             <HStack justify="space-between" color="tertiaryText" mt="2">
               <HStack direction="row">
@@ -185,14 +190,19 @@ const BookPage: NextPage<Partial<BookPageProps>> = ({ initialBook }) => {
               </HStack>
             </HStack>
             <HStack justify="space-between">
-              <Text>{isbn && !Array.isArray(isbn) ? isbn : ""}</Text>
-              <Text>{googleBook?.pageCount?.toString() ?? "\u2013"}</Text>
+              <Text test-id="ISBN">
+                {isbn && !Array.isArray(isbn) ? isbn : ""}
+              </Text>
+              <Text test-id="PageCount">
+                {googleBook?.pageCount?.toString() ?? "\u2013"}
+              </Text>
             </HStack>
           </Box>
         </Flex>
 
         <HStack mt="2">
           <Button
+            test-id="CampusStoreButton"
             width={{
               base: "100%",
               sm: "min-content",
@@ -209,6 +219,7 @@ const BookPage: NextPage<Partial<BookPageProps>> = ({ initialBook }) => {
           </Button>
           {googleBook && (
             <Button
+              test-id="GoogleBookButton"
               width={{
                 base: "100%",
                 sm: "min-content",

@@ -16,22 +16,50 @@ describe("Course page", () => {
     cy.task("db:teardown");
   });
 
+  it("should contain info about the book", () => {
+    cy.visit("/book/" + TEST_BOOK.isbn);
+    cy.get('[test-id="Publisher"]').should("contain", "Addison-Wesley Professional");
+    cy.get('[test-id="PublishedDate"]').should("contain", "2011");
+    cy.get('[test-id="ISBN"]').should("contain", TEST_BOOK.isbn);
+    cy.get('[test-id="PageCount"]').should("contain", "955");
+  });
+
   it("should allow a user to navigate to the corresponding course page", () => {
     cy.visit("/book/" + TEST_BOOK.isbn);
-    const re = new RegExp(
+    const button = cy.get('[test-id="CourseButton"]').first();
+    button.should(
+      "contain",
       TEST_DEPARTMENT.abbreviation + " " + TEST_COURSE.code
     );
-    // not sure why force is necessary but it wasn't working without it
-    cy.findByRole("button", { name: re }).click({ force: true });
-
+    button.click({force: true})
     cy.location("pathname").should("eq", "/course/" + TEST_COURSE_CODE);
   });
 
   it("should have a link to the google books page", () => {
     cy.visit("/book/" + TEST_BOOK.isbn);
-    cy.get(
-      `a[href="http://books.google.ca/books?id=${TEST_BOOK.googleBooksId}&dq=isbn:${TEST_BOOK.isbn}&hl=&source=gbs_api"]`
-    ).should("have.attr", "target", "_blank");
+    cy.get('[test-id="GoogleBookButton"]').should(
+      "have.attr",
+      "target",
+      "_blank"
+    );
+  });
+
+  it("should have a link to the book on the campus store", () => {
+    cy.visit("/book/" + TEST_BOOK.isbn);
+    cy.get('[test-id="GoogleBookButton"]').should(
+      "have.attr",
+      "target",
+      "_blank"
+    );
+  });
+
+  it("should allow a user to navigate to a post page", () => {
+    cy.visit("/course/" + TEST_COURSE_CODE);
+    const postCards = cy.get('[test-id="PostCard"]');
+    postCards.should("have.length", MAX_NUM_POSTS);
+    postCards.first().should("contain", TEST_BOOK.name);
+    postCards.first().click();
+    cy.location("pathname").should("contain", "/post/");
   });
 
   it("should allow a user to navigate to the next page of posts", () => {
@@ -41,8 +69,9 @@ describe("Course page", () => {
     ).as("findPosts");
     cy.visit("/book/" + TEST_BOOK.isbn);
     cy.wait("@findPosts");
-    cy.findByRole("button", { name: "next-page" }).click();
+    cy.findByRole("button", { name: "Next page" }).click();
     cy.location("search").should("eq", "?page=1");
+    cy.get('[test-id="PostCard"]').first().should("be.visible");
   });
 
   it("should allow a user to navigate to the previous page of posts", () => {
@@ -52,7 +81,8 @@ describe("Course page", () => {
     ).as("findPosts");
     cy.visit("/book/" + TEST_BOOK.isbn + "?page=1");
     cy.wait("@findPosts");
-    cy.findByRole("button", { name: "previous-page" }).click();
+    cy.findByRole("button", { name: "Previous page" }).click();
     cy.location("search").should("eq", "?page=0");
+    cy.get('[test-id="PostCard"]').first().should("be.visible");
   });
 });
