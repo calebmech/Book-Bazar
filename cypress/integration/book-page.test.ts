@@ -18,7 +18,10 @@ describe("Course page", () => {
 
   it("should display info about the book", () => {
     cy.visit("/book/" + TEST_BOOK.isbn);
-    cy.get('[test-id="Publisher"]').should("contain", "Addison-Wesley Professional");
+    cy.get('[test-id="Publisher"]').should(
+      "contain",
+      "Addison-Wesley Professional"
+    );
     cy.get('[test-id="PublishedDate"]').should("contain", "2011");
     cy.get('[test-id="ISBN"]').should("contain", TEST_BOOK.isbn);
     cy.get('[test-id="PageCount"]').should("contain", "955");
@@ -31,17 +34,13 @@ describe("Course page", () => {
       "contain",
       TEST_DEPARTMENT.abbreviation + " " + TEST_COURSE.code
     );
-    button.click({force: true})
+    button.click({ force: true });
     cy.location("pathname").should("eq", "/course/" + TEST_COURSE_CODE);
   });
 
   it("should have a link to the google books page", () => {
     cy.visit("/book/" + TEST_BOOK.isbn);
-    cy.get('[test-id="GoogleBookButton"]').should(
-      "have.attr",
-      "href",
-      "http://books.google.com/books?id=MTpsAQAAQBAJ&dq=isbn:9780321573513&hl=&source=gbs_api"
-    );
+    cy.get('[test-id="GoogleBookButton"]').should("have.attr", "href").and('include', `isbn:${TEST_BOOK.isbn}`);
   });
 
   it("should have a link to the book on the campus store", () => {
@@ -49,7 +48,7 @@ describe("Course page", () => {
     cy.get('[test-id="CampusStoreButton"]').should(
       "have.attr",
       "href",
-      "https://campusstore.mcmaster.ca/cgi-mcm/ws/txsub.pl?wsDEPTG1=SFWRENG&wsCOURSEG1=2C03"
+      `https://campusstore.mcmaster.ca/cgi-mcm/ws/txsub.pl?wsDEPTG1=${TEST_DEPARTMENT.abbreviation}&wsCOURSEG1=${TEST_COURSE.code}`
     );
   });
 
