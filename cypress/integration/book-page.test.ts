@@ -40,13 +40,13 @@ describe("Course page", () => {
     cy.get('[test-id="GoogleBookButton"]').should(
       "have.attr",
       "href",
-      "http://books.google.ca/books?id=MTpsAQAAQBAJ&dq=isbn:9780321573513&hl=&source=gbs_api"
+      "http://books.google.com/books?id=MTpsAQAAQBAJ&dq=isbn:9780321573513&hl=&source=gbs_api"
     );
   });
 
   it("should have a link to the book on the campus store", () => {
     cy.visit("/book/" + TEST_BOOK.isbn);
-    cy.get('[test-id="GoogleBookButton"]').should(
+    cy.get('[test-id="CampusStoreButton"]').should(
       "have.attr",
       "href",
       "https://campusstore.mcmaster.ca/cgi-mcm/ws/txsub.pl?wsDEPTG1=SFWRENG&wsCOURSEG1=2C03"
