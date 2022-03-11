@@ -27,7 +27,7 @@ export interface LoginModalProps {
   message: string;
 }
 
-const EMAIL_SUFFIX = "@mcmaster.ca";
+const EMAIL_SUFFIX = "@cas.mcmaster.ca";
 
 export default function LoginModal({
   isOpen,

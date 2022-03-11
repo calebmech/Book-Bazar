@@ -3,7 +3,7 @@ import { sendMagicLink } from "@lib/services/magic";
 import { StatusCodes } from "http-status-codes";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const MCMASTER_EMAIL_SUFFIX = "@mcmaster.ca";
+const MCMASTER_EMAIL_SUFFIX = "@cas.mcmaster.ca";
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method as HttpMethod) {

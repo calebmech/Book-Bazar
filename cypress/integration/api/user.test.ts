@@ -70,7 +70,9 @@ describe("User API", () => {
         expect(response.body.id).to.be.a("string");
         expect(response.body.createdAt).to.be.a("string");
         expect(response.body.updatedAt).to.be.a("string");
-        expect(response.body.email).to.include(userToGetMacID + "@mcmaster.ca");
+        expect(response.body.email).to.include(
+          userToGetMacID + "@cas.mcmaster.ca"
+        );
         expect(response.body.name); // can be empty
         expect(response.body.imageUrl); // can be empty
         expect(response.body.posts).to.be.an("array");

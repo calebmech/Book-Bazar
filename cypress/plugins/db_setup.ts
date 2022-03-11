@@ -57,7 +57,7 @@ export default async () => {
     });
     const otherUser = await prisma.user.create({
       data: {
-        email: "other@mcmaster.ca",
+        email: "other@cas.mcmaster.ca",
         name: "Other",
       },
     });

@@ -2,7 +2,7 @@ import { Course, Dept, User } from ".prisma/client";
 
 export const TEST_USER_UUID = "e8b7ad6d-7086-4d8d-b831-079d5be7caa8";
 export const TEST_USER: Partial<User> = {
-  email: "test@mcmaster.ca",
+  email: "test@cas.mcmaster.ca",
   name: "Test User",
   imageUrl: "https://book-bazar-images.s3.us-east-2.amazonaws.com",
   id: TEST_USER_UUID,
