@@ -5,7 +5,7 @@ import {
 
 describe("Search", () => {
   it("should allow a user to see 2 course and 3 book results", () => {
-    cy.intercept("POST", "**/query?x-algolia-agent=**", {
+    cy.intercept("**/query?x-algolia-agent=**", {
       body: ALGOLIA_RESPONSE_5_RESULTS.results[0],
     }).as("algoliaSearch");
 
@@ -63,7 +63,7 @@ describe("Search", () => {
   });
 
   it("should allow a user to see 0 course and 0 book results", () => {
-    cy.intercept("POST", "**/query?x-algolia-agent=**", {
+    cy.intercept("**/query?x-algolia-agent=**", {
       body: ALGOLIA_RESPONSE_0_RESULTS,
     }).as("algoliaSearch");
 
@@ -73,7 +73,7 @@ describe("Search", () => {
   });
 
   it("should give user no results if they search with an empty string", () => {
-    cy.intercept("POST", "**/query?x-algolia-agent=**", {
+    cy.intercept("**/query?x-algolia-agent=**", {
       body: ALGOLIA_RESPONSE_0_RESULTS,
     }).as("algoliaSearch");
 
@@ -85,7 +85,7 @@ describe("Search", () => {
   it("should allow a user to visit a course page after clicking on a course", () => {
     cy.visit("/search?q=test");
 
-    cy.intercept("POST", "**/query?x-algolia-agent=**", {
+    cy.intercept("**/query?x-algolia-agent=**", {
       body: ALGOLIA_RESPONSE_5_RESULTS.results[0],
     }).as("algoliaSearch");
 
@@ -110,7 +110,7 @@ describe("Search", () => {
   it("should allow a user to visit a book page after clicking on a book", () => {
     cy.visit("/search?q=test");
 
-    cy.intercept("POST", "**/query?x-algolia-agent=**", {
+    cy.intercept("**/query?x-algolia-agent=**", {
       body: ALGOLIA_RESPONSE_5_RESULTS.results[0],
     }).as("algoliaSearch");
 
