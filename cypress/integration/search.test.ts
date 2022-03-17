@@ -4,7 +4,7 @@ import {
 } from "../support/constants";
 
 describe("Search", () => {
-  it("should allow a user to see 2 course and 3 book results", () => {
+  it("should allow a user to view 2 course and 3 book search page results", () => {
     cy.intercept("**/**algolia.net/**/query**", {
       body: ALGOLIA_RESPONSE_5_RESULTS.results[0],
     }).as("algoliaSearch");
@@ -62,7 +62,7 @@ describe("Search", () => {
     cy.get("@mainChildren").eq(3).should("contain", hits[4].entry.name);
   });
 
-  it("should allow a user to see 0 course and 0 book results", () => {
+  it("should allow a user to see 0 course and 0 book search page results", () => {
     cy.intercept("**/**algolia.net/**/query**", {
       body: ALGOLIA_RESPONSE_0_RESULTS,
     }).as("algoliaSearch");
@@ -72,7 +72,7 @@ describe("Search", () => {
     cy.findByRole("main").should("contain", "No courses or books found.");
   });
 
-  it("should give user no results if they search with an empty string", () => {
+  it("should give user no search page results if they search with an empty string", () => {
     cy.intercept("**/**algolia.net/**/query**", {
       body: ALGOLIA_RESPONSE_0_RESULTS,
     }).as("algoliaSearch");
@@ -82,7 +82,7 @@ describe("Search", () => {
     cy.findByRole("main").should("contain", "No courses or books found.");
   });
 
-  it("should allow a user to visit a course page after clicking on a course", () => {
+  it("should allow a user to click on search page course and visit course page", () => {
     cy.visit("/search?q=test");
 
     cy.intercept("**/**algolia.net/**/query**", {
@@ -109,7 +109,7 @@ describe("Search", () => {
     );
   });
 
-  it("should allow a user to visit a book page after clicking on a book", () => {
+  it("should allow a user to click on search page book and visit book page", () => {
     cy.visit("/search?q=test");
 
     cy.intercept("**/**algolia.net/**/query**", {

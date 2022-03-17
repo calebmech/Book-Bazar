@@ -43,7 +43,7 @@ describe("Home page", () => {
     cy.findByRole("listbox").should("not.exist");
   });
 
-  it("should allow a user to view the content of a course with an abbreviation, code, and name", () => {
+  it("should allow a user to view the content of a course auto-complete suggestion with an abbreviation, code, and name", () => {
     cy.visit("/");
 
     cy.intercept("**/**algolia.net/**/queries**", {
@@ -64,7 +64,7 @@ describe("Home page", () => {
     option.should("contain", hits[0].entry.name);
   });
 
-  it("should allow a user to view the content of a course with an abbreviation and code only", () => {
+  it("should allow a user to view the content of a course auto-complete suggestion with an abbreviation and code only", () => {
     cy.visit("/");
 
     cy.intercept("**/**algolia.net/**/queries**", {
@@ -85,7 +85,7 @@ describe("Home page", () => {
       );
   });
 
-  it("should allow a user to view the a book that exists on google books", () => {
+  it("should allow a user to a book auto-complete suggestion that has google books data", () => {
     cy.visit("/");
 
     cy.intercept("**/**algolia.net/**/queries**", {
@@ -111,7 +111,7 @@ describe("Home page", () => {
       .should("not.be.empty");
   });
 
-  it("should allow a user to view the content of a book with 4 relevant courses and 3 google book authors", () => {
+  it("should allow a user to view the content of a book auto-complete suggestion with 4 relevant courses and 3 google book authors", () => {
     cy.visit("/");
 
     cy.intercept("**/**algolia.net/**/queries**", {
@@ -180,7 +180,7 @@ describe("Home page", () => {
       .should("not.be.empty");
   });
 
-  it("should allow a user to search, click on search button, and be directed to search page", () => {
+  it("should allow a user to search, click on search button, and navigate to search page", () => {
     cy.visit("/");
 
     cy.intercept("**/**algolia.net/**/queries**", {
@@ -198,7 +198,7 @@ describe("Home page", () => {
     cy.url().should("contain", `https://${Cypress.env("BASE_URL")}/search?q=`);
   });
 
-  it("should allow a user to search, click enter, and be directed to search page", () => {
+  it("should allow a user to search, press enter, and navigate to search page", () => {
     cy.visit("/");
 
     cy.intercept("**/**algolia.net/**/queries**", {
@@ -216,7 +216,7 @@ describe("Home page", () => {
     cy.url().should("contain", `https://${Cypress.env("BASE_URL")}/search?q=`);
   });
 
-  it("should allow a user to select a course and be directed to course page", () => {
+  it("should allow a user to select a course and navigate to course page", () => {
     cy.visit("/");
 
     cy.intercept("**/**algolia.net/**/queries**", {
@@ -237,7 +237,7 @@ describe("Home page", () => {
     );
   });
 
-  it("should allow a user to click on a book and be directed to book page", () => {
+  it("should allow a user to click on a book auto-complete suggestion and navigate to book page", () => {
     cy.visit("/");
 
     cy.intercept("**/**algolia.net/**/queries**", {
@@ -256,7 +256,7 @@ describe("Home page", () => {
     );
   });
 
-  it("should allow a user to move down using arrow, select first option, and be directed to course page", () => {
+  it("should allow a user to move down using arrow, select first option, and navigate to course page", () => {
     cy.visit("/");
 
     cy.intercept("**/**algolia.net/**/queries**", {
@@ -285,7 +285,7 @@ describe("Home page", () => {
     );
   });
 
-  it("should allow a user to move down using arrow, select fifth option, and be directed to book page", () => {
+  it("should allow a user to move down using arrow, select fifth option, and navigate to book page", () => {
     cy.visit("/");
 
     cy.intercept("**/**algolia.net/**/queries**", {
@@ -312,7 +312,7 @@ describe("Home page", () => {
     );
   });
 
-  it("should allow a user to move down to third option, up to second, select it, and move to course page", () => {
+  it("should allow a user to move down to third option, up to second, select it, and navigate to course page", () => {
     cy.visit("/");
 
     cy.intercept("**/**algolia.net/**/queries**", {
@@ -341,7 +341,7 @@ describe("Home page", () => {
     );
   });
 
-  it("should display Sell Books button and give login modal upon clicking when user is not logged in", () => {
+  it("should display sell books button on home page and navigate to login modal upon clicking when user is not logged in", () => {
     cy.visit("/");
 
     cy.findByRole("link", { name: /sell your used textbooks!/i }).click();
@@ -349,7 +349,7 @@ describe("Home page", () => {
     cy.findByRole("dialog").findByRole("button", { name: /login/i });
   });
 
-  it("should display Sell Books button and move user to create a post if logged in", () => {
+  it("should display sell books button on home page and navigate to create a post if logged in", () => {
     cy.visit("/");
 
     cy.login();
