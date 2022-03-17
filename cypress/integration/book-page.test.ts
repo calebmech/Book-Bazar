@@ -43,7 +43,7 @@ describe("Course page", () => {
     cy.get('[test-id="GoogleBookButton"]').should("have.attr", "href").and('include', `isbn:${TEST_BOOK.isbn}`);
   });
 
-  it("should have a link to the book on the campus store", () => {
+  it("should have two links to the book on the campus store", () => {
     cy.visit("/book/" + TEST_BOOK.isbn);
     cy.get('[test-id="CampusStoreButton"]').should(
       "have.attr",

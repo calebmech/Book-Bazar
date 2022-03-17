@@ -299,6 +299,7 @@ const BookPage: NextPage<Partial<BookPageProps>> = ({ initialBook }) => {
             >
               <Text>Can&apos;t find this book being sold?</Text>
               <Button
+                test-id="CampusStoreButton"
                 colorScheme="teal"
                 as="a"
                 href={resolveCampusStoreLink(book)}
