@@ -20,7 +20,10 @@ const Search: NextPage = () => {
     return <LoadingPage />;
   }
 
-  const hits = algoliaSearchResponse?.hits || [];
+  const hits =
+    search.length > 0 && algoliaSearchResponse?.hits
+      ? algoliaSearchResponse.hits
+      : [];
 
   const courses = hits
     .filter((hit) => hit.type === "course")
