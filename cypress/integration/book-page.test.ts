@@ -18,6 +18,14 @@ describe("Course page", () => {
 
   it("should display info about the book", () => {
     cy.visit("/book/" + TEST_BOOK.isbn);
+    cy.get('[test-id="BookTitle"]').should(
+      "contain",
+      "Algorithms"
+    );
+    cy.get('[test-id="BookAuthors"]').should(
+      "contain",
+      "Robert Sedgewick, Kevin Wayne"
+    );
     cy.get('[test-id="Publisher"]').should(
       "contain",
       "Addison-Wesley Professional"

@@ -144,10 +144,10 @@ const BookPage: NextPage<Partial<BookPageProps>> = ({ initialBook }) => {
 
       <Flex flex="auto" direction="column">
         <Flex direction="column">
-          <Heading as="h1" size="lg" fontWeight="500" fontFamily="title">
+          <Heading test-id="BookTitle" as="h1" size="lg" fontWeight="500" fontFamily="title">
             {resolveBookTitle(book)}
           </Heading>
-          <Text color="tertiaryText" fontWeight="semibold" mb="2">
+          <Text test-id="BookAuthors" color="tertiaryText" fontWeight="semibold" mb="2">
             {googleBook?.authors?.join(", ")}
           </Text>
 
