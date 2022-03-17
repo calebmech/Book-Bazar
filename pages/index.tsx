@@ -1,7 +1,6 @@
 import { Box, Button, Divider, HStack, Text, VStack } from "@chakra-ui/react";
 import Layout from "@components/Layout";
 import pageTitle from "@lib/helpers/frontend/page-title";
-import { useUserQuery } from "@lib/hooks/user";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Logo from "@components/Logo";
@@ -40,7 +39,9 @@ const Home: NextPage = () => {
           <Divider width="80%" maxWidth="sm" />
 
           <Link href="/create-post" passHref>
-            <Button colorScheme="teal">Sell your used textbooks!</Button>
+            <Button as="a" colorScheme="teal">
+              Sell your used textbooks!
+            </Button>
           </Link>
         </VStack>
       </Layout>

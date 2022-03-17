@@ -5,7 +5,7 @@ import {
 
 describe("Search", () => {
   it("should allow a user to see 2 course and 3 book results", () => {
-    cy.intercept("**/query?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/query**", {
       body: ALGOLIA_RESPONSE_5_RESULTS.results[0],
     }).as("algoliaSearch");
 
@@ -63,7 +63,7 @@ describe("Search", () => {
   });
 
   it("should allow a user to see 0 course and 0 book results", () => {
-    cy.intercept("**/query?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/query**", {
       body: ALGOLIA_RESPONSE_0_RESULTS,
     }).as("algoliaSearch");
 
@@ -73,7 +73,7 @@ describe("Search", () => {
   });
 
   it("should give user no results if they search with an empty string", () => {
-    cy.intercept("**/query?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/query**", {
       body: ALGOLIA_RESPONSE_0_RESULTS,
     }).as("algoliaSearch");
 
@@ -85,7 +85,7 @@ describe("Search", () => {
   it("should allow a user to visit a course page after clicking on a course", () => {
     cy.visit("/search?q=test");
 
-    cy.intercept("**/query?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/query**", {
       body: ALGOLIA_RESPONSE_5_RESULTS.results[0],
     }).as("algoliaSearch");
 
@@ -103,14 +103,16 @@ describe("Search", () => {
 
     cy.url().should(
       "equal",
-      `https://localhost:4000/course/${hits[0].entry.dept?.abbreviation}-${hits[0].entry.code}`
+      `https://${Cypress.env("BASE_URL")}/course/${
+        hits[0].entry.dept?.abbreviation
+      }-${hits[0].entry.code}`
     );
   });
 
   it("should allow a user to visit a book page after clicking on a book", () => {
     cy.visit("/search?q=test");
 
-    cy.intercept("**/query?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/query**", {
       body: ALGOLIA_RESPONSE_5_RESULTS.results[0],
     }).as("algoliaSearch");
 
@@ -130,7 +132,7 @@ describe("Search", () => {
 
     cy.url().should(
       "equal",
-      `https://localhost:4000/book/${hits[2].entry?.isbn}`
+      `https://${Cypress.env("BASE_URL")}/book/${hits[2].entry?.isbn}`
     );
   });
 });

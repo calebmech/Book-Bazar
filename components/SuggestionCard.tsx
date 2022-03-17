@@ -67,7 +67,7 @@ export const BookSuggestionCard = (populatedBook: PopulatedBook) => {
           <Text color="secondaryText" isTruncated>
             {authorString}
           </Text>
-          <Box overflowX="auto" whiteSpace="nowrap">
+          <Box overflowX="auto" whiteSpace="nowrap" mt="3">
             {populatedBook?.courses.slice(0, 3).map((course) => (
               <Tag key={course.id} mr="2">
                 <TagLeftIcon as={AcademicCapIcon} />

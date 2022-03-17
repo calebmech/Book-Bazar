@@ -8,7 +8,7 @@ describe("Home page", () => {
   it("should allow a user to search and find 5 auto-complete results", () => {
     cy.visit("/");
 
-    cy.intercept("**/queries?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/queries**", {
       body: ALGOLIA_RESPONSE_5_RESULTS,
     }).as("algoliaSearch");
 
@@ -20,7 +20,7 @@ describe("Home page", () => {
   it("should allow a user to search and find 3 auto-complete results", () => {
     cy.visit("/");
 
-    cy.intercept("**/queries?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/queries**", {
       body: ALGOLIA_RESPONSE_3_RESULTS,
     }).as("algoliaSearch");
 
@@ -32,7 +32,7 @@ describe("Home page", () => {
   it("should allow a user to search and find 0 auto-complete results", () => {
     cy.visit("/");
 
-    cy.intercept("**/queries?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/queries**", {
       body: ALGOLIA_RESPONSE_0_RESULTS,
     }).as("algoliaSearch");
 
@@ -46,7 +46,7 @@ describe("Home page", () => {
   it("should allow a user to view the content of a course with an abbreviation, code, and name", () => {
     cy.visit("/");
 
-    cy.intercept("**/queries?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/queries**", {
       body: ALGOLIA_RESPONSE_5_RESULTS,
     }).as("algoliaSearch");
 
@@ -67,7 +67,7 @@ describe("Home page", () => {
   it("should allow a user to view the content of a course with an abbreviation and code only", () => {
     cy.visit("/");
 
-    cy.intercept("**/queries?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/queries**", {
       body: ALGOLIA_RESPONSE_5_RESULTS,
     }).as("algoliaSearch");
 
@@ -88,7 +88,7 @@ describe("Home page", () => {
   it("should allow a user to view the a book that exists on google books", () => {
     cy.visit("/");
 
-    cy.intercept("**/queries?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/queries**", {
       body: ALGOLIA_RESPONSE_5_RESULTS,
     }).as("algoliaSearch");
     const hits = ALGOLIA_RESPONSE_5_RESULTS.results[0].hits;
@@ -114,7 +114,7 @@ describe("Home page", () => {
   it("should allow a user to view the content of a book with 4 relevant courses and 3 google book authors", () => {
     cy.visit("/");
 
-    cy.intercept("**/queries?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/queries**", {
       body: ALGOLIA_RESPONSE_5_RESULTS,
     }).as("algoliaSearch");
     const hits = ALGOLIA_RESPONSE_5_RESULTS.results[0].hits;
@@ -156,7 +156,7 @@ describe("Home page", () => {
   it("should allow a user to view the content of a book with no google books data", () => {
     cy.visit("/");
 
-    cy.intercept("**/queries?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/queries**", {
       body: ALGOLIA_RESPONSE_5_RESULTS,
     }).as("algoliaSearch");
 
@@ -183,11 +183,11 @@ describe("Home page", () => {
   it("should allow a user to search, click on search button, and be directed to search page", () => {
     cy.visit("/");
 
-    cy.intercept("**/queries?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/queries**", {
       body: ALGOLIA_RESPONSE_5_RESULTS,
     }).as("algoliaSearch");
 
-    cy.intercept("**/query?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/query**", {
       body: ALGOLIA_RESPONSE_5_RESULTS.results[0],
     }).as("algoliaSearch");
 
@@ -195,17 +195,17 @@ describe("Home page", () => {
 
     cy.findByRole("button", { name: /search/i }).click({ force: true });
 
-    cy.url().should("contain", "https://localhost:4000/search?q=");
+    cy.url().should("contain", `https://${Cypress.env("BASE_URL")}/search?q=`);
   });
 
   it("should allow a user to search, click enter, and be directed to search page", () => {
     cy.visit("/");
 
-    cy.intercept("**/queries?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/queries**", {
       body: ALGOLIA_RESPONSE_5_RESULTS,
     }).as("algoliaSearch");
 
-    cy.intercept("**/query?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/query**", {
       body: ALGOLIA_RESPONSE_5_RESULTS.results[0],
     }).as("algoliaSearch");
 
@@ -213,13 +213,13 @@ describe("Home page", () => {
       "test{enter}"
     );
 
-    cy.url().should("contain", "https://localhost:4000/search?q=");
+    cy.url().should("contain", `https://${Cypress.env("BASE_URL")}/search?q=`);
   });
 
   it("should allow a user to select a course and be directed to course page", () => {
     cy.visit("/");
 
-    cy.intercept("**/queries?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/queries**", {
       body: ALGOLIA_RESPONSE_5_RESULTS,
     }).as("algoliaSearch");
 
@@ -231,14 +231,16 @@ describe("Home page", () => {
 
     cy.url().should(
       "equal",
-      `https://localhost:4000/course/${hits[0].entry.dept?.abbreviation}-${hits[0].entry.code}`
+      `https://${Cypress.env("BASE_URL")}/course/${
+        hits[0].entry.dept?.abbreviation
+      }-${hits[0].entry.code}`
     );
   });
 
   it("should allow a user to click on a book and be directed to book page", () => {
     cy.visit("/");
 
-    cy.intercept("**/queries?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/queries**", {
       body: ALGOLIA_RESPONSE_5_RESULTS,
     }).as("algoliaSearch");
 
@@ -250,18 +252,18 @@ describe("Home page", () => {
 
     cy.url().should(
       "equal",
-      `https://localhost:4000/book/${hits[2].entry?.isbn}`
+      `https://${Cypress.env("BASE_URL")}/book/${hits[2].entry?.isbn}`
     );
   });
 
   it("should allow a user to move down using arrow, select first option, and be directed to course page", () => {
     cy.visit("/");
 
-    cy.intercept("**/queries?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/queries**", {
       body: ALGOLIA_RESPONSE_5_RESULTS,
     }).as("algoliaSearch");
 
-    cy.intercept("**/query?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/query**", {
       body: ALGOLIA_RESPONSE_5_RESULTS.results[0],
     }).as("algoliaSearch");
 
@@ -277,18 +279,20 @@ describe("Home page", () => {
 
     cy.url().should(
       "equal",
-      `https://localhost:4000/course/${hits[0].entry.dept?.abbreviation}-${hits[0].entry.code}`
+      `https://${Cypress.env("BASE_URL")}/course/${
+        hits[0].entry.dept?.abbreviation
+      }-${hits[0].entry.code}`
     );
   });
 
   it("should allow a user to move down using arrow, select fifth option, and be directed to book page", () => {
     cy.visit("/");
 
-    cy.intercept("**/queries?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/queries**", {
       body: ALGOLIA_RESPONSE_5_RESULTS,
     }).as("algoliaSearch");
 
-    cy.intercept("**/query?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/query**", {
       body: ALGOLIA_RESPONSE_5_RESULTS.results[0],
     }).as("algoliaSearch");
 
@@ -304,18 +308,18 @@ describe("Home page", () => {
 
     cy.url().should(
       "equal",
-      `https://localhost:4000/book/${hits[4].entry?.isbn}`
+      `https://${Cypress.env("BASE_URL")}/book/${hits[4].entry?.isbn}`
     );
   });
 
   it("should allow a user to move down to third option, up to second, select it, and move to course page", () => {
     cy.visit("/");
 
-    cy.intercept("**/queries?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/queries**", {
       body: ALGOLIA_RESPONSE_5_RESULTS,
     }).as("algoliaSearch");
 
-    cy.intercept("**/query?x-algolia-agent=**", {
+    cy.intercept("**/**algolia.net/**/query**", {
       body: ALGOLIA_RESPONSE_5_RESULTS.results[0],
     }).as("algoliaSearch");
 
@@ -331,14 +335,16 @@ describe("Home page", () => {
 
     cy.url().should(
       "equal",
-      `https://localhost:4000/course/${hits[1].entry.dept?.abbreviation}-${hits[1].entry.code}`
+      `https://${Cypress.env("BASE_URL")}/course/${
+        hits[1].entry.dept?.abbreviation
+      }-${hits[1].entry.code}`
     );
   });
 
   it("should display Sell Books button and give login modal upon clicking when user is not logged in", () => {
     cy.visit("/");
 
-    cy.findByRole("button", { name: /sell your used textbooks!/i }).click();
+    cy.findByRole("link", { name: /sell your used textbooks!/i }).click();
 
     cy.findByRole("dialog").findByRole("button", { name: /login/i });
   });
@@ -348,8 +354,8 @@ describe("Home page", () => {
 
     cy.login();
 
-    cy.findByRole("button", { name: /sell your used textbooks!/i }).click();
+    cy.findByRole("link", { name: /sell your used textbooks!/i }).click();
 
-    cy.url().should("equal", "https://localhost:4000/create-post");
+    cy.url().should("equal", `https://${Cypress.env("BASE_URL")}/create-post`);
   });
 });
