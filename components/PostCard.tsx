@@ -25,6 +25,7 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
 
   const card = (
     <Grid
+      test-id="PostCard"
       templateColumns={{
         base: "120px minmax(0, 1fr)",
         sm: "165px minmax(0, 1fr)",
