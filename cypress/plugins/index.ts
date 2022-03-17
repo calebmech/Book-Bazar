@@ -6,6 +6,7 @@ import db_teardown from "./db_teardown";
  */
 // eslint-disable-next-line no-unused-vars
 export default (on, config) => {
+  config.env = process.env;
   on("task", {
     "db:setup": () => {
       return db_setup();
@@ -14,4 +15,5 @@ export default (on, config) => {
       return db_teardown();
     },
   });
+  return config;
 };

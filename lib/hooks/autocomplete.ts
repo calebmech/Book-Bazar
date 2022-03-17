@@ -44,7 +44,10 @@ export function useAutocomplete(
         onStateChange({ state }) {
           setAutocompleteState(state);
         },
-        getSources() {
+        getSources({ query }) {
+          if (query.length == 0) {
+            return [];
+          }
           return [
             {
               sourceId,

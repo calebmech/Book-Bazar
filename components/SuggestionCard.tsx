@@ -8,7 +8,6 @@ import {
   Container,
   Heading,
   HStack,
-  Skeleton,
   Tag,
   TagLabel,
   TagLeftIcon,
@@ -20,9 +19,8 @@ import {
   resolveImageUrl,
 } from "@lib/helpers/frontend/resolve-book-data";
 import { AutocompleteItem } from "@lib/hooks/autocomplete";
-import { useBookQuery } from "@lib/hooks/book";
+import { PopulatedBook } from "@lib/services/book";
 import { CourseWithDept } from "@lib/services/course";
-import { Book } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -44,15 +42,14 @@ export const CourseSuggestionCard = ({ name, code, dept }: CourseWithDept) => {
   );
 };
 
-export const BookSuggestionCard = (book: Book) => {
-  const { isLoading, data: populatedBook } = useBookQuery(book.isbn);
+export const BookSuggestionCard = (populatedBook: PopulatedBook) => {
   let authorString: string = "-";
   if (populatedBook?.googleBook?.authors) {
     authorString = populatedBook.googleBook.authors.join(", ");
   }
 
   return (
-    <Link href={"/book/" + book.isbn} passHref>
+    <Link href={"/book/" + populatedBook.isbn} passHref>
       <HStack as="a" spacing="0" alignItems="start">
         <Box height="90px" width="60px" position="relative">
           <Image
@@ -65,28 +62,24 @@ export const BookSuggestionCard = (book: Book) => {
         {/* Let box width be controlled by flex parent */}
         <Container flex="1" width="0">
           <Heading isTruncated as="p" size="md" color="primaryText" mb="1">
-            {resolveBookTitle(populatedBook ?? book)}
+            {resolveBookTitle(populatedBook)}
           </Heading>
-          <Skeleton isLoaded={!isLoading}>
-            <Text color="secondaryText" isTruncated>
-              {authorString}
-            </Text>
-          </Skeleton>
-          <Skeleton isLoaded={!isLoading} mt="3">
-            <Box overflowX="auto" whiteSpace="nowrap">
-              {populatedBook?.courses.slice(0, 3).map((course) => (
-                <Tag key={course.id} mr="2">
-                  <TagLeftIcon as={AcademicCapIcon} />
-                  <TagLabel isTruncated={false} whiteSpace="nowrap">
-                    {course.dept.abbreviation} {course.code}
-                  </TagLabel>
-                </Tag>
-              ))}
-              {populatedBook?.courses && populatedBook.courses.length > 3 && (
-                <span>…</span>
-              )}
-            </Box>
-          </Skeleton>
+          <Text color="secondaryText" isTruncated>
+            {authorString}
+          </Text>
+          <Box overflowX="auto" whiteSpace="nowrap" mt="3">
+            {populatedBook?.courses.slice(0, 3).map((course) => (
+              <Tag key={course.id} mr="2">
+                <TagLeftIcon as={AcademicCapIcon} />
+                <TagLabel isTruncated={false} whiteSpace="nowrap">
+                  {course.dept.abbreviation} {course.code}
+                </TagLabel>
+              </Tag>
+            ))}
+            {populatedBook?.courses && populatedBook.courses.length > 3 && (
+              <span>…</span>
+            )}
+          </Box>
         </Container>
       </HStack>
     </Link>
