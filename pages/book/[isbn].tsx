@@ -55,18 +55,6 @@ const BookPage: NextPage<Partial<BookPageProps>> = ({ initialBook }) => {
     initialBook
   );
 
-  const { data: posts, isLoading: isLoadingPosts } = useBookPostsQuery(
-    isbn,
-    page,
-    MAX_NUM_POSTS
-  );
-  const { data: morePosts, isPreviousData } = useBookPostsQuery(
-    isbn,
-    page + 1,
-    MAX_NUM_POSTS
-  );
-  const hasMorePosts = morePosts?.length !== 0;
-
   if (!book) {
     if (isBookSuccess) {
       return <ErrorPage statusCode={404} />;
@@ -76,13 +64,6 @@ const BookPage: NextPage<Partial<BookPageProps>> = ({ initialBook }) => {
   }
 
   const { googleBook } = book;
-
-  const postsWithBookIncluded = posts?.map((post) => {
-    return {
-      ...post,
-      book: book,
-    };
-  });
 
   const CourseBadges = () => (
     <Wrap>
@@ -246,38 +227,7 @@ const BookPage: NextPage<Partial<BookPageProps>> = ({ initialBook }) => {
         <title>{pageTitle(resolveBookTitle(book))}</title>
       </Head>
       <Layout extendedHeader={bookInfo}>
-        {isLoadingPosts ? (
-          <Flex width="100%" height="56" align="center" justifyContent="center">
-            <Spinner />
-          </Flex>
-        ) : !posts || posts.length === 0 ? (
-          <Text my="20" fontSize="lg" textAlign="center">
-            No active listings found
-          </Text>
-        ) : (
-          <>
-            <Text
-              fontFamily="title"
-              fontWeight="500"
-              fontSize="2xl"
-              mt="10"
-              mb="4"
-            >
-              Active Listings
-            </Text>
-            <PostCardGrid posts={postsWithBookIncluded ?? []} />
-            {(page === 0
-              ? posts.length === MAX_NUM_POSTS
-              : posts.length !== 0) && (
-              <PaginationButtons
-                page={page}
-                url={"/book/" + isbn}
-                morePosts={hasMorePosts}
-                isLoadingNextPage={isPreviousData}
-              />
-            )}
-          </>
-        )}
+        <BookPagePosts page={page} book={book} />
 
         {book.isCampusStoreBook && (
           <>
@@ -314,6 +264,69 @@ const BookPage: NextPage<Partial<BookPageProps>> = ({ initialBook }) => {
           </>
         )}
       </Layout>
+    </>
+  );
+};
+
+interface BookPagePostsProps {
+  page: number;
+  book: PopulatedBook;
+}
+
+const BookPagePosts = ({ page, book }: BookPagePostsProps) => {
+  const { data: posts, isLoading: isLoadingPosts } = useBookPostsQuery(
+    book.isbn,
+    page,
+    MAX_NUM_POSTS
+  );
+  const { data: morePosts, isPreviousData } = useBookPostsQuery(
+    book.isbn,
+    page + 1,
+    MAX_NUM_POSTS
+  );
+  const hasMorePosts = morePosts?.length !== 0;
+
+  const postsWithBookIncluded = posts?.map((post) => {
+    return {
+      ...post,
+      book: book,
+    };
+  });
+
+  return (
+    <>
+      {isLoadingPosts ? (
+        <Flex width="100%" height="56" align="center" justifyContent="center">
+          <Spinner />
+        </Flex>
+      ) : !posts || posts.length === 0 ? (
+        <Text my="20" fontSize="lg" textAlign="center">
+          No active listings found
+        </Text>
+      ) : (
+        <>
+          <Text
+            fontFamily="title"
+            fontWeight="500"
+            fontSize="2xl"
+            mt="10"
+            mb="4"
+          >
+            Active Listings
+          </Text>
+          <PostCardGrid posts={postsWithBookIncluded ?? []} />
+          {(page === 0
+            ? posts.length === MAX_NUM_POSTS
+            : posts.length !== 0) && (
+            <PaginationButtons
+              page={page}
+              url={"/book/" + book.isbn}
+              morePosts={hasMorePosts}
+              isLoadingNextPage={isPreviousData}
+            />
+          )}
+        </>
+      )}
     </>
   );
 };
