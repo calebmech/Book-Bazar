@@ -107,7 +107,7 @@
 \hline
 7& 22.02.2022& Caleb Mech & Updated tests to match changes to BookHttpHandler Module design\\
 \hline
-7& 10.03.2022& Matthew Williams & Added UI tests for course page\\
+7& 10.03.2022& Matthew Williams & Added UI tests for course page and book page\\
 \hline
 \end{tabular}
 \caption{Table of Revisions}
@@ -206,6 +206,20 @@ M1T10 & course page should allow a user to navigate to a post page & FR5 \\
 M1T11 & course page should allow a user to navigate to the next page of posts & FR5 \\
 \hline
 M1T12 & course page should allow a user to navigate to the previous page of posts & FR5 \\
+\hline
+M1T13 & book page should display info about the book & FR5 \\
+\hline
+M1T14 & book page should allow a user to navigate to the corresponding course page & FR5 \\
+\hline
+M1T15 & book page should have a link to the google books page & FR5 \\
+\hline
+M1T16 & book page should have a link to the book on the campus store & FR5 \\
+\hline
+M1T17 & book page should allow a user to navigate to a post page & FR5 \\
+\hline
+M1T18 & book page should allow a user to navigate to the next page of posts & FR5 \\
+\hline
+M1T19 & book page should allow a user to navigate to the next page of posts & FR5 \\
 \hline
 \end{tabular}
 \end{table}
@@ -399,15 +413,29 @@ M1T6 & Visit account page and delete a post & Post no longer exists & Unable to 
 \hline
 M1T7 & Visit account page and edit a post & Post is updated as expected & Unable to perform & Fail \\
 \hline
-M1T8 & Visit course page page and edit a post & See course name and code & Same as expected & pass \\
+M1T8 & Visit course page & Course name and code are correct & Same as expected & pass \\
 \hline
-M1T9 & Visit course page page and click a book & Navigated to corresponding book page & Same as expected & pass \\
+M1T9 & Visit course page and click a book & Navigated to corresponding book page & Same as expected & pass \\
 \hline
-M1T10 & Visit course page page and click a post & Navigated to corresponding post page & Same as expected & pass \\
+M1T10 & Visit course page and click a post & Navigated to corresponding post page & Same as expected & pass \\
 \hline
-M1T11 & Visit course page page and click next page of posts & See the next page of posts & Same as expected & pass \\
+M1T11 & Visit course page and click next page of posts & See the next page of posts & Same as expected & pass \\
 \hline
-M1T12 & Visit course page page and click next page of posts & See the previous page of posts & Same as expected & pass \\
+M1T12 & Visit course page and click previous page of posts & See the previous page of posts & Same as expected & pass \\
+\hline
+M1T13 & Visit book page & Book info is correct & Same as expected & pass \\
+\hline
+M1T14 & Visit book page and click a course badge & Navigated to corresponding course page & Same as expected & pass \\
+\hline
+M1T15 & Visit book page and check href of campus store button & Href is correct & Same as expected & pass \\
+\hline
+M1T16 & Visit book page and check href of google book button & Href is correct & Same as expected & pass \\
+\hline
+M1T17 & Visit book page and click a post & Navigated to corresponding post page & Same as expected & pass \\
+\hline
+M1T18 & Visit book page and click next page of posts & See the next page of posts & Same as expected & pass \\
+\hline
+M1T19 & Visit book page and click previous page of posts & See the previous page of posts & Same as expected & pass \\
 \hline
 % \hline
 % M1T2 & should allow a user to logout & FR16 \\
