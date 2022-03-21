@@ -69,7 +69,7 @@ describe("Edit post", () => {
       .eq(0)
       .click();
 
-    cy.findByRole("dialog").findAllByRole("button", { name: /close/i }).click();
+    cy.findByRole("dialog").findByRole("button", { name: /close/i }).click();
 
     cy.findByRole("dialog").should("not.exist");
   });
@@ -81,9 +81,7 @@ describe("Edit post", () => {
     cy.intercept(HttpMethod.PUT, "/api/post/*").as("editPost");
 
     // Check if editing the post works
-    cy.findAllByRole("button", { name: /edit post/i })
-      .eq(0)
-      .click();
+    cy.findByRole("button", { name: /edit post/i }).click();
 
     cy.findByRole("dialog")
       .get('[id="description"]')
@@ -119,11 +117,9 @@ describe("Edit post", () => {
       .should("not.be.empty");
 
     // Check if close button works
-    cy.findAllByRole("button", { name: /edit post/i })
-      .eq(0)
-      .click();
+    cy.findByRole("button", { name: /edit post/i }).click();
 
-    cy.findByRole("dialog").findAllByRole("button", { name: /close/i }).click();
+    cy.findByRole("dialog").findByRole("button", { name: /close/i }).click();
 
     cy.findByRole("dialog").should("not.exist");
   });
