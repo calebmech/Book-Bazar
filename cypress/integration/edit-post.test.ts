@@ -1,5 +1,6 @@
 import { HttpMethod } from "@lib/http-method";
 import { StatusCodes } from "http-status-codes";
+import { TEST_POST_2_UUID } from "../support/constants";
 
 describe("Edit post", () => {
   beforeEach(() => {
@@ -49,17 +50,9 @@ describe("Edit post", () => {
 
   it("should allow a user edit a post from the post page", () => {
     cy.login();
-    cy.visit("/account");
+    cy.visit(`/post/${TEST_POST_2_UUID}`);
 
     cy.intercept(HttpMethod.PUT, "/api/post/*").as("editPost");
-    cy.intercept(HttpMethod.GET, "/api/user/*").as("getUserPosts");
-
-    cy.wait("@getUserPosts").then(({ response }) => {
-      expect(response?.statusCode).to.eq(StatusCodes.OK);
-    });
-
-    cy.findByRole("main").children().eq(0).children().eq(0).click();
-    cy.url().should("contain", `https://${Cypress.env("BASE_URL")}/post`);
 
     cy.findAllByRole("button", { name: /edit post/i })
       .eq(0)
