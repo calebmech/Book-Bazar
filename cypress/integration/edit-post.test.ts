@@ -34,7 +34,7 @@ describe("Edit post", () => {
       .type("{backspace}{backspace}{backspace}{backspace}13");
 
     cy.findByRole("dialog")
-      .findAllByRole("button", { name: /upload new photo/i })
+      .findByRole("button", { name: /upload new photo/i })
       .click();
 
     cy.fixture("guy.jpg", null).as("image");
@@ -44,7 +44,7 @@ describe("Edit post", () => {
     cy.findByRole("dialog").should("contain", "Sold new for $40.00");
 
     cy.findByRole("dialog")
-      .findAllByRole("button", { name: /save changes/i })
+      .findByRole("button", { name: /save changes/i })
       .click();
 
     cy.wait("@editPost").then(({ response }) => {
@@ -94,7 +94,7 @@ describe("Edit post", () => {
       .type("{backspace}{backspace}{backspace}{backspace}13");
 
     cy.findByRole("dialog")
-      .findAllByRole("button", { name: /upload new photo/i })
+      .findByRole("button", { name: /upload new photo/i })
       .click();
 
     cy.fixture("guy.jpg", null).as("image");
@@ -102,7 +102,7 @@ describe("Edit post", () => {
     cy.findByRole("button", { name: /upload/i }).click();
 
     cy.findByRole("dialog")
-      .findAllByRole("button", { name: /save changes/i })
+      .findByRole("button", { name: /save changes/i })
       .click();
 
     cy.wait("@editPost").then(({ response }) => {
@@ -112,7 +112,7 @@ describe("Edit post", () => {
     cy.findByRole("banner").should("contain", "EDITING THE DESCRIPTION");
     cy.findByRole("heading", { name: /algorithms/i }).should("contain", "$13");
     cy.findByRole("banner")
-      .findAllByRole("img", { name: /post-image/i })
+      .findByRole("img", { name: /post-image/i })
       .should("have.attr", "src")
       .should("not.be.empty");
 
