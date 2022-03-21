@@ -24,14 +24,14 @@ describe("Edit post", () => {
       .click();
 
     cy.findByRole("dialog")
-      .get('[id="description"]')
+      .findByRole("textbox", { name: /description/i })
       .click()
       .type("EDITING THE DESCRIPTION");
 
     cy.findByRole("dialog")
-      .get('[id="price"]')
+      .findByRole("spinbutton", { name: /price/i })
       .click()
-      .type("{backspace}{backspace}{backspace}{backspace}13");
+      .type("{selectall}{backspace}13");
 
     cy.findByRole("dialog")
       .findByRole("button", { name: /upload new photo/i })
@@ -84,14 +84,14 @@ describe("Edit post", () => {
     cy.findByRole("button", { name: /edit post/i }).click();
 
     cy.findByRole("dialog")
-      .get('[id="description"]')
+      .findByRole("textbox", { name: /description/i })
       .click()
       .type("EDITING THE DESCRIPTION");
 
     cy.findByRole("dialog")
-      .get('[id="price"]')
+      .findByRole("spinbutton", { name: /price/i })
       .click()
-      .type("{backspace}{backspace}{backspace}{backspace}13");
+      .type("{selectall}{backspace}13");
 
     cy.findByRole("dialog")
       .findByRole("button", { name: /upload new photo/i })
