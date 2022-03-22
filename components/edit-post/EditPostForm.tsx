@@ -27,7 +27,7 @@ export default function EditPostForm({
         leftIcon={<Icon as={PencilAltIcon} />}
         {...props}
       >
-        Edit
+        Edit post
       </Button>
       <EditPostModal
         key={editPostModalKey}
