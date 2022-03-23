@@ -44,7 +44,7 @@ describe("Delete post", () => {
 
     // Check out that content of posts is correct after deletion
     cy.findByRole("main").children().eq(0).children().should("have.length", 16);
-    posts.eq(0).should("not.contain", "TEST POST 14");
+    posts.should("not.contain", "TEST POST 14");
   });
 
   it("should allow a delete a post from the post page", () => {
