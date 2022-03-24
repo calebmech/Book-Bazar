@@ -19,13 +19,12 @@ export interface HeaderProps {
   minimalContent?: boolean;
 }
 
+const SearchBarMemo = React.memo(SearchBar);
 
 const Header: React.FC<HeaderProps> = ({
   minimalContent = false,
   children,
 }) => {
-
-  const SearchBarMemo = React.memo(SearchBar);
 
   return (
     <Box as="header" backgroundColor="secondaryBackground" boxShadow="md">
