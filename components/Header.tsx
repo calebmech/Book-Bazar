@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { CreditCardIcon } from "@heroicons/react/solid";
 import Link from "next/link";
+import React from "react";
 import HeaderUserInfo from "./HeaderUserInfo";
 import { SearchBar } from "./SearchBar";
 
@@ -18,10 +19,14 @@ export interface HeaderProps {
   minimalContent?: boolean;
 }
 
+
 const Header: React.FC<HeaderProps> = ({
   minimalContent = false,
   children,
 }) => {
+
+  const SearchBarComponent = React.memo(SearchBar);
+
   return (
     <Box as="header" backgroundColor="secondaryBackground" boxShadow="md">
       <Container py={{ base: 5, md: 8 }} maxWidth="container.lg">
@@ -61,7 +66,7 @@ const Header: React.FC<HeaderProps> = ({
           )}
           {!minimalContent && (
             <Box gridArea="search">
-              <SearchBar openOnFocus={true} overlay={true} />
+              <SearchBarComponent openOnFocus={true} overlay={true} />
             </Box>
           )}
           <Box gridArea="account" textAlign="right">
