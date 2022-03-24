@@ -37,6 +37,7 @@ const CoursePage: NextPage<Partial<CoursePageProps>> = ({
   const router = useRouter();
   const { code, page: pageString } = router.query;
   const page = parsePageString(pageString);
+
   const { data: course, isSuccess: isCourseSuccess } = useCourseQuery(
     code,
     initialCourse
@@ -147,6 +148,51 @@ const CoursePage: NextPage<Partial<CoursePageProps>> = ({
       </Layout>
     </>
   );
+};
+
+const HeaderExtension = ({}) => {
+
+
+  const { data: course, isSuccess: isCourseSuccess } = useCourseQuery(
+    code,
+    initialCourse
+  );
+
+  return (
+    <Skeleton isLoaded={Boolean(course)}>
+      {course.name ? (
+        <>
+          <Text
+            test-id="CourseCode"
+            fontSize="lg"
+            fontWeight="500"
+            textColor="secondaryText"
+          >
+            {course.dept.abbreviation} {course.code}
+          </Text>
+          <Heading
+            test-id="CourseHeading"
+            as="h1"
+            mt="1"
+            fontSize="3xl"
+            fontWeight="500"
+            fontFamily="title"
+          >
+            {course.name}
+          </Heading>
+        </>
+      ) : (
+        <Heading
+          as="h1"
+          fontSize="3xl"
+          fontWeight="500"
+          fontFamily="title"
+        >
+          {course.dept.abbreviation} {course.code}
+        </Heading>
+      )}
+    </Skeleton>
+  )
 };
 
 export const getStaticProps: GetStaticProps<CoursePageProps> = async (
