@@ -17,6 +17,7 @@ import { SearchPanel, SearchPanelProps } from "./SearchPanel";
 import { useAutocomplete } from "@lib/hooks/autocomplete";
 import { AutocompleteItem } from "@lib/hooks/autocomplete";
 import { Box } from "@chakra-ui/react";
+import React from "react";
 
 const initialAutocompleteState: AutocompleteState<AutocompleteItem> = {
   collections: [],
@@ -29,7 +30,7 @@ const initialAutocompleteState: AutocompleteState<AutocompleteItem> = {
 };
 
 // Returns the search bar displayed in the header and the home page
-export function SearchBar(
+function SearchBarUnmemoized(
   props: Partial<AutocompleteOptions<AutocompleteItem>> & { overlay: boolean }
 ) {
   const [autocompleteState, setAutocompleteState] = useState<
@@ -53,3 +54,5 @@ export function SearchBar(
     </Box>
   );
 }
+
+export const SearchBar = React.memo(SearchBarUnmemoized);
