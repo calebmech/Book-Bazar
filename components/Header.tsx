@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({
   children,
 }) => {
 
-  const SearchBarComponent = React.memo(SearchBar);
+  const SearchBarMemo = React.memo(SearchBar);
 
   return (
     <Box as="header" backgroundColor="secondaryBackground" boxShadow="md">
@@ -66,7 +66,7 @@ const Header: React.FC<HeaderProps> = ({
           )}
           {!minimalContent && (
             <Box gridArea="search">
-              <SearchBarComponent openOnFocus={true} overlay={true} />
+              <SearchBarMemo openOnFocus={true} overlay={true} />
             </Box>
           )}
           <Box gridArea="account" textAlign="right">
