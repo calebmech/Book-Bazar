@@ -29,9 +29,15 @@ const initialAutocompleteState: AutocompleteState<AutocompleteItem> = {
   status: "idle",
 };
 
+interface SearchBarProps {
+  openOnFocus: boolean;
+  autoFocus?: boolean;
+  overlay: boolean
+}
+
 // Returns the search bar displayed in the header and the home page
 function SearchBarUnmemoized(
-  props: Partial<AutocompleteOptions<AutocompleteItem>> & { overlay: boolean }
+  props: SearchBarProps
 ) {
   const [autocompleteState, setAutocompleteState] = useState<
     AutocompleteState<AutocompleteItem>
