@@ -154,6 +154,7 @@ const PostPage: NextPage<Partial<PostPageProps>> = ({
               fontWeight="500"
               fontFamily="title"
               display="inline"
+              test-id="BookTitle"
             >
               {book ? resolveBookTitle(book) : "Placeholder for Skeleton"}{" "}
               <Text
@@ -163,6 +164,7 @@ const PostPage: NextPage<Partial<PostPageProps>> = ({
                 fontFamily="body"
                 fontSize="0.9em"
                 fontWeight="semibold"
+                test-id="PostPrice"
               >
                 ${formatIntPrice(post.price)}
               </Text>
@@ -175,6 +177,7 @@ const PostPage: NextPage<Partial<PostPageProps>> = ({
               variant="outline"
               leftIcon={<Icon as={BookOpenIcon} />}
               colorScheme="teal"
+              test-id="BookButton"
             >
               Book details
             </Button>
@@ -198,7 +201,11 @@ const PostPage: NextPage<Partial<PostPageProps>> = ({
                   hideName
                 />
                 <Skeleton isLoaded={!postUserDataLoading}>
-                  <Text color="secondaryText" fontWeight="500">
+                  <Text
+                    color="secondaryText"
+                    fontWeight="500"
+                    test-id="UserText"
+                  >
                     {postHasUser && post.user.name
                       ? `${post.user.name}  posted ${timeSincePost} ago`
                       : `Posted ${timeSincePost} ago`}
@@ -232,6 +239,7 @@ const PostPage: NextPage<Partial<PostPageProps>> = ({
                   background: "gray.800",
                   borderColor: "whiteAlpha.300",
                 }}
+                test-id="PostDescription"
               >
                 {post.description}
               </Text>

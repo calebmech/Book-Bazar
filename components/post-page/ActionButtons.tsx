@@ -36,6 +36,7 @@ export default function ActionButtons({
         leftIcon={<Icon as={UsersIcon} />}
         colorScheme="microsoftTeams"
         size="sm"
+        test-id="TeamsButton"
         onClick={() => {
           if (postHasUser) {
             openTeamsSafetyModal();

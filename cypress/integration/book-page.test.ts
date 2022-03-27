@@ -61,7 +61,7 @@ describe("Course page", () => {
   });
 
   it("should allow a user to navigate to a post page", () => {
-    cy.visit("/course/" + TEST_COURSE_CODE);
+    cy.visit("/book/" + TEST_BOOK.isbn);
     const postCards = cy.get('[test-id="PostCard"]');
     postCards.should("have.length", MAX_NUM_POSTS);
     postCards.first().should("contain", TEST_BOOK.name);

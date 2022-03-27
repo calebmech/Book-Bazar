@@ -21,6 +21,7 @@ export default function EditPostForm({
   return (
     <>
       <Button
+        test-id="EditPostButton"
         colorScheme={"teal"}
         type={"button"}
         onClick={handleEditPostClick}
