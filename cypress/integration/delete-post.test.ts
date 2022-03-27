@@ -18,16 +18,13 @@ describe("Delete post", () => {
 
     cy.intercept(HttpMethod.DELETE, "/api/post/*").as("deletePost");
 
-    // Ensure that user posts were received
-    cy.intercept(HttpMethod.GET, "/api/user/*").as("getUserPosts");
-    cy.wait("@getUserPosts").then(({ response }) => {
-      expect(response?.statusCode).to.eq(StatusCodes.OK);
-    });
-    const posts = cy.findByRole("main").children().eq(0).children();
+    cy.findByRole("main").should("contain", "Delete post");
 
-    // Check out that posts are being generated correctly
-    posts.should("have.length", 17);
-    posts.eq(0).should("contain", "TEST POST 14");
+    cy.findByRole("main")
+      .findAllByRole("button", { name: /delete post/i })
+      .should("have.length", 17);
+
+    cy.findByRole("main").should("contain", "TEST POST 14");
 
     // Check if deleting the post works
     cy.findAllByRole("button", { name: /delete post/i })
@@ -43,8 +40,11 @@ describe("Delete post", () => {
     });
 
     // Check out that content of posts is correct after deletion
-    cy.findByRole("main").children().eq(0).children().should("have.length", 16);
-    posts.should("not.contain", "TEST POST 14");
+    cy.findByRole("main")
+      .findAllByRole("button", { name: /delete post/i })
+      .should("have.length", 16);
+
+    cy.findByRole("main").should("not.contain", "TEST POST 14");
   });
 
   it("should allow a delete a post from the post page", () => {
