@@ -107,7 +107,7 @@
 \hline
 7& 22.02.2022& Caleb Mech & Updated tests to match changes to BookHttpHandler Module design\\
 \hline
-7& 10.03.2022& Matthew Williams & Added UI tests for course page and book page\\
+7& 10.03.2022& Matthew Williams & Added UI tests for course page, post page and book page\\
 \hline
 \end{tabular}
 \caption{Table of Revisions}
@@ -195,7 +195,7 @@ M1T5 & should allow a user to change their profile picture & FR17 \\
 \hline
 M1T6 & should allow a user to delete their posting from account page & FR2 \\
 \hline
-M1T7 & should allow a user to edit their posting from account page & (Pending changes to functional requirements) \\
+M1T7 & should allow a user to edit their posting from account page & FR19 \\
 \hline
 M1T8 & course page should display course code and name & FR5 \\
 \hline
@@ -221,16 +221,6 @@ M1T18 & book page should allow a user to navigate to the next page of posts & FR
 \hline
 M1T19 & book page should allow a user to navigate to the next page of posts & FR5 \\
 \hline
-M1T20 & should allow a user to search and find 5 auto-complete results & FR5, FR6 \\
-\hline
-M1T21 & should allow a user to search and find 3 auto-complete results & FR5, FR6 \\
-\hline
-M1T22 & should allow a user to search and find 0 auto-complete results & FR5, FR6 \\
-\hline
-M1T23 & should allow a user to view the content of a course auto-complete suggestion with an abbreviation, code, and name & FR5 \\
-\hline
-M1T24 & should allow a user to view the content of a course auto-complete suggestion with an abbreviation and code only & FR5 \\
-\hline
 \end{tabular}
 \end{table}
 
@@ -240,6 +230,16 @@ M1T24 & should allow a user to view the content of a course auto-complete sugges
 \hline
  \rowcolor{lightgray} 
 \textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
+\hline
+M1T20 & should allow a user to search and find 5 auto-complete results & FR5, FR6 \\
+\hline
+M1T21 & should allow a user to search and find 3 auto-complete results & FR5, FR6 \\
+\hline
+M1T22 & should allow a user to search and find 0 auto-complete results & FR5, FR6 \\
+\hline
+M1T23 & should allow a user to view the content of a course auto-complete suggestion with an abbreviation, code, and name & FR5 \\
+\hline
+M1T24 & should allow a user to view the content of a course auto-complete suggestion with an abbreviation and code only & FR5 \\
 \hline
 M1T25 & should allow a user to view the content of a book auto-complete suggestion with 4 relevant courses and 3 google book authors & FR5, FR6 \\
 \hline
@@ -260,6 +260,24 @@ M1T32 & should allow a user to move down using arrow, select first option, and n
 M1T33 & should allow a user to move down using arrow, select fifth option, and navigate to book page & FR6 \\
 \hline
 M1T34 & should allow a user to move down to third option, up to second, select it, and navigate to course page & FR5 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\flushleft
+\begin{tabular}{|c|p{8.5cm}|c|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
+\hline
+M1T47 & post page should prompt user to log in when contacting another user while logged out & FR7, FR8 \\
+\hline
+M1T48 & post page should allow a user to navigate to another post page & FR7, FR8 \\
+\hline
+M1T49 & post page should allow a user to navigate to the next page of posts & FR7, FR8 \\
+\hline
+M1T50 & post page should allow a user to navigate to the previous page of posts & FR7, FR8 \\
 \hline
 M1T35 & should display sell books button on home page and navigate to login modal upon clicking when user is not logged in & FR11, FR15 \\
 \hline
@@ -284,24 +302,6 @@ M1T44 & post page should display info about the post & FR7, FR8 \\
 M1T45 & post page should allow a user to navigate to the corresponding book page & FR7, FR8 \\
 \hline
 M1T46 & post page should show safety tips when contacting another user & FR13  \\
-\hline
-\end{tabular}
-\end{table}
-
-\begin{table}[H]
-\flushleft
-\begin{tabular}{|c|p{8.5cm}|c|}
-\hline
- \rowcolor{lightgray} 
-\textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
-\hline
-M1T47 & post page should prompt user to log in when contacting another user while logged out & FR7, FR8 \\
-\hline
-M1T48 & post page should allow a user to navigate to another post page & FR7, FR8 \\
-\hline
-M1T49 & post page should allow a user to navigate to the next page of posts & FR7, FR8 \\
-\hline
-M1T50 & post page should allow a user to navigate to the previous page of posts & FR7, FR8 \\
 \hline
 \end{tabular}
 \end{table}
@@ -520,10 +520,6 @@ M1T18 & Visit book page and click next page of posts & See the next page of post
 \hline
 M1T19 & Visit book page and click previous page of posts & See the previous page of posts & Same as expected & Pass \\
 \hline
-M1T20 & Search and find 5 auto-complete results & Found 5 auto-complete results & Same as expected & Pass \\
-\hline
-M1T21 & Search and find 3 auto-complete results & Found 3 auto-complete results & Same as expected & Pass \\
-\hline
 \end{tabular}
 \end{table}
 
@@ -533,6 +529,10 @@ M1T21 & Search and find 3 auto-complete results & Found 3 auto-complete results 
 \hline
  \rowcolor{lightgray} 
 \textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
+\hline
+M1T20 & Search and find 5 auto-complete results & Found 5 auto-complete results & Same as expected & Pass \\
+\hline
+M1T21 & Search and find 3 auto-complete results & Found 3 auto-complete results & Same as expected & Pass \\
 \hline
 M1T22 & Search and find 0 auto-complete results & Found 0 auto-complete results & Same as expected & Pass \\
 \hline
@@ -558,14 +558,6 @@ M1T32 & Move down using arrow, select fifth option, and navigate to book page & 
 \hline
 M1T33 & Move down to third option, up to second, select it, and navigate to course page & Navigate to course page & Same as expected & Pass \\
 \hline
-M1T34 & Display sell books button on home page and navigate to login modal upon clicking when user is not logged in & Navigate to login modal & Same as expected & Pass \\
-\hline
-M1T35 & Display sell books button on home page and navigate to create a post if logged in & Navigate to create post page & Same as expected & Pass \\
-\hline
-M1T36 & View 2 course and 3 book search page results & Find 2 courses and 3 books & Same as expected & Pass \\
-\hline
-M1T37 & View 0 course and 0 book search page results & Find 0 courses and 0 books & Same as expected & Pass \\
-\hline
 \end{tabular}
 \end{table}
 
@@ -575,6 +567,14 @@ M1T37 & View 0 course and 0 book search page results & Find 0 courses and 0 book
 \hline
  \rowcolor{lightgray} 
 \textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
+\hline
+M1T34 & Display sell books button on home page and navigate to login modal upon clicking when user is not logged in & Navigate to login modal & Same as expected & Pass \\
+\hline
+M1T35 & Display sell books button on home page and navigate to create a post if logged in & Navigate to create post page & Same as expected & Pass \\
+\hline
+M1T36 & View 2 course and 3 book search page results & Find 2 courses and 3 books & Same as expected & Pass \\
+\hline
+M1T37 & View 0 course and 0 book search page results & Find 0 courses and 0 books & Same as expected & Pass \\
 \hline
 M1T38 & View no search page results if they search with an empty string & Find no results & Same as expected & Pass \\
 \hline
@@ -621,7 +621,6 @@ posts & Same as expected & Pass \\
 % M1T7 & should allow a user to edit their posting & FR19 \\
 \end{tabular}
 \end{table}
-\textbf{Note: }Some of the above tests were unable to perform because the team is yet to implement these tests.
 \subsection{PostHttpHandler Module (M2)}
 \begin{table}[H]
 \flushleft
