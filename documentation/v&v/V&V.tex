@@ -221,6 +221,88 @@ M1T18 & book page should allow a user to navigate to the next page of posts & FR
 \hline
 M1T19 & book page should allow a user to navigate to the next page of posts & FR5 \\
 \hline
+M1T20 & should allow a user to search and find 5 auto-complete results & FR5, FR6 \\
+\hline
+M1T21 & should allow a user to search and find 3 auto-complete results & FR5, FR6 \\
+\hline
+M1T22 & should allow a user to search and find 0 auto-complete results & FR5, FR6 \\
+\hline
+M1T23 & should allow a user to view the content of a course auto-complete suggestion with an abbreviation, code, and name & FR5 \\
+\hline
+M1T24 & should allow a user to view the content of a course auto-complete suggestion with an abbreviation and code only & FR5 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\flushleft
+\begin{tabular}{|c|p{8.5cm}|c|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
+\hline
+M1T25 & should allow a user to view the content of a book auto-complete suggestion with 4 relevant courses and 3 google book authors & FR5, FR6 \\
+\hline
+M1T26 & should allow a user to a book auto-complete suggestion that has google books data & FR6 \\
+\hline
+M1T27 & should allow a user to view the content of a book with no google books data & FR6 \\
+\hline
+M1T28 & should allow a user to search, click on search button, and navigate to search page & FR5, FR6 \\
+\hline
+M1T29 & should allow a user to search, press enter, and navigate to search page & FR5, FR6 \\
+\hline
+M1T30 & should allow a user to select an auto-complete suggestion course and navigate to course page & FR5 \\
+\hline
+M1T31 & should allow a user to select an auto-complete suggestion book and navigate to book page & FR6 \\
+\hline
+M1T32 & should allow a user to move down using arrow, select first option, and navigate to course page & FR5 \\
+\hline
+M1T33 & should allow a user to move down using arrow, select fifth option, and navigate to book page & FR6 \\
+\hline
+M1T34 & should allow a user to move down to third option, up to second, select it, and navigate to course page & FR5 \\
+\hline
+M1T35 & should display sell books button on home page and navigate to login modal upon clicking when user is not logged in & FR11, FR15 \\
+\hline
+M1T36 & should display sell books button on home page and navigate to create a post if logged in & FR11, FR15 \\
+\hline
+M1T37 & should allow a user to view 2 course and 3 book search page results & FR5, FR6 \\
+\hline
+M1T38 & should allow a user to view 0 course and 0 book search page results & FR5, FR6 \\
+\hline
+M1T39 & should give user no search page results if they search with an empty string & FR5, FR6 \\
+\hline
+M1T40 & should allow a user to click on search page course and visit course page & FR5 \\
+\hline
+M1T41 & should allow a user to click on search page book and visit book page & FR6 \\
+\hline
+M1T42 & should allow a user to edit their post from the post page & FR19 \\
+\hline
+M1T43 & should allow a user to delete a post from the post page & FR2 \\
+\hline
+M1T44 & post page should display info about the post & FR7, FR8 \\
+\hline
+M1T45 & post page should allow a user to navigate to the corresponding book page & FR7, FR8 \\
+\hline
+M1T46 & post page should show safety tips when contacting another user & FR13  \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\flushleft
+\begin{tabular}{|c|p{8.5cm}|c|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
+\hline
+M1T47 & post page should prompt user to log in when contacting another user while logged out & FR7, FR8 \\
+\hline
+M1T48 & post page should allow a user to navigate to another post page & FR7, FR8 \\
+\hline
+M1T49 & post page should allow a user to navigate to the next page of posts & FR7, FR8 \\
+\hline
+M1T50 & post page should allow a user to navigate to the previous page of posts & FR7, FR8 \\
+\hline
 \end{tabular}
 \end{table}
 
@@ -270,6 +352,7 @@ M2T18 & should give 400 when attempting to create a post with negative price whi
 \hline
 M2T19 & should give 400 when attempting to create a post with missing book while AuthN & FR1, FR2 \\
 \hline
+
 
 \end{tabular}
 \end{table}
@@ -409,34 +492,121 @@ M1T4 & Visit account page and edit name & User's name is updated as expected & U
 \hline
 M1T5 & Visit account page and edit profile picture & User's profile picture is updated as expected & Unable to perform & Fail \\
 \hline
-M1T6 & Visit account page and delete a post & Post no longer exists & Unable to perform & Fail \\
+M1T6 & Visit account page and delete a post & Post no longer exists & Same as expected & Pass \\
 \hline
-M1T7 & Visit account page and edit a post & Post is updated as expected & Unable to perform & Fail \\
+M1T7 & Visit account page and edit a post & Post is updated as expected & Same as expected & Pass \\
 \hline
-M1T8 & Visit course page & Course name and code are correct & Same as expected & pass \\
+M1T8 & Visit course page & Course name and code are correct & Same as expected & Pass \\
 \hline
-M1T9 & Visit course page and click a book & Navigated to corresponding book page & Same as expected & pass \\
+M1T9 & Visit course page and click a book & Navigated to corresponding book page & Same as expected & Pass \\
 \hline
-M1T10 & Visit course page and click a post & Navigated to corresponding post page & Same as expected & pass \\
+M1T10 & Visit course page and click a post & Navigated to corresponding post page & Same as expected & Pass \\
 \hline
-M1T11 & Visit course page and click next page of posts & See the next page of posts & Same as expected & pass \\
+M1T11 & Visit course page and click next page of posts & See the next page of posts & Same as expected & Pass \\
 \hline
-M1T12 & Visit course page and click previous page of posts & See the previous page of posts & Same as expected & pass \\
+M1T12 & Visit course page and click previous page of posts & See the previous page of posts & Same as expected & Pass \\
 \hline
-M1T13 & Visit book page & Book info is correct & Same as expected & pass \\
+M1T13 & Visit book page & Book info is correct & Same as expected & Pass \\
 \hline
-M1T14 & Visit book page and click a course badge & Navigated to corresponding course page & Same as expected & pass \\
+M1T14 & Visit book page and click a course badge & Navigated to corresponding course page & Same as expected & Pass \\
 \hline
-M1T15 & Visit book page and check href of campus store button & Href is correct & Same as expected & pass \\
+M1T15 & Visit book page and check href of campus store button & Href is correct & Same as expected & Pass \\
 \hline
-M1T16 & Visit book page and check href of google book button & Href is correct & Same as expected & pass \\
+M1T16 & Visit book page and check href of google book button & Href is correct & Same as expected & Pass \\
 \hline
-M1T17 & Visit book page and click a post & Navigated to corresponding post page & Same as expected & pass \\
+M1T17 & Visit book page and click a post & Navigated to corresponding post page & Same as expected & Pass \\
 \hline
-M1T18 & Visit book page and click next page of posts & See the next page of posts & Same as expected & pass \\
+M1T18 & Visit book page and click next page of posts & See the next page of posts & Same as expected & Pass \\
 \hline
-M1T19 & Visit book page and click previous page of posts & See the previous page of posts & Same as expected & pass \\
+M1T19 & Visit book page and click previous page of posts & See the previous page of posts & Same as expected & Pass \\
 \hline
+M1T20 & Search and find 5 auto-complete results & Found 5 auto-complete results & Same as expected & Pass \\
+\hline
+M1T21 & Search and find 3 auto-complete results & Found 3 auto-complete results & Same as expected & Pass \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\flushleft
+\begin{tabular}{|c|p{4.5cm}|p{3.6cm}|p{3.6cm}|c|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
+\hline
+M1T22 & Search and find 0 auto-complete results & Found 0 auto-complete results & Same as expected & Pass \\
+\hline
+M1T23 & View the content of a course auto-complete suggestion with an abbreviation, code, and name & Course suggestion generated as expected & Same as expected & Pass \\
+\hline
+M1T24 & View the content of a course auto-complete suggestion with an abbreviation and code only & Course suggestion generated as expected & Same as expected & Pass \\
+\hline
+M1T25 & View a book auto-complete suggestion that has google books data & Book suggestion generated as expected & Same as expected & Pass \\
+\hline
+M1T26 & View the content of a book auto-complete suggestion with 4 relevant courses and 3 google book authors & Book suggestion generated as expected & Same as expected & Pass \\
+\hline
+M1T27 & View a book auto-complete suggestion that has no google books data & Book suggestion generated as expected & Same as expected & Pass \\
+\hline
+M1T28 & Search, click on search button, and navigate to search page & Navigate to search page & Same as expected & Pass \\
+\hline
+M1T29 & Search, press enter, and navigate to search page & Navigate to course page & Same as expected & Pass \\
+\hline
+M1T30 & Click on a book auto-complete suggestion and navigate to book page & Navigate to book page & Same as expected & Pass \\
+\hline
+M1T31 & Move down using arrow, select first option, and navigate to course page & Navigate to course page & Same as expected & Pass \\
+\hline
+M1T32 & Move down using arrow, select fifth option, and navigate to book page & Navigate to book page & Same as expected & Pass \\
+\hline
+M1T33 & Move down to third option, up to second, select it, and navigate to course page & Navigate to course page & Same as expected & Pass \\
+\hline
+M1T34 & Display sell books button on home page and navigate to login modal upon clicking when user is not logged in & Navigate to login modal & Same as expected & Pass \\
+\hline
+M1T35 & Display sell books button on home page and navigate to create a post if logged in & Navigate to create post page & Same as expected & Pass \\
+\hline
+M1T36 & View 2 course and 3 book search page results & Find 2 courses and 3 books & Same as expected & Pass \\
+\hline
+M1T37 & View 0 course and 0 book search page results & Find 0 courses and 0 books & Same as expected & Pass \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\flushleft
+\begin{tabular}{|c|p{4.5cm}|p{3.6cm}|p{3.6cm}|c|}
+\hline
+ \rowcolor{lightgray} 
+\textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
+\hline
+M1T38 & View no search page results if they search with an empty string & Find no results & Same as expected & Pass \\
+\hline
+M1T39 & Click on search page course and visit course page & Navigate to course page & Same as expected & Pass \\
+\hline
+M1T40 & Click on search page book and visit book page & Navigate to book page & Same as expected & Pass \\
+\hline
+M1T41 & Visit post page and edit a post & Post is updated as expected & Same as expected & Pass \\
+\hline
+M1T42 & Visit post page and delete a post & Post no longer exists & Same as expected & Pass \\
+\hline
+M1T44 & Visit post page & Post info is correct & Same as expected & Pass \\
+\hline
+M1T45 & Visit post page and click book button & Navigated to book page & Same as expected & Pass \\
+\hline
+M1T46 & Login Visit post page and click teams button & Safety tips are shown & Same as expected & Pass \\
+\hline
+M1T47 & Visit post page and click teams button & Login modal is shown & Same as expected & Pass \\
+\hline
+M1T48 & Visit post and click a
+post & Navigated to corre-
+sponding post page & Same as expected & Pass \\
+\hline
+M1T49 & Visit post page and click
+next page of posts & See the next page of
+posts & Same as expected & Pass \\
+\hline
+M1T50 & Visit post page and click
+previous page of posts & See the previous page of
+posts & Same as expected & Pass \\
+\hline
+
 % \hline
 % M1T2 & should allow a user to logout & FR16 \\
 % \hline
