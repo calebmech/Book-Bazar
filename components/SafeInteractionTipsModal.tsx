@@ -57,7 +57,7 @@ export default function SafeInteractionTipsModal({
         <ModalHeader>Before you meet up&hellip;</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Text>
+          <Text test-id="SafetyText">
             It&rsquo;s important to keep safety in mind when meeting anyone that
             you&rsquo;ve met online. Here are a few tips from us!
           </Text>
