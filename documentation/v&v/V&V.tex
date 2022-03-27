@@ -60,11 +60,11 @@
 \underline{\textbf{Group 6}}\\
 \begin{tabular}{ c c }
 
- Caleb Mech & mechc2\\ 
+ Caleb Mech & mechc2\\
  David Thompson & thompd10\\
  Matthew Williams & willim36\\
  Ahmed Al Koasmh & alkoasma\\
- Harsh Mahajan	& mahajanh    
+ Harsh Mahajan	& mahajanh
 \end{tabular}
 }
 
@@ -88,7 +88,7 @@
 \centering
 \begin{tabular}{| l | c | p{4cm}| p{5cm}|}
 \hline
- \rowcolor{lightgray} 
+ \rowcolor{lightgray}
 \textbf{Version} & \textbf{Date(dd.mm.yyy)} &\textbf{Author(s)} &\textbf{Description}\\
 \hline
 0 & 21.01.2022 & Harsh Mahajan & First draft assembled.\\
@@ -117,7 +117,7 @@
 \section{Purpose}
 The motivation for this project is to create an application that allows McMaster students to conveniently buy and sell textbooks in a secure marketplace. Currently, students use online websites like Facebook (\url{https://www.facebook.com/groups/macusedtexts}) or the campus store's buyback program \\ (\url{https://campusstore.mcmaster.ca/information/guaranteed-buyback.html}, suspended because of COVID) to sell their books. These current solutions are either disorganized or take a cut of the transaction. Book Bazaar aims to create an organized marketplace that allows users to sell books for a better price than at the campus store.
 
-The purpose of this Verification and Validation (V\&V) is to provide a complete overview of the process undertaken in-order to ensure that all the requirements have been covered and tested. 
+The purpose of this Verification and Validation (V\&V) is to provide a complete overview of the process undertaken in-order to ensure that all the requirements have been covered and tested.
 \newline
 \small{ \textbf{NOTE:} Book Bazar's website where all the books to be sold are listed, is referred to as \textit{marketplace} in certain parts of this document.}
 
@@ -180,7 +180,7 @@ Below modules were tested multiple times to build confidence that the implementa
 \flushleft
 \begin{tabular}{|c|p{8.5cm}|c|}
 \hline
- \rowcolor{lightgray} 
+ \rowcolor{lightgray}
 \textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
 \hline
 M1T1 & should allow a user to login & FR11, FR15 \\
@@ -228,7 +228,7 @@ M1T19 & book page should allow a user to navigate to the next page of posts & FR
 \flushleft
 \begin{tabular}{|c|p{8.5cm}|c|}
 \hline
- \rowcolor{lightgray} 
+ \rowcolor{lightgray}
 \textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
 \hline
 M1T20 & should allow a user to search and find 5 auto-complete results & FR5, FR6 \\
@@ -268,7 +268,7 @@ M1T34 & should allow a user to move down to third option, up to second, select i
 \flushleft
 \begin{tabular}{|c|p{8.5cm}|c|}
 \hline
- \rowcolor{lightgray} 
+ \rowcolor{lightgray}
 \textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
 \hline
 M1T47 & post page should prompt user to log in when contacting another user while logged out & FR7, FR8 \\
@@ -303,6 +303,8 @@ M1T45 & post page should allow a user to navigate to the corresponding book page
 \hline
 M1T46 & post page should show safety tips when contacting another user & FR13  \\
 \hline
+M1T51 & should allow a user to create a post & FR1, FR4 \\
+\hline
 \end{tabular}
 \end{table}
 
@@ -312,7 +314,7 @@ M1T46 & post page should show safety tips when contacting another user & FR13  \
 \flushleft
 \begin{tabular}{|c|p{8.5cm}|p{5cm}|}
 \hline
- \rowcolor{lightgray} 
+ \rowcolor{lightgray}
 \textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
 M2T1 & should give a 200 when GETting an existing post & FR9 \\
 \hline
@@ -362,7 +364,7 @@ M2T19 & should give 400 when attempting to create a post with missing book while
 \flushleft
 \begin{tabular}{|c|p{8.5cm}|c|}
 \hline
- \rowcolor{lightgray} 
+ \rowcolor{lightgray}
 \textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
 M3T1 & should give a 200 when GETting an existing book and it's course & FR4, FR10 \\
 \hline
@@ -395,10 +397,10 @@ M3T11 & should give a 404 when trying to GET posts for a book with an isbn that 
 \flushleft
 \begin{tabular}{|c|p{8.5cm}|c|}
 \hline
- \rowcolor{lightgray} 
+ \rowcolor{lightgray}
 \textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
 M4T1 & should give a 200 when GETting an existing course & FR5 \\
-\hline 
+\hline
 M4T2 & should give a 200 when GETting posts for an existing course & FR5 \\
 \hline
 M4T3 & should include user with posts when signed in when GETting an existing courses posts while AuthN & FR5 \\
@@ -427,7 +429,7 @@ M4T10 & should give a 404 when trying to GET posts for a course with an invalid 
 \flushleft
 \begin{tabular}{|c|p{8.5cm}|c|}
 \hline
- \rowcolor{lightgray} 
+ \rowcolor{lightgray}
 \textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
 \hline
 M5T1 & should be able to send a magic link to a new user & FR11 \\
@@ -445,7 +447,7 @@ M5T3 & should be able to logout & FR16 \\
 \flushleft
 \begin{tabular}{|c|p{8.5cm}|c|}
 \hline
- \rowcolor{lightgray} 
+ \rowcolor{lightgray}
 \textbf{Test ID} &\textbf{Description} &\textbf{Corresponding Requirement}\\
 \hline
 M6T1 & should be able to get current user & FR9 \\
@@ -479,7 +481,7 @@ M6T10 & should not be able to delete user if not logged in & FR18 \\
 \flushleft
 \begin{tabular}{|c|p{4.5cm}|p{3.6cm}|p{3.6cm}|c|}
 \hline
- \rowcolor{lightgray} 
+ \rowcolor{lightgray}
 \textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
 \hline
 M1T1 & Login with MacID and visit login link & Magic link is sent and authenticates user & Magic link is sent and authenticates user & Pass \\
@@ -527,7 +529,7 @@ M1T19 & Visit book page and click previous page of posts & See the previous page
 \flushleft
 \begin{tabular}{|c|p{4.5cm}|p{3.6cm}|p{3.6cm}|c|}
 \hline
- \rowcolor{lightgray} 
+ \rowcolor{lightgray}
 \textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
 \hline
 M1T20 & Search and find 5 auto-complete results & Found 5 auto-complete results & Same as expected & Pass \\
@@ -565,7 +567,7 @@ M1T33 & Move down to third option, up to second, select it, and navigate to cour
 \flushleft
 \begin{tabular}{|c|p{4.5cm}|p{3.6cm}|p{3.6cm}|c|}
 \hline
- \rowcolor{lightgray} 
+ \rowcolor{lightgray}
 \textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
 \hline
 M1T34 & Display sell books button on home page and navigate to login modal upon clicking when user is not logged in & Navigate to login modal & Same as expected & Pass \\
@@ -606,6 +608,8 @@ M1T50 & Visit post page and click
 previous page of posts & See the previous page of
 posts & Same as expected & Pass \\
 \hline
+M1T51 & Use the GUI to input ISBN, description, and desired price & Post is created & Same as expected & Pass \\
+\hline
 
 % \hline
 % M1T2 & should allow a user to logout & FR16 \\
@@ -626,7 +630,7 @@ posts & Same as expected & Pass \\
 \flushleft
 \begin{tabular}{|c|p{4.5cm}|p{3.6cm}|p{3.6cm}|c|}
 \hline
- \rowcolor{lightgray} 
+ \rowcolor{lightgray}
 \textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
 M2T1 & Unauthenticated HTTP GET request to /api/post/\{existing-post-uuid\} & HTTP OK response, along with the specified post, without user information & Same as expected & Pass\\
 \hline
@@ -655,7 +659,7 @@ M2T10 & Unauthenticated HTTP DELETE request to /api/post/\{existing-post-uuid\} 
 \flushleft
 \begin{tabular}{|c|p{4.5cm}|p{3.6cm}|p{3.6cm}|c|}
 \hline
- \rowcolor{lightgray} 
+ \rowcolor{lightgray}
 \textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
 M2T11 & Unauthenticated HTTP DELETE request to /api/post/\{random-uuid\} & HTTP NOT\_FOUND response & Same as expected &  Pass \\
 \hline
@@ -684,7 +688,7 @@ M2T19 & Authenticated HTTP POST request to /api/post, with the bookId parameter 
 \flushleft
 \begin{tabular}{|c|p{5.6cm}|p{3.6cm}|c|c|}
 \hline
- \rowcolor{lightgray} 
+ \rowcolor{lightgray}
 \textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
 M3T1 & HTTP GET request to /api/book/:isbn & HTTP OK response including expected values & Same as expected & Pass\\
 \hline
@@ -718,7 +722,7 @@ M3T11 & HTTP GET request /api/book/:isbn/posts with invalid isbn & HTTP Not Foun
 \flushleft
 \begin{tabular}{|c|p{4.5cm}|p{3.6cm}|p{3.6cm}|c|}
 \hline
- \rowcolor{lightgray} 
+ \rowcolor{lightgray}
 \textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
 M4T1 & HTTP GET request to /api/course/id/:id & HTTP OK response & HTTP OK response & Pass \\
 \hline
@@ -750,7 +754,7 @@ M4T10 & HTTP GET request to /api/course/id/\{random uuid\}/posts & HTTP Not Foun
 \flushleft
 \begin{tabular}{|c|p{4.5cm}|p{3.6cm}|p{3.6cm}|c|}
 \hline
- \rowcolor{lightgray} 
+ \rowcolor{lightgray}
 \textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
 \hline
 M5T1 & HTTP POST request to /api/auth/magic containing new MacID & HTTP OK response & Same as expected & Pass \\
@@ -767,7 +771,7 @@ M5T3 & HTTP POST request to /api/auth/logout & HTTP OK response & Same as expect
 \flushleft
 \begin{tabular}{|c|p{4.5cm}|p{3.6cm}|p{3.6cm}|c|}
 \hline
- \rowcolor{lightgray} 
+ \rowcolor{lightgray}
 \textbf{Test ID} &\textbf{Inputs} &\textbf{Expected Output} &\textbf{Actual Output} &\textbf{Result}\\
 \hline
 M6T1 & Authenticated HTTP GET request to /api/user & HTTP OK response containing current user object & Same as expected & Pass \\
@@ -807,7 +811,7 @@ For the descriptions of modules and functional requriements mentioned in the tab
 \begin{comment}
 \begin{thebibliography}{9}
 \bibitem{website}
-S. Liu, “Canada most popular desktop browsers 2021,” Statista, 04-Oct-2021. [Online]. Available: https://www.statista.com/statistics/499462/most-popular-desktop-browsers-in-canada-by-market-share/. [Accessed: 17-Oct-2021]. 
+S. Liu, “Canada most popular desktop browsers 2021,” Statista, 04-Oct-2021. [Online]. Available: https://www.statista.com/statistics/499462/most-popular-desktop-browsers-in-canada-by-market-share/. [Accessed: 17-Oct-2021].
 \end{thebibliography}
 \end{comment}
 %\printglossary[type=\acronymtype]
