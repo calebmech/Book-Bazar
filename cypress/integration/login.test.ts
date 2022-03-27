@@ -1,6 +1,10 @@
 import { getMagicLink } from "cypress/support/commands";
 
 describe("Login flow", () => {
+  after(() => {
+    cy.task("db:teardown");
+  });
+
   it("should allow a user to login", () => {
     cy.visit("/");
 

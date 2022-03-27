@@ -8,11 +8,11 @@ import { MAX_NUM_POSTS } from "@lib/helpers/constants";
 import { HttpMethod } from "@lib/http-method";
 
 describe("Course page", () => {
-  beforeEach(() => {
+  before(() => {
     cy.task("db:setup");
   });
 
-  afterEach(() => {
+  after(() => {
     cy.task("db:teardown");
   });
 
