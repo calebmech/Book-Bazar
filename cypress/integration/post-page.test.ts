@@ -60,13 +60,6 @@ describe("Course page", () => {
     cy.get('[test-id="LoginModal"]').should('be.visible');
   });
 
-  it("should show edit and delete button when the post is owned by the user", () => {
-    cy.login();
-    cy.visit("/post/" + TEST_POST_UUID);
-    cy.get('[test-id="DeletePostButton"]').should("be.visible");
-    cy.get('[test-id="EditPostButton"]').should("be.visible");
-  });
-
   it("should allow a user to navigate to another post page", () => {
     cy.visit("/post/" + TEST_POST_UUID);
     const postCards = cy.get('[test-id="PostCard"]');

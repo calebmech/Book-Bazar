@@ -49,7 +49,6 @@ export default function DeletePostForm({
   return (
     <>
       <Button
-        test-id="DeletePostButton"
         onClick={() => onOpen()}
         colorScheme="red"
         leftIcon={<Icon as={TrashIcon} />}
