@@ -1,9 +1,4 @@
 import {
-  Button,
-  Flex,
-  FormControl,
-  Icon,
-  Input,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -11,150 +6,39 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
 } from "@chakra-ui/react";
-import {
-  PhotographIcon,
-  RefreshIcon,
-  UploadIcon,
-} from "@heroicons/react/solid";
-import { ChangeEvent, DragEvent, useCallback, useState } from "react";
-import ImageCrop from "./ImageCrop";
-import { handleRawImage } from "@lib/helpers/frontend/handle-raw-image";
+import ImageUpload, { ImageUploadProps } from "./ImageUpload";
 
-export interface ImageCropModalProps {
+export type ImageUploadModalProps = {
   isOpen: boolean;
   onClose: VoidFunction;
-  shape: "round" | "rect";
-  aspectRatio: number;
-  onUpload: (image: Blob) => Promise<unknown>;
-}
+} & Omit<ImageUploadProps, "children" | "onCancel">;
 
 export default function ImageUploadModal({
   isOpen,
   onClose,
-  shape,
-  aspectRatio,
   onUpload,
-}: ImageCropModalProps) {
-  const [uncroppedImageUrl, setUncroppedImageUrl] = useState<string | null>(
-    null
-  );
-  const [croppedImage, setCroppedImage] = useState<Blob>();
-  const [uploadStatus, setUploadStatus] = useState<
-    "idle" | "uploading" | "error"
-  >("idle");
-
-  const handleImageSelect = (event: ChangeEvent<HTMLInputElement>) => {
-    const imageBlob = event.target.files?.[0];
-    if (imageBlob) {
-      handleRawImage(imageBlob, setUncroppedImageUrl);
-    }
-  };
-
-  const handleImageDrop = (event: DragEvent) => {
-    event.stopPropagation();
-    event.preventDefault();
-
-    const imageBlob = event.dataTransfer?.files?.[0];
-    if (imageBlob) {
-      handleRawImage(imageBlob, setUncroppedImageUrl);
-    }
-  };
-
-  const handleUploadImage = () => {
-    if (!croppedImage) return;
-
-    setUploadStatus("uploading");
-    onUpload(croppedImage)
-      .then(() => {
-        onClose();
-      })
-      .catch((error) => {
-        console.error(error);
-        setUploadStatus("error");
-      });
-  };
-
-  const handleImageCropChange = useCallback(
-    (blob: Blob) => setCroppedImage(blob),
-    [setCroppedImage]
-  );
-
+  ...props
+}: ImageUploadModalProps) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="xl">
-      <ModalOverlay />
-      <ModalContent pt={5} pb={4}>
-        <ModalHeader draggable>Choose image</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody>
-          {!uncroppedImageUrl ? (
-            <Flex
-              onDrop={handleImageDrop}
-              onDragOver={(event) => event.preventDefault()}
-              py="4"
-              height={{ sm: 200 }}
-              width="100%"
-              align="center"
-            >
-              <FormControl align="center">
-                <Input
-                  id="file"
-                  display="none"
-                  type="file"
-                  accept="image/*"
-                  onChange={(event) => handleImageSelect(event)}
-                />
-                <Button
-                  role="button"
-                  as="label"
-                  htmlFor="file"
-                  size="lg"
-                  leftIcon={<Icon as={PhotographIcon} />}
-                >
-                  Select image
-                </Button>
-              </FormControl>
-            </Flex>
-          ) : (
-            <ImageCrop
-              shape={shape}
-              aspectRatio={aspectRatio}
-              imageUrl={uncroppedImageUrl}
-              onChange={handleImageCropChange}
-            />
-          )}
-          {uploadStatus === "error" && (
-            <Text my="4">
-              Something went wrong while uploading your image, please try again.
-            </Text>
-          )}
-        </ModalBody>
-        <ModalFooter>
-          <Button variant="outline" mr={3} onClick={onClose}>
-            Cancel
-          </Button>
-          {uploadStatus === "error" ? (
-            <Button
-              colorScheme="teal"
-              onClick={handleUploadImage}
-              rightIcon={<Icon as={RefreshIcon} />}
-            >
-              Try again
-            </Button>
-          ) : (
-            <Button
-              disabled={!croppedImage}
-              isLoading={uploadStatus === "uploading"}
-              colorScheme="teal"
-              rightIcon={<Icon as={UploadIcon} />}
-              onClick={handleUploadImage}
-            >
-              Upload
-            </Button>
-          )}
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+    <ImageUpload
+      onCancel={onClose}
+      onUpload={async (image) => onUpload(image).then(() => onClose())}
+      {...props}
+    >
+      {({ body, ConfirmationButtons }) => (
+        <Modal isOpen={isOpen} onClose={onClose} size="xl">
+          <ModalOverlay />
+          <ModalContent pt={5} pb={4}>
+            <ModalHeader>Choose image</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>{body}</ModalBody>
+            <ModalFooter>
+              <ConfirmationButtons />
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      )}
+    </ImageUpload>
   );
 }

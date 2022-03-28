@@ -28,7 +28,7 @@ describe("Login flow", () => {
     });
   });
 
-  it.skip("should allow a user to logout", () => {
+  it("should allow a user to logout", () => {
     cy.login();
     cy.visit("/");
 

@@ -22,17 +22,17 @@ describe("create post flow", () => {
     cy.findByRole("textbox", { name: /isbn/i }).type(
       "{selectAll}9780321573513"
     );
-    cy.wait("@findAlgorithmsTextbook");
-
     cy.findByRole("button", { name: /find book/i }).click();
 
-    cy.findByRole("button", { name: /yes/i }).click();
+    cy.wait("@findAlgorithmsTextbook");
+
+    cy.findByRole("button", { name: /it/i }).click();
 
     cy.fixture("guy.jpg", null).as("image");
     cy.get("input[type=file]").selectFile("@image", { force: true });
-    cy.findByRole("dialog")
-      .findByRole("button", { name: /upload/i })
-      .click();
+
+    cy.wait(500);
+    cy.findByRole("button", { name: /looks good/i }).click({});
 
     cy.findByRole("textbox", { name: /description/i }).type(
       "{selectAll}There are sticky notes in it"
@@ -40,7 +40,7 @@ describe("create post flow", () => {
     cy.findByRole("spinbutton", { name: /asking price/i }).type(
       "{selectAll}240"
     );
-    cy.findByRole("button", { name: /create/i }).click();
+    cy.findByRole("button", { name: /post/i }).click();
 
     cy.findByText("There are sticky notes in it").should("exist");
     cy.findByText(/algorithms/i).should("exist");

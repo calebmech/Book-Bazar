@@ -1,6 +1,7 @@
 import {
   Button,
   FormControl,
+  HStack,
   Icon,
   Modal,
   ModalBody,
@@ -8,17 +9,17 @@ import {
   ModalFooter,
   ModalOverlay,
   useDisclosure,
-  VStack,
 } from "@chakra-ui/react";
-import { RefreshIcon } from "@heroicons/react/outline";
 import { FormEvent, useState } from "react";
-import { useEditPostMutation } from "@lib/hooks/post";
+import { RefreshIcon } from "@heroicons/react/outline";
+import { handleRawImage } from "@lib/helpers/frontend/handle-raw-image";
 import { getFloatStringPriceAsNumber } from "@lib/helpers/priceHelpers";
+import { useEditPostMutation } from "@lib/hooks/post";
 import { PostWithBook, PostWithBookWithUser } from "@lib/services/post";
-import UploadTextbookCover from "../create-post-page/UploadTextbookCover";
 import ViewTextbookCover from "../create-post-page/ViewTextbookCover";
 import EditPriceAndDescription from "../EditPriceAndDescription";
-import { handleRawImage } from "@lib/helpers/frontend/handle-raw-image";
+import { TEXTBOOK_ASPECT_RATIO } from "@components/create-post-page/UploadTextbookCover";
+import ImageUploadModal from "@components/ImageUpload/ImageUploadModal";
 
 export interface EditPostProps {
   isOpen: boolean;
@@ -86,11 +87,11 @@ export default function EditPostModal({
       size="xl"
     >
       <ModalOverlay />
-      <ModalContent pt={5} pb={4}>
+      <ModalContent pb={4}>
         <FormControl>
           <form onSubmit={handleSave}>
             <ModalBody>
-              <VStack spacing={7}>
+              <HStack spacing="7" p="7" pb="0" align="top">
                 <ViewTextbookCover
                   onOpen={onOpenEditImage}
                   imageUrl={imageUrl}
@@ -102,7 +103,7 @@ export default function EditPostModal({
                   onPriceChange={onPriceChange}
                   onDescriptionChange={onDescriptionChange}
                 ></EditPriceAndDescription>
-              </VStack>
+              </HStack>
             </ModalBody>
             <ModalFooter mr={2}>
               <Button
@@ -111,7 +112,7 @@ export default function EditPostModal({
                 colorScheme="teal"
                 mr={2}
               >
-                Close
+                Cancel
               </Button>
               {(mutation.isIdle || mutation.isLoading) && (
                 <Button
@@ -147,9 +148,11 @@ export default function EditPostModal({
       </ModalContent>
     </Modal>
   ) : (
-    <UploadTextbookCover
-      onCoverPhotoUploaded={onImageUploaded}
+    <ImageUploadModal
+      onUpload={async (blob) => onImageUploaded(blob)}
       isOpen={isEditImageOpen}
+      aspectRatio={TEXTBOOK_ASPECT_RATIO}
+      shape="rect"
       onClose={onEditImageClose}
     />
   );

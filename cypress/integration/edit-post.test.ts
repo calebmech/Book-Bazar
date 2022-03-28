@@ -33,14 +33,15 @@ describe("Edit post", () => {
       .type("{selectall}{backspace}13");
 
     cy.findByRole("dialog")
-      .findByRole("button", { name: /upload new photo/i })
+      .findByRole("button", { name: /edit image/i })
       .click();
 
     cy.fixture("guy.jpg", null).as("image");
     cy.get("input[type=file]").selectFile("@image", { force: true });
+    cy.wait(500);
     cy.findByRole("button", { name: /upload/i }).click();
 
-    cy.findByRole("dialog").should("contain", "Sold new for $40.00");
+    cy.findByRole("dialog").should("contain", "Sold new for $40");
 
     cy.findByRole("dialog")
       .findByRole("button", { name: /save changes/i })
@@ -67,9 +68,11 @@ describe("Edit post", () => {
       .eq(0)
       .click();
 
-    cy.findByRole("dialog").findByRole("button", { name: /close/i }).click();
+    cy.findByRole("dialog")
+      .findByRole("button", { name: /cancel/i })
+      .click();
 
-    cy.findByRole("dialog").should("not.exist");
+    cy.findByRole("dialog", { timeout: 500 }).should("not.exist");
   });
 
   it("should allow a user edit a post from the post page", () => {
@@ -92,11 +95,12 @@ describe("Edit post", () => {
       .type("{selectall}{backspace}13");
 
     cy.findByRole("dialog")
-      .findByRole("button", { name: /upload new photo/i })
+      .findByRole("button", { name: /edit image/i })
       .click();
 
     cy.fixture("guy.jpg", null).as("image");
     cy.get("input[type=file]").selectFile("@image", { force: true });
+    cy.wait(500);
     cy.findByRole("button", { name: /upload/i }).click();
 
     cy.findByRole("dialog")
@@ -117,8 +121,10 @@ describe("Edit post", () => {
     // Check if close button works
     cy.findByRole("button", { name: /edit post/i }).click();
 
-    cy.findByRole("dialog").findByRole("button", { name: /close/i }).click();
+    cy.findByRole("dialog")
+      .findByRole("button", { name: /cancel/i })
+      .click();
 
-    cy.findByRole("dialog").should("not.exist");
+    cy.findByRole("dialog", { timeout: 500 }).should("not.exist");
   });
 });

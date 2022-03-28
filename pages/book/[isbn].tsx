@@ -50,10 +50,9 @@ const BookPage: NextPage<Partial<BookPageProps>> = ({ initialBook }) => {
   const router = useRouter();
   const { isbn, page: pageString } = router.query;
   const page = parsePageString(pageString);
-  const { data: book, isSuccess: isBookSuccess } = useBookQuery(
-    isbn,
-    initialBook
-  );
+  const { data: book, isSuccess: isBookSuccess } = useBookQuery(isbn, {
+    initialData: initialBook,
+  });
 
   const { data: posts, isLoading: isLoadingPosts } = useBookPostsQuery(
     isbn,

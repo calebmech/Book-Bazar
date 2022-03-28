@@ -23,6 +23,7 @@ export default function EditPostForm({
       <Button
         colorScheme={"teal"}
         type={"button"}
+        size="sm"
         onClick={handleEditPostClick}
         leftIcon={<Icon as={PencilAltIcon} />}
         {...props}
