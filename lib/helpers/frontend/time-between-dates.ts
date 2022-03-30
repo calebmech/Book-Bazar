@@ -20,12 +20,16 @@ export function timeSinceDateString(date: Date): string {
     if (diff < tp.factor) {
       return `${Math.round(diff)} ${tp.name}${
         Math.round(diff) > 1 ? "s" : ""
-      }`;
+      } ago`;
     } else {
       diff /= tp.factor;
     }
   }
 
   // After 4 weeks just use the date
-  return date.toDateString();
+  return date.toLocaleDateString(undefined, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
 }

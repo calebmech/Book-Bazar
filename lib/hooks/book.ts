@@ -5,7 +5,12 @@ import { UseQueryResult, useQuery, useQueries } from "react-query";
 
 export function useBookQuery(
   isbn: string | string[] | undefined,
-  initialData?: PopulatedBook
+  options?: {
+    initialData?: PopulatedBook;
+    retry?: number;
+    onSuccess?: (data: PopulatedBook) => void;
+    onError?: (error: unknown) => void;
+  }
 ): UseQueryResult<PopulatedBook> {
   return useQuery(
     ["book", isbn],
@@ -13,8 +18,8 @@ export function useBookQuery(
       axios.get<PopulatedBook>(`/api/book/${isbn}/`).then((res) => res.data),
     {
       enabled: !!isbn && !Array.isArray(isbn),
-      initialData,
       staleTime: 1000 * 60 * 60, // 1 hour
+      ...options,
     }
   );
 }

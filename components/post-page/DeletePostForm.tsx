@@ -51,6 +51,7 @@ export default function DeletePostForm({
       <Button
         onClick={() => onOpen()}
         colorScheme="red"
+        size="sm"
         leftIcon={<Icon as={TrashIcon} />}
         {...props}
       >

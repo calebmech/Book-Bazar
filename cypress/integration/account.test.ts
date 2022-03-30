@@ -50,7 +50,7 @@ describe("Account page", () => {
 
     cy.fixture("guy.jpg", null).as("image");
     cy.get("input[type=file]").selectFile("@image", { force: true });
-
+    cy.findByRole("slider").type("{leftArrow}");
     cy.findByRole("button", { name: /upload/i }).click();
 
     cy.wait("@updateUser").then(({ response }) => {

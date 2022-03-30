@@ -44,3 +44,15 @@ export function formatIntPrice(price: number): string {
 function isPriceValid(price: number) {
   return !Number.isNaN(price) && Number.isFinite(price) && price >= 0;
 }
+
+/**
+ * Get suggested used price from a new price
+ *
+ * Price is approximately 60% of new price
+ *
+ * @param newPrice int new price
+ * @returns formatted used price as a string
+ */
+export function getSuggestedUsedPrice(newPrice?: number): string {
+  return (Math.round(((newPrice ?? 5000) / 1000) * 0.6) * 10).toFixed(2);
+}

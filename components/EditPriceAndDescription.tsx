@@ -1,14 +1,17 @@
 import {
-  Box,
-  Flex,
+  FormControl,
+  FormHelperText,
   FormLabel,
   Input,
   InputGroup,
   InputLeftElement,
-  SimpleGrid,
-  Text,
   Textarea,
+  VStack,
 } from "@chakra-ui/react";
+import {
+  getSuggestedUsedPrice,
+  formatIntPrice,
+} from "@lib/helpers/priceHelpers";
 
 export interface EditPriceAndDescriptionProps {
   description: string | null;
@@ -26,54 +29,39 @@ export default function EditPriceAndDescription({
   onDescriptionChange,
 }: EditPriceAndDescriptionProps) {
   return (
-    <SimpleGrid
-      columns={2}
-      spacing={3}
-      templateColumns="1fr 4fr"
-      alignItems="center"
-    >
-      {/* Row 1 */}
-      <Box>
-        <FormLabel htmlFor="description">Description:</FormLabel>
-      </Box>
-      <Box>
+    <VStack align="start" spacing={4} width="full">
+      <FormControl>
+        <FormLabel htmlFor="description">Description</FormLabel>
         <Textarea
-          value={description || ""}
           id="description"
           backgroundColor="secondaryBackground"
+          placeholder="Describe the condition of the book"
+          value={description ?? ""}
           onChange={(e) => onDescriptionChange(e.target.value)}
         />
-      </Box>
+      </FormControl>
 
-      {/* Row 2 */}
-      <Box>
-        <FormLabel htmlFor="price">Asking Price:</FormLabel>
-      </Box>
-      <Box>
+      <FormControl>
+        <FormLabel htmlFor="price">Asking Price</FormLabel>
         <InputGroup>
           <InputLeftElement pointerEvents="none" color="fieldDecoration">
             $
           </InputLeftElement>
           <Input
             id="price"
-            type="number"
             backgroundColor="secondaryBackground"
+            placeholder={getSuggestedUsedPrice(campusStorePrice ?? undefined)}
+            value={price ?? ""}
             onChange={(e) => onPriceChange(e.target.value.trim())}
-            value={price || ""}
-          />
+            type="number"
+          ></Input>
         </InputGroup>
-      </Box>
-
-      {/* Row 3 */}
-      <Box>{/* empty */}</Box>
-
-      <Box paddingBottom={2}>
-        <Text color="captionText" textAlign="right">
-          {campusStorePrice
-            ? `Sold new for $${(campusStorePrice / 100).toFixed(2)}`
-            : "Not available from the campus store"}
-        </Text>
-      </Box>
-    </SimpleGrid>
+        {campusStorePrice && (
+          <FormHelperText>
+            Sold new for ${formatIntPrice(campusStorePrice)}
+          </FormHelperText>
+        )}
+      </FormControl>
+    </VStack>
   );
 }

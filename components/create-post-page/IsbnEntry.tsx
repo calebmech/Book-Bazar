@@ -1,77 +1,61 @@
 import {
-  Box,
   Button,
-  HStack,
-  Icon,
+  FormControl,
+  FormLabel,
   Input,
   InputGroup,
   InputRightElement,
-  Text,
-  useToast,
   VStack,
 } from "@chakra-ui/react";
-import { useBookQuery } from "@lib/hooks/book";
-import { PopulatedBook } from "@lib/services/book";
 import { FormEvent, useState } from "react";
-import BarcodeIcon from "./BarcodeIcon";
 
 interface Props {
-  onIsbnSubmitted: (book: PopulatedBook) => void;
+  onIsbnSubmitted: (isbn: string) => void;
 }
 
 export default function IsbnEntry({ onIsbnSubmitted }: Props) {
   const [isbn, setIsbn] = useState("");
-  const toast = useToast();
-
-  const bookQuery = useBookQuery(isbn);
 
   const handleFormSubmit = (event: FormEvent) => {
-    if (isbn.length > 0 && bookQuery.data) {
-      onIsbnSubmitted(bookQuery.data);
-    } else {
-      toast({
-        title: "Book not found",
-        description:
-          "Unfortunately, that book doesn't appear to be required for any courses. " +
-          "Please double check that you've entered the ISBN correctly.",
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-      });
-    }
+    onIsbnSubmitted(isbn);
     event.preventDefault();
   };
 
   return (
-    <Box backgroundColor="accent" rounded={10} p={2}>
-      <VStack>
-        <Icon as={BarcodeIcon} w={100} h={100} color="secondaryBackground" />
-        <HStack spacing={4}>
-          <form onSubmit={handleFormSubmit}>
-            <InputGroup>
-              <Input
-                backgroundColor="primaryBackground"
-                aria-label="isbn"
-                onChange={(e) => setIsbn(e.target.value.trim())}
-              />
-              <InputRightElement width="6.5rem">
-                <Button
-                  type="submit"
-                  size="sm"
-                  isLoading={bookQuery.isLoading}
-                  colorScheme="teal"
-                  isDisabled={isbn.length === 0}
-                >
-                  Find Book
-                </Button>
-              </InputRightElement>
-            </InputGroup>
-          </form>
-        </HStack>
-        <Text as="i" color="secondaryBackground">
-          Type ISBN
-        </Text>
-      </VStack>
-    </Box>
+    <VStack width="100%" maxWidth="xs">
+      <form onSubmit={handleFormSubmit} style={{ width: "100%" }}>
+        <FormControl>
+          <FormLabel
+            textAlign="center"
+            htmlFor="isbn"
+            color="secondaryText"
+            mb="3"
+          >
+            …or select book by ISBN
+          </FormLabel>
+          <InputGroup>
+            <Input
+              id="isbn"
+              name="isbn"
+              placeholder="e.g. 9780321573513"
+              variant="filled"
+              value={isbn}
+              onChange={(event) => setIsbn(event.target.value)}
+            />
+            <InputRightElement width="auto">
+              <Button
+                type="submit"
+                size="sm"
+                mr="1"
+                colorScheme="teal"
+                isDisabled={isbn.length === 0}
+              >
+                Find Book
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        </FormControl>
+      </form>
+    </VStack>
   );
 }

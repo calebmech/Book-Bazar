@@ -1,114 +1,76 @@
-import {
-  Flex,
-  Heading,
-  Icon,
-  IconButton,
-  Spacer,
-  useDisclosure,
-  useToast,
-} from "@chakra-ui/react";
-import Quagga from "@ericblade/quagga2";
-import { ArrowLeftIcon } from "@heroicons/react/solid";
+import { Box, Spinner, useToast } from "@chakra-ui/react";
+import { useBookQuery } from "@lib/hooks/book";
 import { useCreatePostMutation } from "@lib/hooks/createPost";
-import { PopulatedBook } from "@lib/services/book";
 import { PostWithBookWithUser } from "@lib/services/post";
-import axios from "axios";
-import { useState } from "react";
-import { handleRawImage } from "@lib/helpers/frontend/handle-raw-image";
-import ChooseScanOrType from "./ChooseScanOrType";
+import { WizardPage } from "pages/create-post";
+import { useCallback, useState } from "react";
+import ChooseIsbn from "./ChooseIsbn";
 import ConfirmBook from "./ConfirmBook";
-import ScanBarcode from "./ScanBarcode";
 import SetPriceAndDescription from "./SetPriceAndDescription";
 import TextbookUploaded from "./TextbookUploaded";
 import UploadTextbookCover from "./UploadTextbookCover";
-import ViewTextbookCover from "./ViewTextbookCover";
 
-export default function CreatePostingWizard() {
-  const NUMBER_PAGES = 6;
-  const [pageNumber, setPageNumber] = useState<number>(0);
+export interface CreatePostWizardProps {
+  page: number;
+  setPage: (page: number) => void;
+}
 
-  // data needed for the POST
-  const [book, setBook] = useState<PopulatedBook | null>(null);
+export default function CreatePostingWizard({
+  page,
+  setPage,
+}: CreatePostWizardProps) {
+  const [isbn, setIsbn] = useState<string | null>(null);
   const [coverPhoto, setCoverPhoto] = useState<Blob | null>(null);
 
   const toast = useToast();
 
-  // Image upload modal values
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-
-  const clearUploadedPhoto = () => {
-    setCoverPhoto(null);
-    setImageUrl(null);
-  };
+  const { data: book } = useBookQuery(isbn ?? undefined, {
+    onSuccess: () => {
+      setPage(WizardPage.CONFIRM_BOOK);
+    },
+    onError: () => {
+      setPage(WizardPage.CHOOSE_ISBN);
+      setIsbn(null);
+      toast({
+        title: "Book not found",
+        description:
+          "Unfortunately, that book doesn't appear to be required for any courses.",
+        status: "error",
+        duration: 10000,
+        isClosable: true,
+      });
+    },
+    retry: 1,
+  });
 
   const createPostMutation = useCreatePostMutation();
 
-  const onIsbnTyped = (book: PopulatedBook) => {
-    setBook(book);
-    setPageNumber(2);
-    clearUploadedPhoto();
-  };
-
-  const onScanSelected = () => {
-    setPageNumber(1);
-    clearUploadedPhoto();
-  };
-
-  const onBackButton = () => {
-    if (pageNumber == 2) {
-      setPageNumber(0);
-    } else {
-      Quagga.stop();
-      setPageNumber(pageNumber - 1);
-    }
-
-    if (pageNumber == 0) clearUploadedPhoto();
-  };
-
-  const onScanIsbn = async (isbn: string) => {
-    try {
-      const book: PopulatedBook = (
-        await axios.get<PopulatedBook>(`/api/book/${isbn}`)
-      ).data;
-      if (book) {
-        setBook(book);
-        setPageNumber(pageNumber + 1);
-      }
-    } catch (e) {
-      // Do nothing. More than likely, the book wasn't detected correctly
-    }
-  };
-
-  const onNoCamera = () => {
-    setPageNumber(0);
-    toast({
-      title: "No camera detected",
-      description:
-        "If you don't have a camera, you can type in the ISBN by hand. " +
-        "If you do, please make sure you allow Book Bazar to access it.",
-      status: "error",
-      duration: 10000,
-      isClosable: true,
-    });
-  };
+  const onIsbnTyped = useCallback(
+    (isbn: string) => {
+      setIsbn(isbn);
+      setPage(WizardPage.CONFIRM_BOOK);
+      setCoverPhoto(null);
+    },
+    [setIsbn, setPage, setCoverPhoto]
+  );
 
   const onConfirmIsBook = () => {
-    setPageNumber(pageNumber + 1);
-    if (!coverPhoto) {
-      onOpen();
-    }
+    setPage(WizardPage.UPLOAD_PHOTO);
   };
 
   const onConfirmIsNotBook = () => {
-    clearUploadedPhoto();
-    setPageNumber(0);
+    setCoverPhoto;
+    setPage(WizardPage.CHOOSE_ISBN);
   };
 
   const onCoverPhotoUploaded = (inputCoverPhoto: Blob) => {
     setCoverPhoto(inputCoverPhoto);
-    handleRawImage(inputCoverPhoto, setImageUrl);
-    setPageNumber(pageNumber + 1);
+    setPage(WizardPage.SET_DETAILS);
+  };
+
+  const onRetakePhoto = () => {
+    setCoverPhoto(null);
+    setPage(WizardPage.UPLOAD_PHOTO);
   };
 
   const onSubmitPressed = async (
@@ -125,7 +87,7 @@ export default function CreatePostingWizard() {
         },
         {
           onSuccess: () => {
-            setPageNumber(pageNumber + 1);
+            setPage(page + 1);
           },
         }
       );
@@ -142,81 +104,45 @@ export default function CreatePostingWizard() {
     }
   };
 
-  return (
-    <>
-      <Flex
-        backgroundColor="primaryBackground"
-        padding={4}
-        alignItems="center"
-        justifyContent="space-between"
-      >
-        <IconButton
-          aria-label="Back button"
-          icon={<Icon as={ArrowLeftIcon} />}
-          isDisabled={pageNumber === 0 || pageNumber === 5}
-          mr={6}
-          colorScheme="teal"
-          onClick={onBackButton}
+  switch (page) {
+    case WizardPage.CHOOSE_ISBN:
+      return <ChooseIsbn setIsbn={onIsbnTyped} />;
+    case WizardPage.CONFIRM_BOOK:
+      return book ? (
+        <ConfirmBook
+          book={book}
+          onClickNo={onConfirmIsNotBook}
+          onClickYes={onConfirmIsBook}
         />
-        <Spacer />
-        <Heading as="h2" size="md">
-          {
-            {
-              "0": "Create Post",
-              "1": "Scan Barcode",
-              "2": "Is This Your Book?",
-              "3": "Upload Photo of Cover",
-              "4": "Set Price and Description",
-              "5": "Post Created",
-            }[pageNumber]
-          }
-        </Heading>
-        <Spacer />
-        <Heading as="h2" size="md" ml={6} mr={1}>
-          {pageNumber + 1}/{NUMBER_PAGES}
-        </Heading>
-      </Flex>
+      ) : (
+        <Box textAlign="center" mt="16">
+          <Spinner />
+        </Box>
+      );
+    case WizardPage.UPLOAD_PHOTO:
+      return (
+        <UploadTextbookCover
+          onCoverPhotoUploaded={onCoverPhotoUploaded}
+          onClose={() => setCoverPhoto(null)}
+        />
+      );
+    case WizardPage.SET_DETAILS:
+      return book && coverPhoto ? (
+        <SetPriceAndDescription
+          book={book}
+          coverPhoto={coverPhoto}
+          onSubmitPressed={onSubmitPressed}
+          isLoading={createPostMutation.isLoading}
+          onRetakePhoto={onRetakePhoto}
+        />
+      ) : null;
+    case WizardPage.COMPLETE:
+      return (
+        <TextbookUploaded
+          post={createPostMutation.data as PostWithBookWithUser}
+        />
+      );
+  }
 
-      {
-        {
-          "0": (
-            <ChooseScanOrType
-              onScanSelected={onScanSelected}
-              onIsbnTyped={onIsbnTyped}
-            />
-          ),
-          "1": <ScanBarcode onDetected={onScanIsbn} onNoCamera={onNoCamera} />,
-          "2": book && (
-            <ConfirmBook
-              book={book}
-              onClickNo={onConfirmIsNotBook}
-              onClickYes={onConfirmIsBook}
-            />
-          ),
-          "3": (
-            <>
-              <ViewTextbookCover onOpen={onOpen} imageUrl={imageUrl} />
-              <UploadTextbookCover
-                onCoverPhotoUploaded={onCoverPhotoUploaded}
-                isOpen={isOpen}
-                onClose={onClose}
-              />
-            </>
-          ),
-          "4": book && (
-            <SetPriceAndDescription
-              book={book}
-              onSubmitPressed={onSubmitPressed}
-              isLoading={createPostMutation.isLoading}
-            />
-          ),
-          "5": (
-            <TextbookUploaded
-              post={createPostMutation.data as PostWithBookWithUser}
-            />
-          ),
-        }[pageNumber]
-      }
-    </>
-  );
+  return null;
 }

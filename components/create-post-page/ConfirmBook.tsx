@@ -1,6 +1,7 @@
-import { Box, Button, HStack, VStack } from "@chakra-ui/react";
+import { Button, HStack, Icon, VStack } from "@chakra-ui/react";
+import { ArrowLeftIcon } from "@heroicons/react/solid";
 import { PopulatedBook } from "@lib/services/book";
-import BookCard from "../BookCard";
+import BookPreviewCard from "./BookPreviewCard";
 
 interface Props {
   book: PopulatedBook;
@@ -10,14 +11,18 @@ interface Props {
 
 export default function ConfirmBook({ book, onClickYes, onClickNo }: Props) {
   return (
-    <VStack spacing={3}>
-      <BookCard book={book} isLinkActive={false} width="140px" />
-      <HStack spacing={7}>
-        <Button colorScheme="red" onClick={onClickNo}>
-          No
+    <VStack maxWidth="md" margin="auto" spacing="8">
+      <BookPreviewCard book={book} />
+      <HStack spacing={5} justifyContent="flex-end" width="100%">
+        <Button
+          onClick={onClickNo}
+          variant="link"
+          leftIcon={<Icon as={ArrowLeftIcon} />}
+        >
+          Try again
         </Button>
         <Button colorScheme="teal" onClick={onClickYes}>
-          Yes
+          That&rsquo;s it!
         </Button>
       </HStack>
     </VStack>

@@ -65,7 +65,7 @@ const PostPage: NextPage<Partial<PostPageProps>> = ({
   );
   const { data: book, isSuccess: isBookSuccess } = useBookQuery(
     post?.book.isbn,
-    initialBook
+    { initialData: initialBook }
   );
   const { data: posts, isLoading: isLoadingPosts } = useBookPostsQuery(
     post?.book.isbn,
@@ -207,8 +207,8 @@ const PostPage: NextPage<Partial<PostPageProps>> = ({
                     test-id="UserText"
                   >
                     {postHasUser && post.user.name
-                      ? `${post.user.name}  posted ${timeSincePost} ago`
-                      : `Posted ${timeSincePost} ago`}
+                      ? `${post.user.name} posted ${timeSincePost}`
+                      : `Posted ${timeSincePost}`}
                   </Text>
                 </Skeleton>
               </HStack>

@@ -18,7 +18,7 @@ export default function AccountPostCard({
 
   const card = postsWithBookWithUser ? (
     <>
-      <Grid templateColumns="repeat(2, 1fr)" rowGap={1} columnGap={1}>
+      <Grid templateColumns="repeat(2, 1fr)" rowGap={2} columnGap={1}>
         <GridItem colSpan={2}>
           <PostCard post={postsWithBookWithUser} isLinkActive={isLinkActive} />
         </GridItem>

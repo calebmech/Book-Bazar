@@ -3,6 +3,7 @@ import {
   resolveBookTitle,
   resolveImageUrl,
 } from "@lib/helpers/frontend/resolve-book-data";
+import { timeSinceDateString } from "@lib/helpers/frontend/time-between-dates";
 import { formatIntPrice } from "@lib/helpers/priceHelpers";
 import { useBookQuery } from "@lib/hooks/book";
 import { PostWithBook, PostWithBookWithUser } from "@lib/services/post";
@@ -27,11 +28,11 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
     <Grid
       test-id="PostCard"
       templateColumns={{
-        base: "120px minmax(0, 1fr)",
+        base: "135px minmax(0, 1fr)",
         sm: "165px minmax(0, 1fr)",
       }}
       templateRows={{
-        base: "160px",
+        base: "175px",
         sm: "220px",
       }}
       templateAreas="'image info'"
@@ -45,8 +46,8 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
       cursor={isLinkActive ? "pointer" : "cursor"}
     >
       <Box
-        height={{ base: "160px", sm: "220px" }}
-        width={{ base: "120px", sm: "165px" }}
+        height={{ base: "175px", sm: "220px" }}
+        width={{ base: "130px", sm: "165px" }}
         gridArea="image"
         position="relative"
         display="flex"
@@ -64,6 +65,7 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
         justify="space-between"
         fontSize="sm"
         p={{ base: "2", sm: "4" }}
+        ml="2"
       >
         <Box>
           <Skeleton isLoaded={!isBookLoading}>
@@ -72,14 +74,18 @@ export default function PostCard({ post, isLinkActive }: PostCardProps) {
             </Text>
           </Skeleton>
           <Skeleton isLoaded={!isBookLoading}>
-            <Text color="secondaryText" isTruncated>
-              {authors}
+            <Text color="tertiaryText" fontWeight="medium" isTruncated>
+              {`${timeSinceDateString(new Date(post.createdAt))}`}
             </Text>
           </Skeleton>
           <Text my="1" fontWeight="bold" fontSize="xl">
             ${formatIntPrice(price)}
           </Text>
-          <Text color="secondaryText" noOfLines={{ base: 1, sm: 3 }}>
+          <Text
+            color="tertiaryText"
+            fontWeight="medium"
+            noOfLines={{ base: 1, sm: 3 }}
+          >
             {description}
           </Text>
         </Box>

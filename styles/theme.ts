@@ -15,6 +15,7 @@ const config: ThemeOverride = {
     mcmaster: {
       50: "#ffebf4",
       100: "#ffccdc",
+      200: "#ff7a7f",
       600: "#850044",
     },
   },
