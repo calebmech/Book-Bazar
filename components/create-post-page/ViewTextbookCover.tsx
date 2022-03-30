@@ -22,6 +22,8 @@ export default function ViewTextbookCover({ onOpen, imageUrl }: Props) {
           position="relative"
           height={250}
           width={250 * TEXTBOOK_ASPECT_RATIO}
+          borderRadius="lg"
+          overflow="hidden"
           _hover={{ opacity: "0.7" }}
         >
           <Image layout="fill" src={imageUrl} alt="book-image" />
@@ -39,6 +41,7 @@ export default function ViewTextbookCover({ onOpen, imageUrl }: Props) {
       <Button
         mt="1"
         size="sm"
+        // width={{ base: "initial", md: "full" }}
         width="full"
         leftIcon={<Icon as={PencilAltIcon} />}
       >

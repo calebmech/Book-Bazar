@@ -1,7 +1,7 @@
 import {
   Button,
   FormControl,
-  HStack,
+  Stack,
   Icon,
   Modal,
   ModalBody,
@@ -91,7 +91,13 @@ export default function EditPostModal({
         <FormControl>
           <form onSubmit={handleSave}>
             <ModalBody>
-              <HStack spacing="7" p="7" pb="0" align="top">
+              <Stack
+                direction={{ base: "column", md: "row" }}
+                spacing="7"
+                p="7"
+                pb="0"
+                align="top"
+              >
                 <ViewTextbookCover
                   onOpen={onOpenEditImage}
                   imageUrl={imageUrl}
@@ -102,10 +108,10 @@ export default function EditPostModal({
                   campusStorePrice={post.book.campusStorePrice}
                   onPriceChange={onPriceChange}
                   onDescriptionChange={onDescriptionChange}
-                ></EditPriceAndDescription>
-              </HStack>
+                />
+              </Stack>
             </ModalBody>
-            <ModalFooter mr={2}>
+            <ModalFooter mr={2} mt={{ base: "6", md: "0" }}>
               <Button
                 variant="outline"
                 onClick={onClose}

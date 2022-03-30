@@ -22,7 +22,7 @@ export default function SetPriceAndDescription({
   isLoading,
 }: Props) {
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState<number | null>(null);
   const [valid, setValid] = useState(false);
 
   const [coverPhotoUrl, setCoverPhotoUrl] = useState("");
@@ -38,7 +38,9 @@ export default function SetPriceAndDescription({
   }, [coverPhoto, setCoverPhotoUrl]);
 
   const handleSubmit = (event: FormEvent) => {
-    onSubmitPressed(description, price);
+    if (price) {
+      onSubmitPressed(description, price);
+    }
     event.preventDefault();
   };
 

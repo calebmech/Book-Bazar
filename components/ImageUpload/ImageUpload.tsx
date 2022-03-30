@@ -52,10 +52,15 @@ export default function ImageUpload({
     "idle" | "uploading" | "error"
   >("idle");
 
+  const handleInitialImage = (image: Blob) => {
+    handleRawImage(image, setUncroppedImageUrl);
+    setCroppedImage(image);
+  };
+
   const handleImageSelect = (event: ChangeEvent<HTMLInputElement>) => {
     const imageBlob = event.target.files?.[0];
     if (imageBlob) {
-      handleRawImage(imageBlob, setUncroppedImageUrl);
+      handleInitialImage(imageBlob);
     }
   };
 
@@ -65,7 +70,7 @@ export default function ImageUpload({
 
     const imageBlob = event.dataTransfer?.files?.[0];
     if (imageBlob) {
-      handleRawImage(imageBlob, setUncroppedImageUrl);
+      handleInitialImage(imageBlob);
     }
   };
 
