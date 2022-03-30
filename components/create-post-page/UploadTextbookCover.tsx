@@ -41,6 +41,7 @@ export default function UploadTextbookCover({
                 <Button
                   variant="link"
                   leftIcon={<Icon as={RefreshIcon} />}
+                  disabled={!props.hasImage}
                   {...props}
                   onClick={() => setImageUploadKey(uuid())}
                 >

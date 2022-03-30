@@ -48,7 +48,9 @@ export default function BookPreviewCard({
           justifyContent="space-between"
         >
           <Box mb="2">
-            <Text fontWeight="semibold">{resolveBookTitle(book)}</Text>
+            <Text fontWeight="semibold" noOfLines={2} lineHeight="short" mb="2">
+              {resolveBookTitle(book)}
+            </Text>
             <Text color="secondaryText" fontSize="sm">
               {book.googleBook?.authors?.join(", ")}
             </Text>

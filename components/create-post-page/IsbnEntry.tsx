@@ -31,7 +31,7 @@ export default function IsbnEntry({ onIsbnSubmitted }: Props) {
             color="secondaryText"
             mb="3"
           >
-            or select book by ISBN...
+            …or select book by ISBN
           </FormLabel>
           <InputGroup>
             <Input

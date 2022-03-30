@@ -38,7 +38,7 @@ describe("Edit post", () => {
 
     cy.fixture("guy.jpg", null).as("image");
     cy.get("input[type=file]").selectFile("@image", { force: true });
-    cy.wait(500);
+    cy.findByRole("slider").type("{leftArrow}");
     cy.findByRole("button", { name: /upload/i }).click();
 
     cy.findByRole("dialog").should("contain", "Sold new for $40");
@@ -100,7 +100,7 @@ describe("Edit post", () => {
 
     cy.fixture("guy.jpg", null).as("image");
     cy.get("input[type=file]").selectFile("@image", { force: true });
-    cy.wait(500);
+    cy.findByRole("slider").type("{leftArrow}");
     cy.findByRole("button", { name: /upload/i }).click();
 
     cy.findByRole("dialog")

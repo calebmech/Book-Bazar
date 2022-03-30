@@ -48,9 +48,11 @@ function isPriceValid(price: number) {
 /**
  * Get suggested used price from a new price
  *
- * @param price int new price
+ * Price is approximately 60% of new price
+ *
+ * @param newPrice int new price
  * @returns formatted used price as a string
  */
-export function getSuggestedUsedPrice(price?: number): string {
-  return (Math.round(((price ?? 5000) / 1000) * 0.6) * 10).toFixed(2);
+export function getSuggestedUsedPrice(newPrice?: number): string {
+  return (Math.round(((newPrice ?? 5000) / 1000) * 0.6) * 10).toFixed(2);
 }

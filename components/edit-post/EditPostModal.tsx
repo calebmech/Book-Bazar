@@ -9,6 +9,8 @@ import {
   ModalFooter,
   ModalOverlay,
   useDisclosure,
+  ModalCloseButton,
+  ModalHeader,
 } from "@chakra-ui/react";
 import { FormEvent, useState } from "react";
 import { RefreshIcon } from "@heroicons/react/outline";
@@ -88,14 +90,15 @@ export default function EditPostModal({
     >
       <ModalOverlay />
       <ModalContent pb={4}>
+        <ModalHeader>Edit Post</ModalHeader>
+        <ModalCloseButton />
         <FormControl>
           <form onSubmit={handleSave}>
             <ModalBody>
               <Stack
                 direction={{ base: "column", md: "row" }}
                 spacing="7"
-                p="7"
-                pb="0"
+                px="7"
                 align="top"
               >
                 <ViewTextbookCover

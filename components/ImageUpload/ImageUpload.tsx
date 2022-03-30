@@ -23,7 +23,11 @@ export interface ImageUploadRenderProps {
   ConfirmationButtons: (
     props: {
       RetryButton?: (props: ButtonProps) => React.ReactElement;
-      CancelButton?: (props: ButtonProps) => React.ReactElement;
+      // This is gross
+      CancelButton?: ({
+        hasImage,
+        ...props
+      }: { hasImage: boolean } & ButtonProps) => React.ReactElement;
       ConfirmButton?: (props: ButtonProps) => React.ReactElement;
     } & ButtonGroupProps
   ) => React.ReactElement;
@@ -165,7 +169,7 @@ export default function ImageUpload({
           ...props
         }) => (
           <ButtonGroup {...props}>
-            <CancelButton onClick={onCancel} />
+            <CancelButton hasImage={Boolean(croppedImage)} onClick={onCancel} />
             {uploadStatus === "error" ? (
               <RetryButton onClick={handleUploadImage} />
             ) : (

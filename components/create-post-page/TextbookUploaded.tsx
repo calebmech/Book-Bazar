@@ -1,5 +1,5 @@
 import { Box, Button, Icon, Text, VStack } from "@chakra-ui/react";
-import { LinkIcon } from "@heroicons/react/solid";
+import { LinkIcon, UserCircleIcon } from "@heroicons/react/solid";
 import { PostWithBookWithUser } from "@lib/services/post";
 import Link from "next/link";
 import PostCard from "../PostCard";
@@ -22,8 +22,11 @@ export default function TextbookUploaded({ post }: Props) {
             <Button
               as="a"
               colorScheme="teal"
+              verticalAlign="text-bottom"
               variant="link"
-              rightIcon={<Icon as={LinkIcon} />}
+              rightIcon={
+                <Icon mb="-0.07rem" ml="-0.25rem" as={UserCircleIcon} />
+              }
             >
               account page
             </Button>

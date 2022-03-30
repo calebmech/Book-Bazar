@@ -30,8 +30,7 @@ describe("create post flow", () => {
 
     cy.fixture("guy.jpg", null).as("image");
     cy.get("input[type=file]").selectFile("@image", { force: true });
-
-    cy.wait(500);
+    cy.findByRole("slider").type("{leftArrow}");
     cy.findByRole("button", { name: /looks good/i }).click({});
 
     cy.findByRole("textbox", { name: /description/i }).type(
