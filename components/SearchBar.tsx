@@ -7,16 +7,15 @@
   algolia queries.
 */
 
-import { useState } from "react";
 import {
   AutocompleteOptions,
-  AutocompleteState,
+  AutocompleteState
 } from "@algolia/autocomplete-core";
+import { Box } from "@chakra-ui/react";
+import { AutocompleteItem, useAutocomplete } from "@lib/hooks/autocomplete";
+import { useState } from "react";
 import { SearchInput } from "./SearchInput";
 import { SearchPanel, SearchPanelProps } from "./SearchPanel";
-import { useAutocomplete } from "@lib/hooks/autocomplete";
-import { AutocompleteItem } from "@lib/hooks/autocomplete";
-import { Box } from "@chakra-ui/react";
 
 const initialAutocompleteState: AutocompleteState<AutocompleteItem> = {
   collections: [],
