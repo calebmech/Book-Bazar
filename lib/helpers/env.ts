@@ -16,4 +16,7 @@ if (!process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME) {
 export const NEXT_PUBLIC_ALGOLIA_INDEX_NAME =
   process.env.NEXT_PUBLIC_ALGOLIA_INDEX_NAME;
 
+export const ALLOW_UNVERIFIED_EXPO_EMAIL =
+  process.env.ALLOW_UNVERIFIED_EXPO_EMAIL === "true";
+
 export const IS_E2E = process.env.IS_E2E === "true";
