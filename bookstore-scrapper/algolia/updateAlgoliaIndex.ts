@@ -48,6 +48,7 @@ const searchableAttributes: string[] = [
   "entry.code",
   "entry.name",
   "entry.isbn",
+  "entry.googleBook.authors",
 ];
 
 const rankings: string[] = [

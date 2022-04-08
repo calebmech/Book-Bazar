@@ -115,7 +115,14 @@ const CoursePage: NextPage<Partial<CoursePageProps>> = ({
         <Text fontFamily="title" fontWeight="500" fontSize="2xl">
           Course Books
         </Text>
-        <BookCardGrid books={books} />
+
+        {!books || books.length === 0 ? (
+          <Text my="10" fontSize="lg">
+            No course books found.
+          </Text>
+        ) : (
+          <BookCardGrid books={books} />
+        )}
 
         <Text fontFamily="title" fontWeight="500" fontSize="2xl" mt="10" mb="4">
           Active Listings

@@ -8,6 +8,19 @@ export interface CampusStoreEntry {
   dept: Dept;
 }
 
+// Unwanted book ISBN and name string values
+const UNWANTED_ISBN_ENDING_WITH_B = "B";
+const ETEXT = "ETEXT";
+const LAB_MANUAL = "LAB MANUAL";
+
+const isWantedBookEntry = (entry: CampusStoreEntry): boolean => {
+  return !(
+    entry.book.isbn.endsWith(UNWANTED_ISBN_ENDING_WITH_B) ||
+    entry.book.name.startsWith(ETEXT) ||
+    entry.book.name.includes(LAB_MANUAL)
+  );
+};
+
 const sameBook = (book1: Book, book2: Book): boolean =>
   book1.isbn === book2.isbn;
 
@@ -103,8 +116,13 @@ const updateCourses = async (campusStoreData: CampusStoreEntry[]) => {
 
 // Update the book data
 const updateBooks = async (campusStoreData: CampusStoreEntry[]) => {
+  // Remove unwanted books
+  const campusStoreWantedBookData: CampusStoreEntry[] = campusStoreData.filter(
+    (entry) => isWantedBookEntry(entry)
+  );
+
   // Update or create data for all books in the campus store
-  for (const campusStoreEntry of campusStoreData) {
+  for (const campusStoreEntry of campusStoreWantedBookData) {
     /* Create the courseConnection that wil be upserted
         if there is an update being completed. */
     const courseConnection = {
@@ -143,7 +161,7 @@ const updateBooks = async (campusStoreData: CampusStoreEntry[]) => {
     with false for isCampusStoreBook. */
   const currentDbBooks: Book[] = await prisma.book.findMany();
 
-  const campusStoreBooks: Book[] = campusStoreData.map((m) => m.book);
+  const campusStoreBooks: Book[] = campusStoreWantedBookData.map((m) => m.book);
 
   const booksNotInCampusStore = lodash.differenceWith(
     currentDbBooks,
