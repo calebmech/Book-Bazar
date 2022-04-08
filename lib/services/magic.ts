@@ -4,7 +4,7 @@ import {
   SENDGRID_EMAIL_FROM,
   SENDGRID_TEMPLATE_ID,
 } from "@lib/helpers/backend/env";
-import { IS_E2E } from "@lib/helpers/env";
+import { ALLOW_UNVERIFIED_EXPO_EMAIL, IS_E2E } from "@lib/helpers/env";
 import sgMail from "@sendgrid/mail";
 import { createToken, hashToken } from "../helpers/backend/tokens";
 import { prisma } from "./db";
@@ -18,7 +18,7 @@ function getMagicLinkExpirationDate(): Date {
 export async function sendMagicLink(
   email: string,
   redirectUrl?: string
-): Promise<void> {
+): Promise<string | void> {
   const token = createToken();
   const hashedToken = hashToken(token);
 
@@ -39,6 +39,11 @@ export async function sendMagicLink(
   }
 
   const magicLink = `https://${BASE_URL}/magic?${searchParams.toString()}`;
+
+  // Allow expo users to login to public account without email verification
+  if (ALLOW_UNVERIFIED_EXPO_EMAIL && email === "expo@mcmaster.ca") {
+    return magicLink;
+  }
 
   sgMail.setApiKey(SENDGRID_API_KEY);
 

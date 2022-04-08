@@ -99,9 +99,13 @@ export function useDeleteUserMutation() {
 }
 
 export function useSendMagicLinkMutation() {
-  return useMutation((request: SendMagicLinkBody) =>
-    axios.post("/api/auth/magic", request)
-  );
+  const queryClient = useQueryClient();
+
+  return useMutation(async (request: SendMagicLinkBody) => {
+    await axios.post("/api/auth/magic", request);
+
+    queryClient.invalidateQueries(USER_KEY);
+  });
 }
 
 export function useLogout() {
