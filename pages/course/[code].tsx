@@ -116,11 +116,7 @@ const CoursePage: NextPage<Partial<CoursePageProps>> = ({
           Course Books
         </Text>
 
-        {isLoading ? (
-          <Flex width="100%" height="56" align="center" justifyContent="center">
-            <Spinner />
-          </Flex>
-        ) : !books || books.length === 0 ? (
+        {!books || books.length === 0 ? (
           <Text my="10" fontSize="lg">
             No course books found.
           </Text>
