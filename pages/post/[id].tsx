@@ -298,7 +298,7 @@ const PostPage: NextPage<Partial<PostPageProps>> = ({
           onClose={onTeamsSafetyModalClose}
           onAccept={() => {
             if (postHasUser) {
-              window.open(createTeamsContactUrl(post), "_blank")?.focus();
+              window.open(createTeamsContactUrl(post, book), "_blank")?.focus();
             }
           }}
         />
