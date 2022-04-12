@@ -102,9 +102,13 @@ export function useSendMagicLinkMutation() {
   const queryClient = useQueryClient();
 
   return useMutation(async (request: SendMagicLinkBody) => {
-    await axios.post("/api/auth/magic", request);
+    const response = await axios.post("/api/auth/magic", request);
 
-    queryClient.invalidateQueries(USER_KEY);
+    // Magic link given directly for expo URL
+    if (response.data) {
+      await axios.get(response.data);
+      queryClient.invalidateQueries(USER_KEY);
+    }
   });
 }
 
