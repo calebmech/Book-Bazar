@@ -34,7 +34,7 @@ async function sendMagicLinkHandler(req: NextApiRequest, res: NextApiResponse) {
   const unverifiedLink = await sendMagicLink(email, body.redirectUrl);
 
   if (unverifiedLink) {
-    return res.redirect(StatusCodes.TEMPORARY_REDIRECT, unverifiedLink);
+    return res.status(StatusCodes.OK).send(unverifiedLink);
   }
 
   return res.status(StatusCodes.OK).end();
